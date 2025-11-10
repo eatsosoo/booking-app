@@ -1,5 +1,5 @@
 <template>
-    <header class="p-4 shadow bg-black flex justify-between items-center">
+    <header class="p-4 shadow bg-white flex justify-between items-center">
       <h1 class="text-xl font-bold text-primary">Booking App</h1>
       <nav class="flex gap-4">
         <NuxtLink to="/">Trang chủ</NuxtLink>
