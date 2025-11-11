@@ -1,75 +1,104 @@
-# Nuxt Minimal Starter
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+# Booking App
 
-## Setup
+**Booking App** là một ứng dụng đặt lịch trực tuyến được xây dựng với **Nuxt 4** và **Bun**, giúp người dùng dễ dàng quản lý các lịch đặt, tối ưu hiệu suất và trải nghiệm mượt mà trên web.  
 
-Make sure to install dependencies:
+## 📦 Công nghệ sử dụng
 
+- **Frontend & SSR**: [Nuxt 4](https://nuxt.com/)  
+- **Runtime & Package Manager**: [Bun](https://bun.sh/)  
+- **CSS Framework**: TailwindCSS (tùy chỉnh theo dự án)  
+- **Icons**: Font Awesome  
+- **Quản lý trạng thái**: Pinia hoặc composables Nuxt (tùy nhu cầu)  
+- **Code Linting & Formatting**: ESLint, Prettier  
+- **Git commit convention**: [Conventional Commits](https://www.conventionalcommits.org/)  
+
+## ⚡ Cài đặt và chạy project
+
+1. **Cài Bun** (nếu chưa có):  
 ```bash
-# npm
-npm install
+curl -fsSL https://bun.sh/install | bash
+```
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
+2. **Cài đặt dependencies**:  
+```bash
 bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
+3. **Chạy project ở môi trường phát triển**:  
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+bun dev
 ```
 
-## Production
-
-Build the application for production:
-
+4. **Build cho production**:  
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+bun build
 ```
 
-Locally preview production build:
-
+5. **Chạy server production**:  
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+bun start
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## 🗂 Cấu trúc thư mục
+
+```
+booking-app/
+│
+├─ app/                   # Thư mục chính Nuxt app
+│   ├─ components/        # Components UI
+│   ├─ pages/             # Pages Nuxt
+│   ├─ layouts/           # Layouts
+│   ├─ plugins/           # Plugins
+│   └─ assets/            # CSS, images, fonts
+│
+├─ server/                # API hoặc server-side code (nếu có)
+├─ public/                # Files public
+├─ bun.lockb              # Bun lockfile
+├─ nuxt.config.ts         # Config Nuxt 4
+└─ package.json
+```
+
+## 🧹 Quy chuẩn viết commit
+
+Chúng tôi tuân theo chuẩn **Conventional Commits** để dễ dàng quản lý lịch sử git và tạo changelog tự động.  
+
+**Cấu trúc cơ bản**:  
+
+```
+<type>(<scope>): <subject>
+```
+
+### Các loại commit phổ biến
+
+| Type        | Khi nào dùng                                      |
+|------------|--------------------------------------------------|
+| **feat**   | Thêm tính năng mới                               |
+| **fix**    | Sửa lỗi                                         |
+| **docs**   | Chỉ chỉnh sửa tài liệu                           |
+| **style**  | Chỉ thay đổi format, space, dấu chấm phẩy       |
+| **refactor** | Thay đổi code nhưng không thêm tính năng/sửa lỗi |
+| **perf**   | Cải thiện hiệu suất                              |
+| **test**   | Thêm hoặc chỉnh sửa test                         |
+| **chore**  | Các công việc khác (build, configs, scripts...) |
+
+**Ví dụ commit hợp lệ**:  
+```bash
+git commit -m "feat(auth): add login with Google OAuth"
+git commit -m "fix(booking): correct timezone issue"
+git commit -m "docs(readme): update setup instructions"
+```
+
+---
+
+## 📌 Lời khuyên
+
+- Luôn tạo branch riêng khi phát triển tính năng mới:  
+```bash
+git checkout -b feat/add-new-feature
+```
+- Kiểm tra code format trước khi commit:  
+```bash
+bun lint
+bun format
+```
