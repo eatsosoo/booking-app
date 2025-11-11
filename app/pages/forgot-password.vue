@@ -59,7 +59,6 @@
 
 <script setup lang="ts">
 import Button from '~/components/ui/button/Button.vue';
-import Checkbox from '~/components/ui/checkbox/Checkbox.vue';
 import Input from '~/components/ui/input/Input.vue';
 
 useSeoMeta({
