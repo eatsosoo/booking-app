@@ -8,7 +8,8 @@
           <span class="text-xl font-semibold text-white">BookingNow</span>
         </NuxtLink>
         <p class="text-sm leading-relaxed">
-          BookingNow giúp bạn dễ dàng đặt phòng khách sạn, vé du lịch, tour trọn gói, và nhiều dịch vụ khác trên toàn thế giới với giá tốt nhất.
+          BookingNow giúp bạn dễ dàng đặt phòng khách sạn, vé du lịch, tour trọn gói, và nhiều dịch vụ khác trên toàn
+          thế giới với giá tốt nhất.
         </p>
         <div class="flex space-x-4 mt-4">
           <ClientOnly>
@@ -35,11 +36,21 @@
       <div>
         <h3 class="text-white font-semibold mb-4 text-lg">Liên kết nhanh</h3>
         <ul class="space-y-2 text-sm">
-          <li><NuxtLink to="/" class="hover:text-blue-400">Trang chủ</NuxtLink></li>
-          <li><NuxtLink to="/rooms" class="hover:text-blue-400">Phòng</NuxtLink></li>
-          <li><NuxtLink to="/services" class="hover:text-blue-400">Dịch vụ</NuxtLink></li>
-          <li><NuxtLink to="/about" class="hover:text-blue-400">Giới thiệu</NuxtLink></li>
-          <li><NuxtLink to="/contact" class="hover:text-blue-400">Liên hệ</NuxtLink></li>
+          <li>
+            <NuxtLink to="/" class="hover:text-blue-400">Trang chủ</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/rooms" class="hover:text-blue-400">Phòng</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/services" class="hover:text-blue-400">Dịch vụ</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/about" class="hover:text-blue-400">Giới thiệu</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/contact" class="hover:text-blue-400">Liên hệ</NuxtLink>
+          </li>
         </ul>
       </div>
 
@@ -47,10 +58,18 @@
       <div>
         <h3 class="text-white font-semibold mb-4 text-lg">Hỗ trợ khách hàng</h3>
         <ul class="space-y-2 text-sm">
-          <li><NuxtLink to="/" class="hover:text-blue-400">Câu hỏi thường gặp</NuxtLink></li>
-          <li><NuxtLink to="/" class="hover:text-blue-400">Chính sách & điều khoản</NuxtLink></li>
-          <li><NuxtLink to="/" class="hover:text-blue-400">Bảo mật thông tin</NuxtLink></li>
-          <li><NuxtLink to="/" class="hover:text-blue-400">Trung tâm hỗ trợ</NuxtLink></li>
+          <li>
+            <NuxtLink to="/" class="hover:text-blue-400">Câu hỏi thường gặp</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/" class="hover:text-blue-400">Chính sách & điều khoản</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/" class="hover:text-blue-400">Bảo mật thông tin</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/" class="hover:text-blue-400">Trung tâm hỗ trợ</NuxtLink>
+          </li>
         </ul>
       </div>
 
@@ -63,12 +82,17 @@
             <span>123 Nguyễn Trãi, Quận 1, TP.HCM, Việt Nam</span>
           </li>
           <li class="flex items-center space-x-2 item">
-            <FontAwesomeIcon :icon="['fas', 'phone']" />
+            <ClientOnly>
+              <FontAwesomeIcon :icon="['fas', 'phone']" />
+            </ClientOnly>
             <span>Hotline: <NuxtLink to="tel:+84123456789" class="hover:text-blue-400">0123 456 789</NuxtLink></span>
           </li>
           <li class="flex items-center space-x-2">
-            <FontAwesomeIcon :icon="['fas', 'envelope']" />
-            <span>Email: <NuxtLink to="mailto:support@bookingnow.vn" class="hover:text-blue-400">support@bookingnow.vn</NuxtLink></span>
+            <ClientOnly>
+              <FontAwesomeIcon :icon="['fas', 'envelope']" />
+            </ClientOnly>
+            <span>Email: <NuxtLink to="mailto:support@bookingnow.vn" class="hover:text-blue-400">support@bookingnow.vn
+              </NuxtLink></span>
           </li>
         </ul>
       </div>

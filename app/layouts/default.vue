@@ -3,7 +3,9 @@
     <AppHeader />
 
     <main class="p-6">
-      <slot />
+      <div class="max-w-[1560px] mx-auto">
+        <slot />
+      </div>
     </main>
 
     <AppFooter />
