@@ -18,7 +18,7 @@
 
       <Popover>
         <PopoverTrigger as-child>
-          <Button variant="outline" class="text-left">Chọn phòng</Button>
+          <Button variant="outline" class="text-left">{{ selectRoomText }}</Button>
         </PopoverTrigger>
         <PopoverContent class="w-80">
           <div class="grid gap-4">
@@ -166,55 +166,43 @@ import {
 
 const groups = [
   {
-    label: "North America",
+    label: "Khu vực Miền Bắc",
     value: [
-      "Eastern Standard Time (EST)",
-      "Central Standard Time (CST)",
-      "Mountain Standard Time (MST)",
-      "Pacific Standard Time (PST)",
-      "Alaska Standard Time (AKST)",
-      "Hawaii Standard Time (HST)",
+      "Hà Nội",
+      "Hoà Bình",
+      "Ba Vì",
+      "Sóc Sơn",
+      "Tam Đảo",
+      "Đại Lải",
+      "Hạ Long",
+      "Tuần Châu",
+      "Ninh Bình",
+      "Mộc Châu",
+      "Sa Pa"
     ],
   },
   {
-    label: "Europe & Africa",
+    label: "Khu vực Miền Trung",
     value: [
-      "Greenwich Mean Time (GMT)",
-      "Central European Time (CET)",
-      "Eastern European Time (EET)",
-      "Western European Summer Time (WEST)",
-      "Central Africa Time (CAT)",
-      "East Africa Time (EAT)",
+      "FLC Sầm Sơn",
+      "Hải Tiến",
+      "Huế",
+      "Đà Nẵng",
+      "Hội An",
+      "Quy Nhơn",
+      "Nha Trang",
+      "Mũi Né",
+      "Phú Yên",
+      "Đà Lạt"
     ],
   },
   {
-    label: "Asia",
+    label: "Khu vực Miền Nam",
     value: [
-      "Moscow Time (MSK)",
-      "India Standard Time (IST)",
-      "China Standard Time (CST)",
-      "Japan Standard Time (JST)",
-      "Korea Standard Time (KST)",
-      "Indonesia Central Standard Time (WITA)",
-    ],
-  },
-  {
-    label: "Australia & Pacific",
-    value: [
-      "Australian Western Standard Time (AWST)",
-      "Australian Central Standard Time (ACST)",
-      "Australian Eastern Standard Time (AEST)",
-      "New Zealand Standard Time (NZST)",
-      "Fiji Time (FJT)",
-    ],
-  },
-  {
-    label: "South America",
-    value: [
-      "Argentina Time (ART)",
-      "Bolivia Time (BOT)",
-      "Brasilia Time (BRT)",
-      "Chile Standard Time (CLT)",
+      "Vũng Tàu",
+      "Hồ Tràm",
+      "Sài Gòn",
+      "Phú Quốc"
     ],
   },
 ];
@@ -243,4 +231,22 @@ const roomTypes = ref({
   children: 0,
   infants: 0,
 });
+
+const selectRoomText = computed(() => {
+  const { adults, children, infants } = roomTypes.value;
+  if (!adults && !children && !infants) return 'Chọn phòng';
+
+  let string = '';
+  if (adults > 0) {
+    string += `${adults} người lớn`;
+  }
+  if (children > 0) {
+    string += ` - ${children} trẻ em`;
+  } 
+  if (infants > 0) {
+    string += ` - ${infants} em bé`;
+  }
+
+  return string;
+})
 </script>
