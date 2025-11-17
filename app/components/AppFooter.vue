@@ -79,7 +79,7 @@
         <ul class="space-y-3 text-sm">
           <li class="flex items-start space-x-2">
             <i class="fa-solid fa-location-dot text-blue-400 mt-1"></i>
-            <span>123 Nguyễn Trãi, Quận 1, TP.HCM, Việt Nam</span>
+            <span>193 Văn Cao, Ngô Quyền, TP.Hải Phòng, Việt Nam</span>
           </li>
           <li class="flex items-center space-x-2 item">
             <ClientOnly>

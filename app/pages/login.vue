@@ -50,12 +50,12 @@
         </Button>
       </form>
 
-      <p class="text-center text-gray-600 text-sm mt-6">
+      <!-- <p class="text-center text-gray-600 text-sm mt-6">
         Chưa có tài khoản?
         <NuxtLink to="/register" class="text-primary hover:underline">
           Đăng ký ngay
         </NuxtLink>
-      </p>
+      </p> -->
     </div>
   </div>
 </template>

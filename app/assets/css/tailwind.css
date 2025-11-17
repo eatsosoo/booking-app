@@ -50,7 +50,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: oklch(0.8 0.17 71.23);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -122,6 +122,10 @@
   }
 }
 
+main {
+  padding: 0;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
@@ -130,4 +134,10 @@
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.cus-container {
+  max-width: 1560px;
+  margin-inline: auto;
+  padding: 100px 16px;
 }
