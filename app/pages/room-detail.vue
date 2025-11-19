@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="p-4">
-      <div class="grid grid-cols-2 gap-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <NuxtImg
           src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
           class="h-full"
@@ -24,9 +24,9 @@
               class="absolute top-0 bottom-0 right-0 left-0 bg-black text-white opacity-50"
             ></div>
             <div
-              class="absolute top-0 bottom-0 right-0 left-0 text-white text-xl font-semibold flex justify-center items-center text-center"
+              class="absolute top-0 bottom-0 right-0 left-0 text-white font-semibold flex justify-center items-center text-center"
             >
-              Xem tất cả <br />11 Ảnh
+              Xem tất cả <br> 11 Ảnh
             </div>
           </div>
         </div>

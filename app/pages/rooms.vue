@@ -7,7 +7,7 @@
         class="absolute top-0 bottom-0 right-0 left-0 bg-black opacity-50"
       ></div>
       <div
-        class="absolute -bottom-4 bg-primary z-10 py-6 px-10 top rounded-tl-4xl rounded-br-4xl shadow-xl max-w-7xl w-7xl"
+        class="absolute -bottom-4 bg-primary z-10 py-6 px-10 top rounded-tl-4xl rounded-br-4xl shadow-xl max-w-7xl w-full"
       >
         <h1 class="uppercase text-white text-2xl semibold">
           Kết quả tìm kiếm cho từ khoá "<span class="text-blue-900 font-bold"
@@ -17,7 +17,7 @@
       </div>
     </section>
 
-    <section class="max-w-7xl mx-auto mt-22">
+    <section class="max-w-7xl mx-auto mt-22 p-4">
       <SearchRooms />
 
       <div class="flex justify-between items-center">
@@ -111,6 +111,9 @@
           </div>
         </div>
       </div>
+
+      <Separator class="mt-10 mb-6"/>
+      <PaginateWrap />
     </section>
   </div>
 </template>
@@ -123,6 +126,7 @@ import Label from "~/components/ui/label/Label.vue";
 import Popover from "~/components/ui/popover/Popover.vue";
 import PopoverContent from "~/components/ui/popover/PopoverContent.vue";
 import PopoverTrigger from "~/components/ui/popover/PopoverTrigger.vue";
+import Separator from "~/components/ui/separator/Separator.vue";
 
 const rooms = ref([
   {

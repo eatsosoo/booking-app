@@ -7,7 +7,7 @@
         class="absolute top-0 bottom-0 right-0 left-0 bg-black opacity-50"
       ></div>
       <div
-        class="absolute -bottom-4 bg-primary z-10 py-6 px-10 top rounded-tl-4xl rounded-br-4xl shadow-xl max-w-7xl w-7xl"
+        class="absolute -bottom-4 bg-primary z-10 py-6 px-10 top rounded-tl-4xl rounded-br-4xl shadow-xl max-w-7xl w-full"
       >
         <h1 class="uppercase text-white text-2xl semibold">
           Cẩm nang<span class="text-blue-900 font-bold"> căn hộ</span>
@@ -16,17 +16,17 @@
     </section>
 
     <section class="max-w-7xl mx-auto px-4 py-8">
-      <div class="grid grid-cols-3 py-6 gap-4">
-        <div class="col-span-2">
+      <div class="grid grid-cols-1 md:grid-cols-3 py-6 gap-4">
+        <div class="md:col-span-2">
           <div
             v-for="(item, index) in handbookList"
             :key="index"
-            class="flex border-b border-gray-300 py-6"
+            class="flex-row md:flex border-b border-gray-300 py-6"
           >
             <NuxtImg
               :src="item.image_url"
               :alt="item.title"
-              class="max-w-70 rounded-md transition-transform duration-300 hover:scale-105 shadow-2xs"
+              class="w-full md:max-w-70 md:max-h-64  rounded-md transition-transform duration-300 hover:scale-105 shadow-2xs"
             />
             <div class="ml-4">
               <h2 class="text-2xl font-semibold mb-2">{{ item.title }}</h2>
