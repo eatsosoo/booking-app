@@ -65,7 +65,7 @@ const groups = [
                 <p>{{ group.label }}</p>
                 <li v-for="(item, idx) in group.value" :key="idx">
                   <NavigationMenuLink as-child>
-                    <a href="/rooms" class="hover:underline hover:text-primary hover:bg-white">{{ item }}</a>
+                    <a href="/dia-diem" class="hover:underline hover:text-primary hover:bg-white">{{ item }}</a>
                   </NavigationMenuLink>
                 </li>
               </ul>
@@ -75,7 +75,7 @@ const groups = [
 
       <NavigationMenuItem>
         <NavigationMenuLink as-child :class="navigationMenuTriggerStyle()">
-          <a href="/">Dịch vụ</a>
+          <a href="/can-ho">Dịch vụ</a>
         </NavigationMenuLink>
       </NavigationMenuItem>
 

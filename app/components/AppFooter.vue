@@ -40,7 +40,7 @@
             <NuxtLink to="/" class="hover:text-blue-400">Trang chủ</NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/rooms" class="hover:text-blue-400">Phòng</NuxtLink>
+            <NuxtLink to="/dia-diem" class="hover:text-blue-400">Phòng</NuxtLink>
           </li>
           <li>
             <NuxtLink to="/services" class="hover:text-blue-400">Dịch vụ</NuxtLink>

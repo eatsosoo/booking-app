@@ -17,6 +17,7 @@ import {
   faPeopleGroup,
   faMagnifyingGlass,
   faArrowRightLong,
+  faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Brand icons
@@ -51,7 +52,8 @@ library.add(
   faCaretUp,
   faPeopleGroup,
   faMagnifyingGlass,
-  faArrowRightLong
+  faArrowRightLong,
+  faBookmark
 );
 
 export default defineNuxtPlugin((nuxtApp) => {

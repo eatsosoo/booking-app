@@ -99,7 +99,7 @@
               {{ formatPrice(room.price) }} / đêm
             </p>
 
-            <NuxtLink to="/room-detail">
+            <NuxtLink :to="`/dia-diem/${room.slug}`">
               <Button
                 variant="link"
                 class="text-md underline"
@@ -139,6 +139,7 @@ const rooms = ref([
     roomInfo: "6 phòng ngủ, 9 toilet",
     numPeople: "14 người",
     rate: 5,
+    slug: 'phong-deluxe-huong-bien',
   },
   {
     id: 2,
@@ -150,6 +151,7 @@ const rooms = ref([
     roomInfo: "6 phòng ngủ, 9 toilet",
     numPeople: "14 người",
     rate: 5,
+    slug: 'phong-superior'
   },
   {
     id: 3,
@@ -161,10 +163,11 @@ const rooms = ref([
     roomInfo: "6 phòng ngủ, 9 toilet",
     numPeople: "14 người",
     rate: 5,
+    slug: 'phong-gia-dinh'
   },
   {
     id: 4,
-    name: "Phòng Gia Đình",
+    name: "Phòng Gia Đình 2",
     description: "Phù hợp cho nhóm hoặc gia đình 4 người, view thành phố.",
     price: 1800000,
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
@@ -172,6 +175,7 @@ const rooms = ref([
     roomInfo: "6 phòng ngủ, 9 toilet",
     numPeople: "14 người",
     rate: 5,
+    slug: 'phong-gia-dinh-2'
   },
 ]);
 

@@ -218,7 +218,9 @@
           </div>
 
           <!-- Button -->
-          <Button class="w-full" size="lg"> Đặt phòng ngay </Button>
+          <NuxtLink to="/xac-nhan"> 
+            <Button class="w-full" size="lg"> Đặt phòng ngay </Button>
+          </NuxtLink>
         </div>
       </div>
     </section>

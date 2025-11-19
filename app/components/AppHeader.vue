@@ -76,7 +76,7 @@ const isOpen = ref(false)
 const toggleMenu = () => (isOpen.value = !isOpen.value)
 const menus = [
   { title: 'Trang chủ', link: '/' },
-  { title: 'Địa điểm', link: '/rooms' },
+  { title: 'Địa điểm', link: '/dia-diem' },
   { title: 'Dịch vụ', link: '/services' },
   { title: 'Cẩm nang du lịch', link: '/cam-nang' },
   { title: 'Câu hỏi thường gặp', link: '/contact' },
