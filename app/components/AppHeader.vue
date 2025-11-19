@@ -81,7 +81,7 @@ const menus = [
   { title: 'Trang chủ', link: '/' },
   { title: 'Địa điểm', link: '/rooms' },
   { title: 'Dịch vụ', link: '/services' },
-  { title: 'Cẩm nang du lịch', link: '/about' },
+  { title: 'Cẩm nang du lịch', link: '/cam-nang' },
   { title: 'Câu hỏi thường gặp', link: '/contact' },
 ]
 </script>

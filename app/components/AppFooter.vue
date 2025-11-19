@@ -46,7 +46,7 @@
             <NuxtLink to="/services" class="hover:text-blue-400">Dịch vụ</NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/about" class="hover:text-blue-400">Giới thiệu</NuxtLink>
+            <NuxtLink to="/cam-nang" class="hover:text-blue-400">Giới thiệu</NuxtLink>
           </li>
           <li>
             <NuxtLink to="/contact" class="hover:text-blue-400">Liên hệ</NuxtLink>

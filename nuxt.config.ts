@@ -44,7 +44,8 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/scripts',
     '@nuxt/ui',
-    'shadcn-nuxt'
+    'shadcn-nuxt',
+    '@nuxt/fonts'
   ],
 
   css: ['~/assets/css/tailwind.css', '@fortawesome/fontawesome-svg-core/styles.css'],
@@ -64,4 +65,10 @@ export default defineNuxtConfig({
      */
     componentDir: './components/ui'
   },
+
+  fonts: {
+    families: [
+      { name: 'Roboto', provider: 'google' }
+    ]
+  }
 })
