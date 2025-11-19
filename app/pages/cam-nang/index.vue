@@ -42,6 +42,10 @@
               >
             </div>
           </div>
+
+          <div class="mt-6">
+            <PaginateWrap />
+          </div>
         </div>
 
         <div>
