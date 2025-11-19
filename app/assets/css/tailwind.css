@@ -146,6 +146,11 @@ main {
   width: 1560px;
 }
 
-.cus-container-2 {
+.cus-shadow-1 {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
 
+.cus-background {
+  background-image: url('/background.svg');
+  background-repeat: no-repeat;
 }

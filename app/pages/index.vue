@@ -1,36 +1,34 @@
 <template>
   <div>
-    <section class="cus-container">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-        <div class="md:my-auto">
-          <h1 class="text-6xl font-semibold mb-8">
-            Sun Homestay - Căn hộ dịch vụ Vinhomes Hà Nội
-          </h1>
-          <p class="font-semibold">
-            Chuỗi căn hộ dịch vụ Vinhomes Smart City - Vinhomes Ocean Park. Cho
-            thuê theo giờ/ngày/tuần/tháng. Check in-out tự động 24/7 riêng tư,
-            bảo mật như khách sạn với vô vạn tiện ích 5*: Pool, Gym, Biển Hồ,
-            Vườn Nhật, Shopping
+    <section class="bg-[url('/google1.jpg')] h-160 bg-cover bg-center relative">
+      <div
+        class="absolute top-0 bottom-0 right-0 left-0 bg-black opacity-60"
+      ></div>
+      <div class="absolute bottom-0 uppercase flex justify-center m-4 mb-12 w-full">
+        <div class="text-gray-200 w-3/4">
+          <h1 class="font-bold text-4xl mb-6 text-shadow-2xs ">Chào mứng đến với BookingNow</h1>
+          <p class="text-lg font-semibold text-shadow-2xs mb-4">
+            BookingNow là đơn vị chuyên cung cấp giải pháp đặt phòng thảnh thơi
+            và dịch vụ tổ chức <br />
+            sự kiện chuyên nghiệp - với phong cách phục vụ nhanh - nhiệt tình -
+            chính xác.
           </p>
-        </div>
-        <div class="flex justify-center md:justify-end">
-          <NuxtImg
-            src="https://sunhomestay.vn/uploads/2023/12/setting/y966i17028867531606749051vuon nhat vinhomes smart city.jpg"
-            class="rounded-t-[50%] max-h-96"
-            alt="banner"
-          />
-        </div>
-      </div>
 
-      <div class="md:flex md:justify-center w-full m">
-        <SearchForm />
+          <button class="text-3xl p-4 bg-primary rounded-full font-bold text-white">
+            <FontAwesomeIcon :icon="['fas', 'phone']" class="mr-1"/>
+            093 666 8888
+          </button>
+        </div>
       </div>
     </section>
 
-    <section class="bg-primary">
-      <div class="cus-container">
+    <section class="bg-primary cus-background">
+      <div class="cus-container ">
+        <div class="md:flex md:justify-center w-full mb-12">
+          <SearchForm />
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
-          <div class="bg-white p-8 rounded-tl-4xl rounded-br-4xl">
+          <div class="bg-white cus-shadow-1 p-8 rounded-tl-4xl rounded-br-4xl">
             <NuxtImg src="/svg/gt_dv_2.svg" class="h-24 mx-auto mb-6" />
             <h2 class="font-bold text-2xl mb-6 uppercase">LO TỪ A-Z</h2>
             <p>
@@ -38,7 +36,7 @@
               trước, trong và sau chuyến đi.
             </p>
           </div>
-          <div class="bg-white p-8 rounded-tl-4xl rounded-br-4xl">
+          <div class="bg-white cus-shadow-1 p-8 rounded-tl-4xl rounded-br-4xl">
             <NuxtImg src="/svg/gt_dv_1.svg" class="h-24 mx-auto mb-6" />
             <h2 class="font-bold text-2xl mb-6 uppercase">Chính xác</h2>
             <p>
@@ -46,7 +44,7 @@
               và minh bạch để khách hàng dễ dàng đưa ra lựa chọn phù hợp nhất.
             </p>
           </div>
-          <div class="bg-white p-8 rounded-tl-4xl rounded-br-4xl">
+          <div class="bg-white cus-shadow-1 p-8 rounded-tl-4xl rounded-br-4xl">
             <NuxtImg src="/svg/gt_dv_3.svg" class="h-24 mx-auto mb-6" />
             <h2 class="font-bold text-2xl mb-6 uppercase">Nhiệt tình</h2>
             <p>
@@ -61,6 +59,8 @@
 </template>
 
 <script setup lang="ts">
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 useSeoMeta({
   title: "Trang chủ",
   description:

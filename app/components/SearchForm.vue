@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <div class="grid md:grid-cols-4 gap-4 p-8 mt-4 shadow-md rounded-md">
+  <div class="shadow-md rounded-md bg-white p-8">
+    <h2 class="font-semibold">Bạn muốn đi đâu?</h2>
+    <div class="grid md:grid-cols-4 gap-4 ">
       <Select>
         <SelectTrigger class="w-full">
           <SelectValue placeholder="Chọn địa điểm..." />
@@ -23,7 +24,7 @@
         <PopoverContent class="w-80">
           <div class="grid gap-4">
             <div class="space-y-2">
-              <h4 class="font-medium leading-none">Lựa chọn loại phòng</h4>
+              <h4 class="font-medium leading-none">Số khách</h4>
               <p class="text-sm text-muted-foreground">
                 Chọn số lượng mong muốn bằng các nút.
               </p>
@@ -234,7 +235,7 @@ const roomTypes = ref({
 
 const selectRoomText = computed(() => {
   const { adults, children, infants } = roomTypes.value;
-  if (!adults && !children && !infants) return 'Chọn phòng';
+  if (!adults && !children && !infants) return 'Chọn số khách...';
 
   let string = '';
   if (adults > 0) {
