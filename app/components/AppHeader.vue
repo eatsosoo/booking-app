@@ -46,7 +46,7 @@
       <div v-if="isOpen" class="md:hidden bg-white border-t border-gray-200">
         <div class="px-4 py-3 space-y-3 text-gray-700 font-medium">
           <template v-for="menu in menus" :key="menu.title">
-            <NuxtLink :to="menu.link" class="block hover:bg-gray-200 hover:text-black px-4 py-2 hover:rounded-2xl m-0">{{
+            <NuxtLink :to="menu.link" class="block hover:bg-gray-200 hover:text-black px-4 py-2 hover:rounded-2xl m-0" @click="toggleMenu">{{
               menu.title }}</NuxtLink>
           </template>
 
@@ -70,15 +70,14 @@
 
 <script setup>
 import { ref } from 'vue'
-import Button from './ui/button/Button.vue';
 
 const isOpen = ref(false)
 const toggleMenu = () => (isOpen.value = !isOpen.value)
 const menus = [
   { title: 'Trang chủ', link: '/' },
   { title: 'Địa điểm', link: '/dia-diem' },
-  { title: 'Dịch vụ', link: '/services' },
+  { title: 'Dịch vụ', link: '/can-ho' },
   { title: 'Cẩm nang du lịch', link: '/cam-nang' },
-  { title: 'Câu hỏi thường gặp', link: '/contact' },
+  { title: 'Tư vấn hỗ trợ', link: '/tu-van-ho-tro' },
 ]
 </script>

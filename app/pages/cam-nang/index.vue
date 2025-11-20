@@ -102,45 +102,61 @@ useSeoMeta({
 
 const handbookList = [
   {
-    title: "Cẩm nang Homestay D’Eldorado Tây Hồ – Gợi ý chỗ nghỉ view hồ...",
-    date: "2025-01-15",
-    subtitle: `Homestay D' Eldorado Tây Hồ - Tân Hoàng Minh Tây Hồ`,
-    subcontent:
-      "Khám phá Homestay D’Eldorado Tây Hồ – vị trí đắc địa, view hồ thoáng mát, tiện nghi sang trọng. Cẩm nang chọn chỗ nghỉ lý tưởng cùng SunHomestay",
-    image_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+    title: "Bí kíp săn Homestay View Biển Phú Quốc - Trải Nghiệm 'Thiên Đường' Nghỉ Dưỡng",
+    date: "2024-12-20",
+    subtitle: `Khu nghỉ dưỡng Sunset Sanctuary - Bãi Dài, Phú Quốc`,
+    subcontent: "Tổng hợp những homestay view biển đẹp nhất Phú Quốc, từ bình dân đến sang trọng. Cùng SunHomestay khám phá bí quyết đặt phòng giá tốt và trải nghiệm trọn vẹn thiên đường biển đảo.",
+    image_url: "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
   },
   {
-    title: "Cẩm nang Homestay D’Eldorado Tây Hồ – Gợi ý chỗ nghỉ view hồ...",
-    date: "2025-01-15",
-    subtitle: `Homestay D' Eldorado Tây Hồ - Tân Hoàng Minh Tây Hồ`,
-    subcontent:
-      "Khám phá Homestay D’Eldorado Tây Hồ – vị trí đắc địa, view hồ thoáng mát, tiện nghi sang trọng. Cẩm nang chọn chỗ nghỉ lý tưởng cùng SunHomestay",
-    image_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+    title: "Homestay Đà Lạt Có View Rừng Thông - Góc 'Sống Ảo' Cực Phẩm Cho Team Mê Xê Dịch",
+    date: "2024-11-05",
+    subtitle: `The Pine Hill Homestay - Đường Hồ Xuân Hương, Đà Lạt`,
+    subcontent: "Đắm chìm trong không gian se lạnh và view rừng thông bạt ngàn tại những homestay Đà Lạt độc đáo. Gợi ý các góc check-in 'cực phẩm' và lịch trình khám phá thành phố sương mù 3 ngày 2 đêm.",
+    image_url: "https://images.pexels.com/photos/34514019/pexels-photo-34514019.jpeg",
   },
   {
-    title: "Cẩm nang Homestay D’Eldorado Tây Hồ – Gợi ý chỗ nghỉ view hồ...",
-    date: "2025-01-15",
-    subtitle: `Homestay D' Eldorado Tây Hồ - Tân Hoàng Minh Tây Hồ`,
-    subcontent:
-      "Khám phá Homestay D’Eldorado Tây Hồ – vị trí đắc địa, view hồ thoáng mát, tiện nghi sang trọng. Cẩm nang chọn chỗ nghỉ lý tưởng cùng SunHomestay",
-    image_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+    title: "Trải Nghiệm Homestay Phố Cổ Hội An - Lưu Trú Gần Sông Hoài, Cổ Kính & Bình Yên",
+    date: "2025-02-10",
+    subtitle: `RiverSide Homestay Hội An - 45 Nguyễn Phúc Chu`,
+    subcontent: "Sống chậm giữa lòng phố cổ với những homestay Hội An mang đậm nét kiến trúc truyền thống. Cẩm nang từ A-Z: chọn vị trí, giá cả, các hoạt động văn hóa và ẩm thực không thể bỏ lỡ.",
+    image_url: "https://images.unsplash.com/photo-1527853787696-f7be74f2e39a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
   },
   {
-    title: "Cẩm nang Homestay D’Eldorado Tây Hồ – Gợi ý chỗ nghỉ view hồ...",
-    date: "2025-01-15",
-    subtitle: `Homestay D' Eldorado Tây Hồ - Tân Hoàng Minh Tây Hồ`,
-    subcontent:
-      "Khám phá Homestay D’Eldorado Tây Hồ – vị trí đắc địa, view hồ thoáng mát, tiện nghi sang trọng. Cẩm nang chọn chỗ nghỉ lý tưởng cùng SunHomestay",
-    image_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+    title: "Homestay Sapa View Ruộng Bậc Thang - 'Check-in' Mùa Lúa Chín Vàng Óng Ả",
+    date: "2024-09-28",
+    subtitle: `Mountain Lodge Sapa - Thôn Cát Cát, Sa Pa`,
+    subcontent: "Bỏ túi danh sách những homestay Sapa có view ruộng bậc thang đẹp nhất, đặc biệt vào mùa lúa chín. Hướng dẫn trekking, tìm hiểu văn hóa các dân tộc và thưởng thức ẩm thực địa phương.",
+    image_url: "https://images.unsplash.com/photo-1543413884-807d73cb32d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
   },
   {
-    title: "Cẩm nang Homestay D’Eldorado Tây Hồ – Gợi ý chỗ nghỉ view hồ...",
-    date: "2025-01-15",
-    subtitle: `Homestay D' Eldorado Tây Hồ - Tân Hoàng Minh Tây Hồ`,
-    subcontent:
-      "Khám phá Homestay D’Eldorado Tây Hồ – vị trí đắc địa, view hồ thoáng mát, tiện nghi sang trọng. Cẩm nang chọn chỗ nghỉ lý tưởng cùng SunHomestay",
-    image_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+    title: "Lẩn Trốn Ở Homestay Vịnh Hạ Long - Ngắm Bình Minh Trên Vịnh Di Sản",
+    date: "2025-01-08",
+    subtitle: `Bayview Homestay Hạ Long - Đường Bãi Cháy`,
+    subcontent: "Khám phá những homestay Hạ Long có view vịnh tuyệt đẹp, lý tưởng để ngắm hoàng hôn và bình minh. Kinh nghiệm đặt tour du thuyền, khám phá hang động và thưởng thức hải sản tươi sống.",
+    image_url: "https://images.pexels.com/photos/34472001/pexels-photo-34472001.jpeg",
   },
+  {
+    title: "Homestay Ninh Bình 'View Tam Cốc' - Du Thuyền & Khám Phá Tràng An Cổ Kính",
+    date: "2024-10-15",
+    subtitle: `Tam Coc Garden Homestay - Xã Ninh Hải, Hoa Lư`,
+    subcontent: "Lựa chọn homestay Ninh Bình có hồ bơi vô cực và view núi non hữu tình. Hướng dẫn chi tiết lịch trình 2 ngày 1 đêm: chèo thuyền Tam Cốc, viếng chùa Bái Đính và leo núi Mua.",
+    image_url: "https://images.pexels.com/photos/34714129/pexels-photo-34714129.jpeg",
+  },
+  {
+    title: "Homestay Mộc Châu View Đồi Chè - Săn Mây & Trải Nghiệm Văn Hóa Bản Địa",
+    date: "2024-08-22",
+    subtitle: `Cloudy Hill Homestay - Mộc Châu, Sơn La`,
+    subcontent: "Tận hưởng không khí trong lành và ngắm những đồi chè xanh mướt tại Mộc Châu. Gợi ý các homestay độc đáo, hoạt động hái chè, tham quan bản làng và thưởng thức sữa bò tươi.",
+    image_url: "https://images.pexels.com/photos/34728867/pexels-photo-34728867.jpeg",
+  },
+  {
+    title: "Homestay Phú Quốc 'Villa Riêng Tư' - Kỳ Nghỉ Đẳng Cấp Cho Gia Đình & Nhóm Bạn",
+    date: "2025-03-01",
+    subtitle: `Seaside Villa Phú Quốc - Khu Grand World`,
+    subcontent: "Trải nghiệm không gian nghỉ dưỡng riêng tư với đầy đủ tiện nghi tại các villa homestay Phú Quốc. Bí quyết tổ chức tiệc BBQ, thư giãn bên hồ bơi và khám phá các điểm vui chơi giải trí.",
+    image_url: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+  }
 ];
 
 const handleCategorise = [

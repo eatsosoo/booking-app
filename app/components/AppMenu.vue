@@ -58,7 +58,39 @@ const groups = [
       </NavigationMenuItem>
 
       <NavigationMenuItem>
-        <NavigationMenuTrigger>Đỉa điểm</NavigationMenuTrigger>
+        <NavigationMenuTrigger>Khách sạn</NavigationMenuTrigger>
+        <NavigationMenuContent>
+            <div class="grid grid-cols-3 gap-2 w-lg">
+              <ul v-for="(group, index) in groups" :key="index" class="grid w-[200px] gap-1">
+                <p>{{ group.label }}</p>
+                <li v-for="(item, idx) in group.value" :key="idx">
+                  <NavigationMenuLink as-child>
+                    <a href="/dia-diem" class="hover:underline hover:text-primary hover:bg-white">{{ item }}</a>
+                  </NavigationMenuLink>
+                </li>
+              </ul>
+          </div>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+
+      <NavigationMenuItem>
+        <NavigationMenuTrigger>Villa</NavigationMenuTrigger>
+        <NavigationMenuContent>
+            <div class="grid grid-cols-3 gap-2 w-lg">
+              <ul v-for="(group, index) in groups" :key="index" class="grid w-[200px] gap-1">
+                <p>{{ group.label }}</p>
+                <li v-for="(item, idx) in group.value" :key="idx">
+                  <NavigationMenuLink as-child>
+                    <a href="/dia-diem" class="hover:underline hover:text-primary hover:bg-white">{{ item }}</a>
+                  </NavigationMenuLink>
+                </li>
+              </ul>
+          </div>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+
+      <NavigationMenuItem>
+        <NavigationMenuTrigger>Chung cư mini</NavigationMenuTrigger>
         <NavigationMenuContent>
             <div class="grid grid-cols-3 gap-2 w-lg">
               <ul v-for="(group, index) in groups" :key="index" class="grid w-[200px] gap-1">
@@ -87,7 +119,7 @@ const groups = [
 
       <NavigationMenuItem>
         <NavigationMenuLink as-child :class="navigationMenuTriggerStyle()">
-          <a href="/">Câu hỏi thường gặp</a>
+          <a href="/tu-van-ho-tro">Tư vấn hỗ trợ</a>
         </NavigationMenuLink>
       </NavigationMenuItem>
     </NavigationMenuList>

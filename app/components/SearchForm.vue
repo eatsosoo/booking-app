@@ -112,8 +112,8 @@
       </Popover>
 
       <!-- Action -->
-      <div class="grid grid-cols-2">
-        <Button>Tìm kiếm</Button>
+      <div class="">
+        <Button class="w-full">Tìm kiếm</Button>
       </div>
     </div>
 

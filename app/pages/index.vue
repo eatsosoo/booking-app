@@ -68,7 +68,7 @@
         >
           <div class="flex flex-col justify-around">
             <h2 class="text-3xl font-bold uppercase">Về chúng tôi</h2>
-            <p class="text-justify">
+            <p class="text-justify py-4">
               Được thành lập từ năm 2024, BookingNow là thương hiệu du lịch uy
               tín, hướng đến việc mang lại cho khách hàng những trải nghiệm đặt
               phòng nhanh chóng, tiện lợi và hoàn toàn thảnh thơi. Chúng tôi
@@ -76,8 +76,8 @@
               khách sạn – resort – homestay, mà còn mở rộng dịch vụ sang lĩnh
               vực tổ chức sự kiện với quy trình chuyên nghiệp, linh hoạt theo
               từng nhu cầu riêng biệt của khách hàng.
-              <br />
-              <br />
+              <br>
+              <br>
               BookingNow không ngừng đổi mới, cải thiện công nghệ và nâng cao
               chất lượng dịch vụ, với mục tiêu trở thành người bạn đồng hành tin
               cậy cho mọi chuyến du lịch, công tác hay sự kiện quan trọng của
@@ -90,7 +90,7 @@
           <div class="flex justify-center md:justify-end">
             <div class="rounded-tl-4xl rounded-br-4xl p-2 bg-white">
               <NuxtImg
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
+                src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg"
                 class="rounded-tl-4xl rounded-br-4xl max-h-96"
               />
             </div>
@@ -98,11 +98,11 @@
         </div>
 
         <div
-          class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:mx-24 mt-20 bg-white p-8 rounded-xl"
+          class="grid grid-cols-1 md:grid-cols-3 md:gap-12 lg:mx-24 mt-20 bg-white p-8 rounded-xl"
         >
-          <div>
+          <div class="flex flex-col justify-center">
             <NuxtImg
-              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
+              src="https://images.pexels.com/photos/237272/pexels-photo-237272.jpeg"
               class="rounded-tl-4xl rounded-br-4xl max-h-96"
             />
             <p
@@ -113,7 +113,7 @@
           </div>
           <div class="col-span-2 text-center">
             <h2 class="uppercase text-2xl font-bold mb-4 mt-4 text-blue-950">
-              Giảm giá giờ chót <br />gói dịch vụ thuê Villa, Biệt thự
+              Giảm giá giờ chót <br>gói dịch vụ thuê Villa, Biệt thự
             </h2>
             <p class="text-justify">
               <span class="font-semibold">Nghỉ dưỡng đẳng cấp bậc nhất Vũng Tàu</span>, phù hợp cho nhóm 10–15

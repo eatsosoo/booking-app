@@ -4,7 +4,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <NuxtImg
           src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
-          class="h-full"
+          class="h-70 md:h-full"
         />
         <div class="grid grid-cols-2 gap-2">
           <NuxtImg

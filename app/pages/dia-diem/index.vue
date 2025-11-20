@@ -103,7 +103,6 @@
               <Button
                 variant="link"
                 class="text-md underline"
-                @click="bookRoom(room)"
               >
                 Xem thêm
               </Button>
@@ -131,60 +130,120 @@ import Separator from "~/components/ui/separator/Separator.vue";
 const rooms = ref([
   {
     id: 1,
-    name: "Phòng Deluxe Hướng Biển",
-    description: "Tầm nhìn tuyệt đẹp, ban công riêng, miễn phí bữa sáng.",
-    price: 1200000,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-    address: "Hạ Long, Quảng Ninh",
-    roomInfo: "6 phòng ngủ, 9 toilet",
-    numPeople: "14 người",
-    rate: 5,
-    slug: 'phong-deluxe-huong-bien',
+    name: "Biệt Thự View Biển Cao Cấp",
+    description: "Biệt thự riêng tư với hồ bơi, view biển tuyệt đẹp, phù hợp cho gia đình và nhóm bạn. Có bếp đầy đủ tiện nghi và sân vườn rộng rãi.",
+    price: 3200000,
+    image: "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    address: "Bãi Dài, Phú Quốc, Kiên Giang",
+    roomInfo: "4 phòng ngủ, 3 phòng tắm",
+    numPeople: "8 người",
+    rate: 4.9,
+    slug: 'biet-thu-view-bien-cao-cap',
   },
   {
     id: 2,
-    name: "Phòng Superior",
-    description: "Phòng thoáng mát, nội thất sang trọng, tiện nghi đầy đủ.",
-    price: 950000,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-    address: "Hạ Long, Quảng Ninh",
-    roomInfo: "6 phòng ngủ, 9 toilet",
-    numPeople: "14 người",
-    rate: 5,
-    slug: 'phong-superior'
+    name: "Căn Hộ Studio View Thành Phố",
+    description: "Căn hộ studio hiện đại với view toàn cảnh thành phố, nội thất mới 100%, wifi tốc độ cao và phòng gym miễn phí.",
+    price: 850000,
+    image: "https://images.pexels.com/photos/271619/pexels-photo-271619.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    address: "Quận 1, TP. Hồ Chí Minh",
+    roomInfo: "1 phòng ngủ, 1 phòng tắm",
+    numPeople: "2 người",
+    rate: 4.7,
+    slug: 'can-ho-studio-view-thanh-pho'
   },
   {
     id: 3,
-    name: "Phòng Gia Đình",
-    description: "Phù hợp cho nhóm hoặc gia đình 4 người, view thành phố.",
-    price: 1800000,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-    address: "Hạ Long, Quảng Ninh",
-    roomInfo: "6 phòng ngủ, 9 toilet",
-    numPeople: "14 người",
-    rate: 5,
-    slug: 'phong-gia-dinh'
+    name: "Nhà Gỗ View Rừng Thông",
+    description: "Nhà gỗ ấm cúng giữa rừng thông, không gian yên tĩnh lý tưởng để nghỉ dưỡng. Có lò sưởi và ban công ngắm cảnh.",
+    price: 1250000,
+    image: "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    address: "Đường Hồ Xuân Hương, Đà Lạt, Lâm Đồng",
+    roomInfo: "2 phòng ngủ, 2 phòng tắm",
+    numPeople: "4 người",
+    rate: 4.8,
+    slug: 'nha-go-view-rung-thong'
   },
   {
     id: 4,
-    name: "Phòng Gia Đình 2",
-    description: "Phù hợp cho nhóm hoặc gia đình 4 người, view thành phố.",
-    price: 1800000,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-    address: "Hạ Long, Quảng Ninh",
-    roomInfo: "6 phòng ngủ, 9 toilet",
-    numPeople: "14 người",
-    rate: 5,
-    slug: 'phong-gia-dinh-2'
+    name: "Homestay View Ruộng Bậc Thang",
+    description: "Homestay độc đáo với view ruộng bậc thang tuyệt đẹp, trải nghiệm văn hóa địa phương. Bao gồm bữa sáng đặc sản.",
+    price: 750000,
+    image: "https://images.pexels.com/photos/3188786/pexels-photo-3188786.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    address: "Thôn Cát Cát, Sa Pa, Lào Cai",
+    roomInfo: "3 phòng ngủ, 2 phòng tắm",
+    numPeople: "6 người",
+    rate: 4.6,
+    slug: 'homestay-view-ruong-bac-thang'
   },
+  {
+    id: 5,
+    name: "Villa Hồ Bơi Riêng View Núi",
+    description: "Villa sang trọng với hồ bơi riêng, view núi non hùng vĩ. Có người quản gia và đầu bếp riêng theo yêu cầu.",
+    price: 5500000,
+    image: "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    address: "Hòa Bình, Việt Nam",
+    roomInfo: "5 phòng ngủ, 4 phòng tắm",
+    numPeople: "10 người",
+    rate: 5.0,
+    slug: 'villa-ho-boi-rieng-view-nui'
+  },
+  {
+    id: 6,
+    name: "Căn Hộ View Sông Sang Trọng",
+    description: "Căn hộ cao cấp với view sông tuyệt đẹp, nội thất thiết kế tinh tế. Tiện nghi 5 sao và dịch vụ khách sạn đẳng cấp.",
+    price: 1950000,
+    image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    address: "Quận Bình Thạnh, TP. Hồ Chí Minh",
+    roomInfo: "2 phòng ngủ, 2 phòng tắm",
+    numPeople: "4 người",
+    rate: 4.9,
+    slug: 'can-ho-view-song-sang-trong'
+  },
+  {
+    id: 7,
+    name: "Nhà Vườn Yên Tĩnh",
+    description: "Không gian nghỉ dưỡng yên bình với vườn cây xanh mát, phù hợp cho những ai muốn tránh xa ồn ào thành thị.",
+    price: 680000,
+    image: "https://images.pexels.com/photos/53610/large-home-residential-house-architecture-53610.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    address: "Củ Chi, TP. Hồ Chí Minh",
+    roomInfo: "3 phòng ngủ, 2 phòng tắm",
+    numPeople: "6 người",
+    rate: 4.5,
+    slug: 'nha-vuon-yen-tinh'
+  },
+  {
+    id: 8,
+    name: "Căn Hộ Mini Trung Tâm",
+    description: "Căn hộ mini tiện nghi, vị trí đắc địa ngay trung tâm, dễ dàng di chuyển đến các điểm du lịch và mua sắm.",
+    price: 520000,
+    image: "https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    address: "Quận Hoàn Kiếm, Hà Nội",
+    roomInfo: "1 phòng ngủ, 1 phòng tắm",
+    numPeople: "2 người",
+    rate: 4.3,
+    slug: 'can-ho-mini-trung-tam'
+  },
+  {
+    id: 9,
+    name: "Bungalow View Biển Lãng Mạn",
+    description: "Bungalow nhỏ xinh nằm ngay sát biển, view hoàng hôn tuyệt đẹp. Thiết kế mở, phù hợp cho các cặp đôi muốn không gian riêng tư.",
+    price: 1450000,
+    image: "https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    address: "Đảo Nam Du, Kiên Giang",
+    roomInfo: "1 phòng ngủ, 1 phòng tắm",
+    numPeople: "2 người",
+    rate: 4.8,
+    slug: 'bungalow-view-bien-lang-man'
+  }
 ]);
 
 const formatPrice = (value: number) =>
   value.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 
-const bookRoom = (room: { id: number; name: string }) => {
-  alert(`Bạn đã chọn đặt: ${room.name}`);
-};
+// const bookRoom = (room: { id: number; name: string }) => {
+//   alert(`Bạn đã chọn đặt: ${room.name}`);
+// };
 
 useSeoMeta({
   title: "Danh sách phòng",
