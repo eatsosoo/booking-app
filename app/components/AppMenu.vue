@@ -107,7 +107,7 @@ const groups = [
 
       <NavigationMenuItem>
         <NavigationMenuLink as-child :class="navigationMenuTriggerStyle()">
-          <a href="/can-ho">Dịch vụ</a>
+          <a href="/dich-vu">Dịch vụ</a>
         </NavigationMenuLink>
       </NavigationMenuItem>
 

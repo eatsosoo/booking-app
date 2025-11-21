@@ -1,7 +1,7 @@
 <template>
   <div>
     <section
-      class="bg-[url('/banner3.avif')] bg-center bg-contain h-96 opacity-85 relative flex justify-center"
+      class="bg-[url('/banner3.avif')] bg-center bg-cover h-96 opacity-85 relative flex justify-center"
     >
       <div
         class="absolute top-0 bottom-0 right-0 left-0 bg-black opacity-50"
