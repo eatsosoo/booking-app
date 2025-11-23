@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="overflow-x-hidden">
     <section class="bg-[url('/google1.jpg')] h-160 bg-cover bg-center relative">
       <div
         class="absolute top-0 bottom-0 right-0 left-0 bg-black opacity-60"
