@@ -51,6 +51,7 @@
             <NuxtLink :to="menu.link" class="block hover:bg-gray-200 hover:text-black px-4 py-2 hover:rounded-2xl m-0" @click="toggleMenu">{{
               menu.title }}</NuxtLink>
           </template>
+          <!-- <AppMenu /> -->
 
           <!-- <div class="border-t border-gray-200 pt-3 space-y-2">
             <NuxtLink to="/login" class="mr-2">
@@ -77,9 +78,10 @@ const isOpen = ref(false)
 const toggleMenu = () => (isOpen.value = !isOpen.value)
 const menus = [
   { title: 'Trang chủ', link: '/' },
-  { title: 'Địa điểm', link: '/dia-diem' },
-  { title: 'Dịch vụ', link: '/can-ho' },
+  { title: 'Dịch vụ', link: '/dich-vu' },
   { title: 'Cẩm nang du lịch', link: '/cam-nang' },
-  { title: 'Tư vấn hỗ trợ', link: '/tu-van-ho-tro' },
+  { title: 'Về chúng tôi', link: '/gioi-thieu/ve-chung-toi' },
+  { title: 'Tư vấn hỗ trợ', link: '/gioi-thieu/tu-van-ho-tro' },
+  { title: 'Câu hỏi thường gặp', link: '/gioi-thieu/cau-hoi-thuong-gap' },
 ]
 </script>
