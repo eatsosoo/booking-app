@@ -12,7 +12,7 @@ import {
     <section class="w-full">
       <!-- Hero section -->
       <div class="relative h-[250px] md:h-[400px] w-full">
-        <img
+        <NuxtImg
           src="https://images.pexels.com/photos/5428833/pexels-photo-5428833.jpeg"
           alt="Booking team"
           class="object-cover w-full h-full"
