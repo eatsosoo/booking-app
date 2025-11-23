@@ -78,7 +78,7 @@
         <h3 class="text-white font-semibold mb-4 text-lg">Liên hệ</h3>
         <ul class="space-y-3 text-sm">
           <li class="flex items-start space-x-2">
-            <i class="fa-solid fa-location-dot text-blue-400 mt-1"></i>
+            <i class="fa-solid fa-location-dot text-blue-400 mt-1" />
             <span>193 Văn Cao, Ngô Quyền, TP.Hải Phòng, Việt Nam</span>
           </li>
           <li class="flex items-center space-x-2 item">
