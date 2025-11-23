@@ -43,13 +43,13 @@
             <NuxtLink to="/dia-diem" class="hover:text-blue-400">Phòng</NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/services" class="hover:text-blue-400">Dịch vụ</NuxtLink>
+            <NuxtLink to="/dich-vu" class="hover:text-blue-400">Dịch vụ</NuxtLink>
           </li>
           <li>
             <NuxtLink to="/cam-nang" class="hover:text-blue-400">Giới thiệu</NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/contact" class="hover:text-blue-400">Liên hệ</NuxtLink>
+            <NuxtLink to="/gioi-thieu/tu-van-ho-tro" class="hover:text-blue-400">Liên hệ</NuxtLink>
           </li>
         </ul>
       </div>

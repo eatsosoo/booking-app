@@ -7,7 +7,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu'
+} from "@/components/ui/navigation-menu";
 
 const groups = [
   {
@@ -60,15 +60,23 @@ const groups = [
       <NavigationMenuItem>
         <NavigationMenuTrigger>Khách sạn</NavigationMenuTrigger>
         <NavigationMenuContent>
-            <div class="grid grid-cols-3 gap-2 w-lg">
-              <ul v-for="(group, index) in groups" :key="index" class="grid w-[200px] gap-1">
-                <p>{{ group.label }}</p>
-                <li v-for="(item, idx) in group.value" :key="idx">
-                  <NavigationMenuLink as-child>
-                    <a href="/dia-diem" class="hover:underline hover:text-primary hover:bg-white">{{ item }}</a>
-                  </NavigationMenuLink>
-                </li>
-              </ul>
+          <div class="grid grid-cols-3 gap-2 w-lg">
+            <ul
+              v-for="(group, index) in groups"
+              :key="index"
+              class="grid w-[200px] gap-1"
+            >
+              <p>{{ group.label }}</p>
+              <li v-for="(item, idx) in group.value" :key="idx">
+                <NavigationMenuLink as-child>
+                  <a
+                    href="/dia-diem"
+                    class="hover:underline hover:text-primary hover:bg-white"
+                    >{{ item }}</a
+                  >
+                </NavigationMenuLink>
+              </li>
+            </ul>
           </div>
         </NavigationMenuContent>
       </NavigationMenuItem>
@@ -76,15 +84,23 @@ const groups = [
       <NavigationMenuItem>
         <NavigationMenuTrigger>Villa</NavigationMenuTrigger>
         <NavigationMenuContent>
-            <div class="grid grid-cols-3 gap-2 w-lg">
-              <ul v-for="(group, index) in groups" :key="index" class="grid w-[200px] gap-1">
-                <p>{{ group.label }}</p>
-                <li v-for="(item, idx) in group.value" :key="idx">
-                  <NavigationMenuLink as-child>
-                    <a href="/dia-diem" class="hover:underline hover:text-primary hover:bg-white">{{ item }}</a>
-                  </NavigationMenuLink>
-                </li>
-              </ul>
+          <div class="grid grid-cols-3 gap-2 w-lg">
+            <ul
+              v-for="(group, index) in groups"
+              :key="index"
+              class="grid w-[200px] gap-1"
+            >
+              <p>{{ group.label }}</p>
+              <li v-for="(item, idx) in group.value" :key="idx">
+                <NavigationMenuLink as-child>
+                  <a
+                    href="/dia-diem"
+                    class="hover:underline hover:text-primary hover:bg-white"
+                    >{{ item }}</a
+                  >
+                </NavigationMenuLink>
+              </li>
+            </ul>
           </div>
         </NavigationMenuContent>
       </NavigationMenuItem>
@@ -92,15 +108,23 @@ const groups = [
       <NavigationMenuItem>
         <NavigationMenuTrigger>Chung cư mini</NavigationMenuTrigger>
         <NavigationMenuContent>
-            <div class="grid grid-cols-3 gap-2 w-lg">
-              <ul v-for="(group, index) in groups" :key="index" class="grid w-[200px] gap-1">
-                <p>{{ group.label }}</p>
-                <li v-for="(item, idx) in group.value" :key="idx">
-                  <NavigationMenuLink as-child>
-                    <a href="/dia-diem" class="hover:underline hover:text-primary hover:bg-white">{{ item }}</a>
-                  </NavigationMenuLink>
-                </li>
-              </ul>
+          <div class="grid grid-cols-3 gap-2 w-lg">
+            <ul
+              v-for="(group, index) in groups"
+              :key="index"
+              class="grid w-[200px] gap-1"
+            >
+              <p>{{ group.label }}</p>
+              <li v-for="(item, idx) in group.value" :key="idx">
+                <NavigationMenuLink as-child>
+                  <a
+                    href="/dia-diem"
+                    class="hover:underline hover:text-primary hover:bg-white"
+                    >{{ item }}</a
+                  >
+                </NavigationMenuLink>
+              </li>
+            </ul>
           </div>
         </NavigationMenuContent>
       </NavigationMenuItem>
@@ -118,9 +142,18 @@ const groups = [
       </NavigationMenuItem>
 
       <NavigationMenuItem>
-        <NavigationMenuLink as-child :class="navigationMenuTriggerStyle()">
-          <a href="/tu-van-ho-tro">Tư vấn hỗ trợ</a>
-        </NavigationMenuLink>
+        <NavigationMenuTrigger>Giới thiệu</NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <NavigationMenuLink as-child :class="navigationMenuTriggerStyle()">
+            <a href="/gioi-thieu/ve-chung-toi">Về chúng tôi</a>
+          </NavigationMenuLink>
+          <NavigationMenuLink as-child :class="navigationMenuTriggerStyle()">
+            <a href="/gioi-thieu/tu-van-ho-tro">Tư vấn hỗ trợ</a>
+          </NavigationMenuLink>
+          <NavigationMenuLink as-child :class="navigationMenuTriggerStyle()">
+            <a href="/gioi-thieu/cau-hoi-thuong-gap">Câu hỏi thường gặp</a>
+          </NavigationMenuLink>
+        </NavigationMenuContent>
       </NavigationMenuItem>
     </NavigationMenuList>
   </NavigationMenu>
