@@ -10,7 +10,7 @@
         class="absolute -bottom-4 bg-primary z-10 py-6 px-10 top rounded-tl-4xl rounded-br-4xl shadow-xl max-w-7xl w-full"
       >
         <h1 class="uppercase text-white text-2xl semibold">
-          Các căn hộ "<span class="text-blue-900 font-bold">dịch vụ</span>"
+          Các căn hộ "<span class="text-blue-900 font-bold">Khu đô thị Vinhomes Smart City</span>"
         </h1>
       </div>
     </section>
@@ -23,7 +23,7 @@
       </p>
 
       <!-- Filter Buttons -->
-      <div class="flex flex-wrap gap-2 mt-6">
+      <!-- <div class="flex flex-wrap gap-2 mt-6">
         <Button
           v-for="item in filters"
           :key="item.value"
@@ -32,7 +32,7 @@
         >
           {{ item.label }}
         </Button>
-      </div>
+      </div> -->
 
       <!-- Room List -->
       <div class="mt-10 space-y-8">
@@ -110,29 +110,39 @@
           </div>
         </div>
       </div>
+
+      <!-- Pagination -->
+       <!-- <Separator class="mb-10 mt-12"/> -->
+       <div class="mt-12">
+        <PaginateWrap />
+       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import Button from "~/components/ui/button/Button.vue";
+// import Button from "~/components/ui/button/Button.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
 
-const filters = [
-  { label: "Tất cả", value: "all" },
-  { label: "Khách sạn", value: "hotel" },
-  { label: "Villa", value: "villa" },
-  { label: "Studio", value: "studio" },
-  { label: "Căn hộ 1 PN", value: "1pn" },
-  { label: "Căn hộ 2 PN", value: "2pn" },
-  { label: "Căn hộ 3 PN", value: "3pn" },
-];
+const { params } = useRoute()
+const { slug } = params
+
+console.log(slug)
+// const filters = [
+//   { label: "Tất cả", value: "all" },
+//   { label: "Khách sạn", value: "hotel" },
+//   { label: "Villa", value: "villa" },
+//   { label: "Studio", value: "studio" },
+//   { label: "Căn hộ 1 PN", value: "1pn" },
+//   { label: "Căn hộ 2 PN", value: "2pn" },
+//   { label: "Căn hộ 3 PN", value: "3pn" },
+// ];
 
 const rooms = [
   {
     id: 1,
-    title: "Căn hộ dịch vụ cho cặp đôi tại Vinhomes Smart City",
+    title: "Căn hộ cho cặp đôi tại Vinhomes Smart City",
     location: "Vinhomes Smart City, Nam Từ Liêm, Hà Nội",
     type: "Studio",
     guests: "1-2 khách",
@@ -168,7 +178,7 @@ const rooms = [
   {
     id: 3,
     title: "Căn hộ cao cấp view Hồ Tây Full tiện nghi",
-    location: "Tây Hồ, Hà Nội",
+    location: "Vinhomes Smart City, Nam Từ Liêm, Hà Nội",
     type: "Căn hộ",
     guests: "1-3 khách",
     tag: "View Đẹp",
@@ -185,7 +195,7 @@ const rooms = [
   {
     id: 4,
     title: "Studio Mini có ban công tại Times City",
-    location: "Times City, Hoàng Mai, Hà Nội",
+    location: "Vinhomes Smart City, Nam Từ Liêm, Hà Nội",
     type: "Studio",
     guests: "1-2 khách",
     tag: "Tiết Kiệm",
@@ -203,7 +213,7 @@ const rooms = [
   {
     id: 5,
     title: "Căn hộ Duplex có bếp nấu ăn Royal City",
-    location: "Royal City, Thanh Xuân, Hà Nội",
+    location: "Vinhomes Smart City, Nam Từ Liêm, Hà Nội",
     type: "Duplex",
     guests: "2-4 khách",
     tag: "Có Bếp",
@@ -220,7 +230,7 @@ const rooms = [
   {
     id: 6,
     title: "Studio có bồn tắm lớn & view thành phố",
-    location: "Cầu Giấy, Hà Nội",
+    location: "Vinhomes Smart City, Nam Từ Liêm, Hà Nội",
     type: "Studio",
     guests: "1-2 khách",
     tag: "Sang Trọng",
@@ -237,8 +247,8 @@ const rooms = [
   },
   {
     id: 7,
-    title: "Căn hộ dịch vụ có Gym & Hồ bơi nội khu",
-    location: "The Manor, Mỹ Đình, Hà Nội",
+    title: "Căn hộ có Gym & Hồ bơi nội khu",
+    location: "Vinhomes Smart City, Nam Từ Liêm, Hà Nội",
     type: "Căn hộ",
     guests: "1-3 khách",
     tag: "Tiện Ích",
@@ -255,7 +265,7 @@ const rooms = [
   {
     id: 8,
     title: "Studio giá rẻ gần sân bay Nội Bài",
-    location: "Đông Anh, Hà Nội",
+    location: "Vinhomes Smart City, Nam Từ Liêm, Hà Nội",
     type: "Studio",
     guests: "1-2 khách",
     tag: "Giá Rẻ",
@@ -272,7 +282,7 @@ const rooms = [
   }
 ];
 
-const filterVal = ref("all");
+// const filterVal = ref("all");
 </script>
 
 <style scoped>

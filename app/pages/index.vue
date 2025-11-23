@@ -76,8 +76,8 @@
               khách sạn – resort – homestay, mà còn mở rộng dịch vụ sang lĩnh
               vực tổ chức sự kiện với quy trình chuyên nghiệp, linh hoạt theo
               từng nhu cầu riêng biệt của khách hàng.
-              <br>
-              <br>
+              <br />
+              <br />
               BookingNow không ngừng đổi mới, cải thiện công nghệ và nâng cao
               chất lượng dịch vụ, với mục tiêu trở thành người bạn đồng hành tin
               cậy cho mọi chuyến du lịch, công tác hay sự kiện quan trọng của
@@ -113,22 +113,73 @@
           </div>
           <div class="col-span-2 text-center">
             <h2 class="uppercase text-2xl font-bold mb-4 mt-4 text-blue-950">
-              Giảm giá giờ chót <br>gói dịch vụ thuê Villa, Biệt thự
+              Giảm giá giờ chót <br />gói dịch vụ thuê Villa, Biệt thự
             </h2>
             <p class="text-justify">
-              <span class="font-semibold">Nghỉ dưỡng đẳng cấp bậc nhất Vũng Tàu</span>, phù hợp cho nhóm 10–15
-              người, tọa lạc tại vị trí <span class="font-semibold">view biển tuyệt đẹp</span> ngay trên trục đường
-              Trần Phú nổi tiếng. Chỉ <span class="font-semibold">cách biển khoảng 200m</span>, du khách có thể dễ
-              dàng di chuyển đến bãi tắm, ngắm bình minh, hoặc tận hưởng không
-              khí biển trong lành bất cứ lúc nào. 
-              <br><br>Không gian lưu trú được thiết
-              kế sang trọng, đầy đủ tiện nghi, rất thích hợp cho gia đình, nhóm
-              bạn hoặc team building nhỏ. Với số lượng căn hạn chế, chỗ ở luôn
-              trong tình trạng được đặt nhanh — <span class="font-semibold"> hãy liên hệ ngay để giữ phòng và
-              trải nghiệm kỳ nghỉ hoàn hảo tại Vũng Tàu!</span>
+              <span class="font-semibold"
+                >Nghỉ dưỡng đẳng cấp bậc nhất Vũng Tàu</span
+              >, phù hợp cho nhóm 10–15 người, tọa lạc tại vị trí
+              <span class="font-semibold">view biển tuyệt đẹp</span> ngay trên
+              trục đường Trần Phú nổi tiếng. Chỉ
+              <span class="font-semibold">cách biển khoảng 200m</span>, du khách
+              có thể dễ dàng di chuyển đến bãi tắm, ngắm bình minh, hoặc tận
+              hưởng không khí biển trong lành bất cứ lúc nào. <br /><br />Không
+              gian lưu trú được thiết kế sang trọng, đầy đủ tiện nghi, rất thích
+              hợp cho gia đình, nhóm bạn hoặc team building nhỏ. Với số lượng
+              căn hạn chế, chỗ ở luôn trong tình trạng được đặt nhanh —
+              <span class="font-semibold">
+                hãy liên hệ ngay để giữ phòng và trải nghiệm kỳ nghỉ hoàn hảo
+                tại Vũng Tàu!</span
+              >
             </p>
             <Button class="mt-8">Đặt ngay</Button>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dự án hiện tại -->
+    <section class="bg-secondary">
+      <div class="cus-container space-y-10">
+        <h2 class="text-3xl font-bold text-center">Dự án đang triển khai</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
+          <!-- Project item -->
+          <div
+            v-for="(project, i) in projects"
+            :key="i"
+            class="bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col"
+          >
+            <!-- Image -->
+            <NuxtImg
+              :src="project.image_url"
+              class="h-48 w-full object-cover"
+              :alt="project.slug"
+            />
+
+            <!-- Content -->
+            <div class="p-5 flex flex-col flex-1">
+              <h3 class="text-xl font-semibold mb-2">{{ project.title }}</h3>
+              <p class="text-muted-foreground text-sm flex-1">
+                {{ project.description }}
+              </p>
+              <div class="mx-auto">
+                <NuxtLink :to="`/du-an/${project.slug}`">
+                  <Button class="mt-4 w-fit" variant="link">
+                    Xem chi tiết
+                  </Button>
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-center">
+          <NuxtLink to="/du-an/tat-ca">
+            <Button class="mt-4 w-fit" variant="default">
+              Xem tất cả tự án
+            </Button>
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -144,4 +195,79 @@ useSeoMeta({
   description:
     "Trang đặt phòng khách sạn, resort, homestay dễ sử dụng và tối ưu SEO.",
 });
+
+const projects = ref([
+  {
+    title: "Khu đô thị Vinhomes Smart City",
+    description:
+      "Khu đô thị thông minh với hệ thống tiện ích đồng bộ, công viên cây xanh và hạ tầng hiện đại bậc nhất Hà Nội",
+    image_url:
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    slug: "khu-do-thi-vinhomes-smart-city",
+  },
+  {
+    title: "Dự án Sunshine Riverside",
+    description:
+      "Tổ hợp căn hộ cao cấp view sông Hồng, thiết kế sang trọng với không gian sống xanh và tiện nghi đẳng cấp",
+    image_url:
+      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    slug: "du-an-sunshine-riverside",
+  },
+  {
+    title: "Khu nghỉ dưỡng FLC Sầm Sơn",
+    description:
+      "Tổ hợp nghỉ dưỡng 5 sao với bãi biển riêng, sân golf và hệ thống villa, khách sạn cao cấp",
+    image_url:
+      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    slug: "khu-nghi-duong-flc-sam-son",
+  },
+  {
+    title: "Dự án The Zei Mỹ Đình",
+    description:
+      "Căn hộ thương mại - dịch vụ cao cấp tại trung tâm Mỹ Đình, kết hợp không gian sống và kinh doanh",
+    image_url:
+      "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    slug: "du-an-the-zei-my-dinh",
+  },
+  {
+    title: "Khu đô thị Ecopark Grand",
+    description:
+      "Thành phố xanh với hệ sinh thái hoàn chỉnh, công viên rộng lớn và cộng đồng cư dân văn minh",
+    image_url:
+      "https://images.pexels.com/photos/1438832/pexels-photo-1438832.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    slug: "khu-do-thi-ecopark-grand",
+  },
+  {
+    title: "Dự án Masteri Centre Point",
+    description:
+      "Tòa tháp đôi cao cấp tại trung tâm quận 2, TP.HCM với view sông Sài Gòn toàn cảnh",
+    image_url:
+      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    slug: "du-an-masteri-centre-point",
+  },
+  // {
+  //   title: "Khu nghỉ dưỡng InterContinental Phú Quốc",
+  //   description: "Resort 5 sao quốc tế với villa trên biển, spa cao cấp và ẩm thực đa dạng từ các đầu bếp hàng đầu",
+  //   image_url: "https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //   slug: "khu-nghi-duong-intercontinental-phu-quoc"
+  // },
+  // {
+  //   title: "Dự án Hado Centrosa Garden",
+  //   description: "Tổ hợp căn hộ xanh với thiết kế vườn thẳng đứng, không gian sống gần gũi thiên nhiên giữa lòng thành phố",
+  //   image_url: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //   slug: "du-an-hado-centrosa-garden"
+  // },
+  // {
+  //   title: "Khu đô thị Times City Park Hill",
+  //   description: "Phân khu cao cấp trong khu đô thị Times City với view công viên và hồ nước rộng lớn",
+  //   image_url: "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //   slug: "khu-do-thi-times-city-park-hill"
+  // },
+  // {
+  //   title: "Dự án Vinpearl Discovery Coastalland",
+  //   description: "Tổ hợp du lịch - nghỉ dưỡng - giải trí với công viên nước, thủy cung và hệ thống khách sạn tiêu chuẩn quốc tế",
+  //   image_url: "https://images.pexels.com/photos/2613239/pexels-photo-2613239.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  //   slug: "du-an-vinpearl-discovery-coastalland"
+  // }
+]);
 </script>
