@@ -130,6 +130,30 @@ const groups = [
       </NavigationMenuItem>
 
       <NavigationMenuItem>
+        <NavigationMenuTrigger>Homestay</NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <div class="grid grid-cols-3 gap-2 w-lg">
+            <ul
+              v-for="(group, index) in groups"
+              :key="index"
+              class="grid w-[200px] gap-1"
+            >
+              <p>{{ group.label }}</p>
+              <li v-for="(item, idx) in group.value" :key="idx">
+                <NavigationMenuLink as-child>
+                  <a
+                    href="/dia-diem"
+                    class="hover:underline hover:text-primary hover:bg-white"
+                    >{{ item }}</a
+                  >
+                </NavigationMenuLink>
+              </li>
+            </ul>
+          </div>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+
+      <NavigationMenuItem>
         <NavigationMenuLink as-child :class="navigationMenuTriggerStyle()">
           <a href="/dich-vu">Dịch vụ</a>
         </NavigationMenuLink>
