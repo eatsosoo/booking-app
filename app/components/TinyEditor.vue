@@ -34,6 +34,8 @@ const modelValue = defineModel<string>({ default: "" });
 const imageInput = ref<HTMLInputElement | null>(null);
 const editor = ref<Editor | null>(null);
 
+const config = useRuntimeConfig();
+
 onMounted(() => {
   editor.value = new Editor({
     content: modelValue.value,
@@ -72,7 +74,7 @@ const handleImageUpload = async (e: Event) => {
     const formData = new FormData();
     formData.append("media", file);
 
-    const res = await $fetch("http://api-gateway.dyhome.vn/api/home/upload", {
+    const res = await $fetch(`${config.public.apiBase}/home/upload`, {
       method: "POST",
       body: formData,
     });
@@ -208,8 +210,8 @@ const setLink = () => {
       <Button
   size="icon"
   variant="ghost"
-  @click="setLink"
   :class="{ 'bg-primary text-primary-foreground': editor?.isActive('link') }"
+  @click="setLink"
 >
   <LinkIcon class="w-4 h-4" />
 </Button>
