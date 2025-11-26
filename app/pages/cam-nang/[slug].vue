@@ -30,8 +30,8 @@
           <span>Chia sẻ:</span>
 
           <button
-            @click="shareFacebook"
             class="flex items-center gap-1 hover:underline"
+            @click="shareFacebook"
           >
             <Facebook class="w-4 h-4" />
             Facebook
@@ -59,25 +59,25 @@
     </div>
   </div>
 </template>
-<style>
-@import "~/assets/css/reverse-format.css";
-</style>
+
 <script setup lang="ts">
 import { useRoute } from "vue-router";
 import { useFetch } from "#app";
 import { Calendar, Facebook, Twitter } from "lucide-vue-next";
+import type { Post, Response } from "~/types";
 
 const route = useRoute();
+const config = useRuntimeConfig();
 const slug = route.params.slug;
 
 // API URL
-const apiUrl = `http://api-gateway.dyhome.vn/api/home/posts/${slug}`;
+const apiUrl = `${config.public.apiBase}/home/posts/${slug}`;
 
 // Fetch detail post
-const { data, pending, error } = await useFetch(apiUrl);
+const { data, pending, error } = await useFetch<Response<Post>>(apiUrl);
 
 // Extract data (chuẩn API của cậu: data.data)
-const post = computed(() => data.value?.data.items || {});
+const post = ref<Post>(data.value?.data.items || {} as Post);
 
 // Format date
 const formatDate = (dateStr: string) => {
@@ -109,3 +109,7 @@ const shareTwitter = () => {
   );
 };
 </script>
+
+<style>
+@import "~/assets/css/reverse-format.css";
+</style>

@@ -26,7 +26,7 @@
             class="flex flex-col md:flex-row border-b border-gray-300 py-6 gap-4"
           >
             <NuxtImg
-              :src="`http://api-gateway.dyhome.vn/${item.image}`"
+              :src="`${config.public.mediaUrl}/${item.image}`"
               :alt="item.title"
               class="w-full md:w-72 h-48 object-cover rounded-md transition-transform duration-300 hover:scale-105 shadow-sm"
             />
@@ -52,10 +52,10 @@
 
           <!-- Pagination -->
           <Pagination
+            class="mt-6"
             :page="pagination.current_page"
             :total-pages="pagination.last_page"
             @change="goToPage"
-            class="mt-6"
           />
         </div>
 
@@ -65,7 +65,7 @@
             <h2 class="text-2xl font-semibold">Tìm kiếm</h2>
 
             <InputGroup class="bg-white mt-4 h-12">
-              <InputGroupInput placeholder="Nhập từ khoá..." v-model="search" />
+              <InputGroupInput v-model="search" placeholder="Nhập từ khoá..."  />
               <InputGroupAddon>
                 <ClientOnly>
                   <FontAwesomeIcon :icon="['fas', 'magnifying-glass']" />
@@ -74,7 +74,7 @@
             </InputGroup>
           </div>
 
-          <div class="p-4 bg-white shadow rounded-md">
+          <div class="p-4 bg-white">
             <h2 class="text-2xl font-semibold">Danh mục cẩm nang</h2>
 
             <ul class="mt-4 space-y-2">
@@ -85,7 +85,7 @@
               >
                 <NuxtLink
                   :to="`/cam-nang/${cat.slug}`"
-                  class="font-semibold inline-block hover:text-primary hover:underline transition-all hover:-translate-y-1"
+                  class="font-semibold inline-block hover:text-primary hover:underline transition-all hover:-translate-y-1 text-gray-600"
                 >
                   {{ cat.title }}
                 </NuxtLink>
@@ -108,25 +108,27 @@ import {
   InputGroupInput,
   InputGroupAddon,
 } from "~/components/ui/input-group";
+import type { Post, Response } from "~/types";
 
 useSeoMeta({
   title: "Cẩm nang căn hộ",
   description: "Trang đặt phòng khách sạn, resort, homestay chuẩn SEO.",
 });
 
+const config = useRuntimeConfig();
 const page = ref(1);
 const search = ref("");
-let debounce: any = null;
+let debounce: string | number | NodeJS.Timeout | undefined = undefined
 
 // =========================
 // FETCH API
 // =========================
 const apiUrl = computed(
   () =>
-    `http://api-gateway.dyhome.vn/api/home/posts?page=${page.value}&search=${search.value}`
+    `${config.public.apiBase}/home/posts?page=${page.value}&search=${search.value}`
 );
 
-const { data } = useFetch(apiUrl);
+const { data } = useFetch<Response<Post[]>>(apiUrl);
 
 const posts = computed(() => data.value?.data.items ?? []);
 

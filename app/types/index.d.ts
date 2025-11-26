@@ -12,15 +12,15 @@ export interface Post {
   keywords: string
   description: string
   content: string
-  createdAt: string
+  created_at: string
 }
 
 interface Pagination {
-  currentPage: number
-  lastPage: number
-  perPage: number
+  current_page: number
+  last_page: number
+  per_page: number
   total: number
-  hasMorePages: boolean
+  has_more_pages: boolean
 }
 
 interface ResultWrapper<T> {
