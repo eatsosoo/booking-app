@@ -7,9 +7,14 @@ export interface Faq {
 export interface Response<T> {
     statusCode: number
     message: string
-    data: ItemsWrapper<T>
+    data: {
+      items: T,
+      agination? :Pagination
+    }
 }
 
-export interface ItemsWrapper<T> {
-  items: T[]
+export interface Pagination {
+    total: number;
+    page: number;
+    perPage: number;
 }

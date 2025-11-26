@@ -29,7 +29,7 @@ import {
   Link as LinkIcon,
   ListOrdered,
 } from "lucide-vue-next";
-import type { ApiResponse } from "~/types/response";
+import type { Response } from "~/types";
 
 const modelValue = defineModel<string>({ default: "" });
 const imageInput = ref<HTMLInputElement | null>(null);
@@ -75,7 +75,7 @@ const handleImageUpload = async (e: Event) => {
     const formData = new FormData();
     formData.append("media", file);
 
-    const { data, error } = await useFetch<ApiResponse<string>>(
+    const { data, error } = await useFetch<Response<string>>(
       `${config.public.apiBase}/home/upload`,
       {
         method: "POST",
