@@ -76,4 +76,9 @@ export default defineNuxtConfig({
       { name: 'Roboto', provider: 'google' }
     ]
   },
+
+  typescript: {
+    strict: true,
+    typeCheck: true
+  }
 })

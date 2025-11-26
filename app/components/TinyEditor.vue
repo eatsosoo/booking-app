@@ -27,8 +27,9 @@ import {
   ImageIcon,
   Underline as UnderlineIcon,
   Link as LinkIcon,
-  ListOrdered
+  ListOrdered,
 } from "lucide-vue-next";
+import type { ApiResponse } from "~/types/response";
 
 const modelValue = defineModel<string>({ default: "" });
 const imageInput = ref<HTMLInputElement | null>(null);
@@ -74,14 +75,22 @@ const handleImageUpload = async (e: Event) => {
     const formData = new FormData();
     formData.append("media", file);
 
-    const res = await $fetch(`${config.public.apiBase}/home/upload`, {
-      method: "POST",
-      body: formData,
-    });
+    const { data, error } = await useFetch<ApiResponse<string>>(
+      `${config.public.apiBase}/home/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
-    const imageUrl = res.data.items;
+    if (error.value) {
+      console.error("Upload failed:", error.value);
+      return;
+    }
 
-    editor.value?.chain().focus().setImage({ src: imageUrl }).run();
+    const imageUrl = data.value?.data.items ?? "";
+
+    editor.value?.chain().focus().setImage({ src: imageUrl as string }).run();
   } catch (error) {
     console.error("Upload image error:", error);
   } finally {
@@ -90,19 +99,23 @@ const handleImageUpload = async (e: Event) => {
 };
 
 const setLink = () => {
-  const previousUrl = editor.value?.getAttributes('link').href
-  const url = window.prompt('Nhập URL', previousUrl)
+  const previousUrl = editor.value?.getAttributes("link").href;
+  const url = window.prompt("Nhập URL", previousUrl);
 
   if (url === null) {
-    return
-  } else if (url === '') {
-    editor.value?.chain().focus().unsetLink().run()
-    return
+    return;
+  } else if (url === "") {
+    editor.value?.chain().focus().unsetLink().run();
+    return;
   }
 
-  editor.value?.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
-}
-
+  editor.value
+    ?.chain()
+    .focus()
+    .extendMarkRange("link")
+    .setLink({ href: url })
+    .run();
+};
 </script>
 
 <template>
@@ -208,13 +221,15 @@ const setLink = () => {
 
       <!-- Link -->
       <Button
-  size="icon"
-  variant="ghost"
-  :class="{ 'bg-primary text-primary-foreground': editor?.isActive('link') }"
-  @click="setLink"
->
-  <LinkIcon class="w-4 h-4" />
-</Button>
+        size="icon"
+        variant="ghost"
+        :class="{
+          'bg-primary text-primary-foreground': editor?.isActive('link'),
+        }"
+        @click="setLink"
+      >
+        <LinkIcon class="w-4 h-4" />
+      </Button>
 
       <!-- Align Left -->
       <Button
