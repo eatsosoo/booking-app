@@ -7,6 +7,12 @@ export default defineNuxtConfig({
 
   ssr: true,
 
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.API_BASE_URL, // client + server
+    }
+  },
+
   app: {
     head: {
       titleTemplate: '%s | Booking App',
@@ -69,5 +75,10 @@ export default defineNuxtConfig({
     families: [
       { name: 'Roboto', provider: 'google' }
     ]
-  }
+  },
+
+  typescript: {
+    strict: true,
+    typeCheck: false
+  },
 })

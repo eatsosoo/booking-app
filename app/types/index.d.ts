@@ -15,13 +15,6 @@ export interface Post {
   createdAt: string
 }
 
-export interface Response<T> {
-  statusCode: number
-  message: string
-  data: ItemsWrapper<T>,
-  result: ResultWrapper<Pagination>|null
-}
-
 interface Pagination {
   currentPage: number
   lastPage: number
@@ -33,6 +26,13 @@ interface Pagination {
 interface ResultWrapper<T> {
   result: T
 }
-interface ItemsWrapper<T> {
-  items: T[]
+
+export interface Response<T> {
+    statusCode: number
+    message: string
+    data: {
+      items: T,
+      pagination?: Pagination
+    }
 }
+

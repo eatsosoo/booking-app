@@ -9,10 +9,11 @@ import { ref } from "vue";
 import { useFetch } from "#app";
 import type { Faq, Response } from "~/types";
 
+const config = useRuntimeConfig();
 const faqs = ref<Faq[]>([]);
 
-const { data, error } = await useFetch<Response<Faq>>(
-  "http://api-gateway.dyhome.vn/api/home/faqs"
+const { data, error } = await useFetch<Response<Faq[]>>(
+  `${config.public.apiBase}/faqs`
 );
 if (error.value) {
   console.error("Failed to fetch FAQs:", error.value);
