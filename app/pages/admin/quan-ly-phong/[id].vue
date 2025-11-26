@@ -67,8 +67,7 @@ watch(editor, (e) => {
       <div class="col-span-1 md:col-span-2">
         <label class="block mb-2 font-medium">Mô tả phòng</label>
         <ClientOnly>
-          
-          <TipTapEditor />
+          <TinyEditor />
         </ClientOnly>
       </div>
     </div>
