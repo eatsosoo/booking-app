@@ -47,7 +47,7 @@ export default defineNuxtConfig({
     '@nuxt/fonts'
   ],
 
-  css: ['~/assets/css/tailwind.css', '@fortawesome/fontawesome-svg-core/styles.css'],
+  css: ['~/assets/css/tailwind.css', '~/assets/css/reverse-format.css', '@fortawesome/fontawesome-svg-core/styles.css'],
   vite: {
     plugins: [
       tailwindcss(),
