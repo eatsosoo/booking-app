@@ -51,7 +51,7 @@
           </div>
 
           <!-- Pagination -->
-          <Pagination
+          <PaginationPage
             class="mt-6"
             :page="pagination.current_page"
             :total-pages="pagination.last_page"
@@ -101,7 +101,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { useFetch } from "#app";
-import Pagination from "~/components/Pagination.vue";
+import Pagination from "~/components/PaginationPage.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   InputGroup,
@@ -133,7 +133,7 @@ const { data } = useFetch<Response<Post[]>>(apiUrl);
 const posts = computed(() => data.value?.data.items ?? []);
 
 const pagination = computed(
-  () => data.value?.result.pagination ?? { current_page: 1, last_page: 1 }
+  () => data.value?.result?.pagination ?? { current_page: 1, last_page: 1 }
 );
 
 // Format date

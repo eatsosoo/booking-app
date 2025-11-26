@@ -302,11 +302,11 @@ const setLink = () => {
     </div>
 
     <!-- Editor -->
-    <div class="flex flex-col flex-1 items-center h-full">
+    <div class="flex flex-col flex-1 items-center overflow-y-scroll">
       <EditorContent
         v-if="editor"
         :editor="editor"
-        class="w-7xl p-3 min-h-[400px] focus:outline-none ProseMirror format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
+        class="w-7xl p-3 max-h-[800px] focus:outline-none ProseMirror format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
       />
     </div>
   </div>

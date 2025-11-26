@@ -15,11 +15,11 @@
         v-for="p in pagesToShow"
         :key="p.key"
         :disabled="p.type === 'dots'"
-        @click="p.type === 'page' && $emit('change', p.number)"
         class="w-9 h-9 flex items-center justify-center rounded-md border transition hover:bg-gray-100 disabled:bg-transparent disabled:border-none disabled:cursor-default"
         :class="{
           'bg-gray-900 text-white border-gray-900': p.number === page,
         }"
+        @click="p.type === 'page' && $emit('change', p.number)"
       >
         <span v-if="p.type === 'page'">{{ p.number }}</span>
         <span v-else class="text-xl">…</span>
@@ -45,11 +45,13 @@ const props = defineProps({
   totalPages: { type: Number, required: true },
 });
 
+const emits = defineEmits(['change'])
+
 const pagesToShow = computed(() => {
   const current = props.page;
   const total = props.totalPages;
 
-  const arr: any[] = [];
+  const arr: { type: "page" | "dots", number: number | null, key: string }[] = [];
 
   const push = (type: "page" | "dots", number?: number) => {
     arr.push({

@@ -33,6 +33,9 @@ export interface Response<T> {
     data: {
       items: T,
       pagination?: Pagination
+    },
+    result?: {
+      pagination: Pagination
     }
 }
 
