@@ -41,6 +41,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Faq, Response } from "~/types";
+import { toast } from "vue-sonner";
 
 const config = useRuntimeConfig();
 const page = ref(1);
@@ -51,7 +52,12 @@ const apiUrl = computed(
     `${config.public.apiBase}/faqs?page=${page.value}&search=${search.value}`
 );
 
-const { data } = useFetch<Response<Faq[]>>(apiUrl);
+const { data, refresh } = useAsyncData(
+  "faqs",
+  () => $fetch<Response<Faq[]>>(apiUrl.value),
+  { watch: [apiUrl] }
+);
+
 const faqs = computed(() => data.value?.data.items ?? []);
 const pagination = computed(
   () => data.value?.result?.pagination ?? { current_page: 1, last_page: 1 }
@@ -150,6 +156,21 @@ const table = useVueTable({
 function copy(id: number) {
   navigator.clipboard.writeText(id.toString());
 }
+async function deleteFaq(id: number) {
+  try {
+    await $fetch(`${config.public.apiBase}/faqs/${id}`, {
+      method: "DELETE",
+    });
+    await refresh();
+    toast.success("Thành công", {
+      description: "FAQ đã được xoá thành công!",
+    });
+  } catch (error) {
+    toast.error("error", {
+      description: `Có lỗi xảy ra, vui lòng thử lại sau: ${error} !`,
+    });
+  }
+}
 </script>
 
 <template>
@@ -170,7 +191,7 @@ function copy(id: number) {
             Sao chép ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Xoá</DropdownMenuItem>
+          <DropdownMenuItem @click="deleteFaq(faq.id)">Xoá</DropdownMenuItem>
           <DropdownMenuItem>
             <NuxtLink :to="`/admin/quan-ly-faq/${faq.id}`">Chi tiết</NuxtLink>
           </DropdownMenuItem>
@@ -178,13 +199,19 @@ function copy(id: number) {
       </DropdownMenu>
     </DefineTemplate>
     <div class="w-full">
-      <div class="flex items-center py-4">
+      <div class="flex items-center py-4 gap-4">
         <Input
           class="max-w-sm"
           placeholder="Tìm kiếm theo tiêu đề..."
           :model-value="search"
           @update:model-value="search = $event"
         />
+        <NuxtLink
+          to="/admin/quan-ly-faq/tao-moi"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border bg-primary text-primary-foreground hover:bg-primary/90 transition"
+        >
+          Tạo mới
+        </NuxtLink>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button variant="outline" class="ml-auto">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
 import type { Faq, Response } from "~/types";
@@ -7,45 +7,46 @@ import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
 
-const route = useRoute();
+const router = useRouter();
 const config = useRuntimeConfig();
-const id = route.params.id;
 
-const apiUrl = `${config.public.apiBase}/faqs/${id}`;
+const apiCreate = `${config.public.apiBase}/faqs`;
 
-// GET → lấy dữ liệu FAQ
-const { data } = useFetch<Response<Faq>>(apiUrl);
+// form
+const faq = ref<Faq>({
+  question: "",
+  answer: "",
+} as Faq);
 
-const faq = ref<Faq>({} as Faq);
-const message = ref("");
+const pending = ref(false);
 
-// Khi GET thành công, gán vào form
-watch(data, (val) => {
-  if (val?.data) {
-    faq.value = val.data.items;
-  }
-});
-
-// Hàm lưu
 const savefaq = async () => {
-  // PUT → cập nhật FAQ
-  const { execute, error } = useFetch<Response<Faq>>(apiUrl, {
-    method: "PUT",
-    body: faq.value,
-    immediate: true,
-  });
+  pending.value = true;
 
-  await execute();
-  if (error.value) {
-    message.value =
-      error.value?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
-    toast.error("Cập nhật câu hỏi thường gặp", {
-      description: message.value,
+  try {
+    const res: any = await $fetch(apiCreate, {
+      method: "POST",
+      body: faq.value,
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-  } else {
-    toast.success("Cập nhật câu hỏi thường gặp", {
-      description: "Câu hỏi thường gặp đã được cập nhật thành công!",
+
+    toast.success("Tạo FAQ thành công!", {
+      description: "FAQ mới đã được thêm.",
     });
+
+    // chuyển về danh sách
+    router.push("/admin/quan-ly-faq");
+  } catch (err: any) {
+    toast.error("Lỗi!", {
+      description:
+        err?.data?.message ||
+        err?.message ||
+        "Có lỗi xảy ra, vui lòng thử lại!",
+    });
+  } finally {
+    pending.value = false;
   }
 };
 </script>
@@ -53,7 +54,8 @@ const savefaq = async () => {
 <template>
   <section class="w-full px-6 py-10 max-w-7xl mx-auto mt-4">
     <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa FAQ</h1>
+      <h1 class="text-2xl font-semibold">Tạo mới FAQ</h1>
+
       <NuxtLink
         to="/admin/quan-ly-faq"
         class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-gray-100 transition"
@@ -84,9 +86,10 @@ const savefaq = async () => {
       </div>
     </div>
 
-    <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" @click="savefaq"> Lưu thay đổi </Button>
+      <Button variant="default" :loading="pending" @click="savefaq">
+        Tạo mới
+      </Button>
     </div>
   </section>
 </template>
