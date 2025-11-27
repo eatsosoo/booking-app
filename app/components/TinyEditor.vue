@@ -4,8 +4,6 @@ import { Editor, EditorContent } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import Image from "@tiptap/extension-image";
-import Underline from "@tiptap/extension-underline";
-import Link from "@tiptap/extension-link";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -49,12 +47,6 @@ onMounted(() => {
         types: ["paragraph", "heading", "image"],
       }),
       Image,
-      Underline,
-      Link.configure({
-        openOnClick: true,
-        autolink: false,
-        protocols: ["http", "https"],
-      }),
     ],
     onUpdate({ editor }) {
       modelValue.value = editor.getHTML();

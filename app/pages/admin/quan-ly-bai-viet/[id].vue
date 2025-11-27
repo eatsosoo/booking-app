@@ -4,18 +4,26 @@ import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
 import type { Post, Response } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
+import { toast } from "vue-sonner";
 
 const route = useRoute();
 const config = useRuntimeConfig();
 const id = route.params.id;
 
-const apiUrl = `${config.public.apiBase}/posts/${id}`;
-const { data } = useFetch<Response<Post>>(apiUrl);
-
-const post = ref<Post>(data.value?.data.items || ({} as Post));
 const message = ref<string>("");
+const post = ref<Post>({} as Post);
 
-const { execute, pending, error, data: resEdit } = useFetch<Response<Post>>(apiUrl, {
+const apiUrl = `${config.public.apiBase}/posts/${id}`;
+const { data } = await useFetch<Response<Post>>(apiUrl);
+
+watch(data, (val) => {
+  console.log(val);
+  if (val?.data.items) {
+    post.value = val.data.items; // ✔ update sau khi fetch xong
+  }
+});
+
+const { execute, pending, error } = useFetch<Response<Post>>(apiUrl, {
   method: "PUT",
   body: post.value,
   immediate: false,
@@ -23,16 +31,26 @@ const { execute, pending, error, data: resEdit } = useFetch<Response<Post>>(apiU
 
 const savePost = async () => {
   await execute();
-  console.log(error.value)
+  console.log("data", error.value?.data);
   if (error.value) {
-    message.value = resEdit.value?.message || 'Có lỗi xảy ra, vui lòng thử lại sau!';
+    message.value =
+      error.value?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
+    toast.error("Cập nhật bài viết", {
+      description: message.value,
+    });
+  } else {
+    toast.success("Cập nhật bài viết", {
+      description: "Bài viết đã được cập nhật thành công!",
+    });
   }
 };
+
+post.value = data.value?.data.items || ({} as Post);
 </script>
 
 <template>
   <section class="w-full px-6 py-10 max-w-7xl mx-auto mt-4">
-    <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa Phòng</h1>
+    <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa bài viết</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Title -->
