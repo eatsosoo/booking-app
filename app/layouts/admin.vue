@@ -6,7 +6,9 @@
         <div class="px-6 max-w-7xl mx-auto mt-4">
             <AdminBreadcrumb />
         </div>
-        <slot />
+        <div class="w-full px-6 pt-6 pb-10 max-w-7xl mx-auto">
+          <slot />
+        </div>
     </main>
 
     <ClientOnly>

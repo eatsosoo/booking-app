@@ -55,7 +55,7 @@ const savefaq = async () => {
 </script>
 
 <template>
-  <section class="w-full px-6 py-10 max-w-7xl mx-auto mt-4">
+  <section>
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa FAQ</h1>
       <NuxtLink

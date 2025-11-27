@@ -222,7 +222,7 @@ function copy(id: number) {
 </script>
 
 <template>
-  <section class="w-full px-6 py-10 max-w-7xl mx-auto mt-4 min-h-[90%]">
+  <section>
     <h1 class="font-semibold text-2xl">Quản lý danh sách điểm đến</h1>
 
     <DefineTemplate v-slot="{ home }">

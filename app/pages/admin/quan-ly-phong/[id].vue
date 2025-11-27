@@ -98,7 +98,7 @@ if (typeof home.value.gallery === "string") {
 </script>
 
 <template>
-  <section class="w-full px-6 py-10 max-w-7xl mx-auto mt-4">
+  <section>
     <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa điểm đến</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

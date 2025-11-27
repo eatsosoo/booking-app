@@ -1,5 +1,5 @@
 <template>
-  <section class="px-6 py-10 max-w-7xl mx-auto mt-4">
+  <section class="px-6 py-10 max-w-7xl mx-auto mt-4 min-h-[calc(100vh-415px)]">
     <h1 class="uppercase text-3xl font-semibold mb-8">Quản trị</h1>
     <div class="grid grid-cols-4 gap-4">
       <div
