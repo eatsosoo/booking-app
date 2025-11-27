@@ -48,7 +48,7 @@
       </div>
 
       <NuxtImg
-        :src="`http://api-gateway.dyhome.vn/${post.image}`"
+        :src="`${post.image}`"
         class="rounded-xl w-full max-h-[400px] object-cover mb-8 shadow"
       />
 
@@ -77,7 +77,7 @@ const apiUrl = `${config.public.apiBase}/home/posts/${slug}`;
 const { data, pending, error } = await useFetch<Response<Post>>(apiUrl);
 
 // Extract data (chuẩn API của cậu: data.data)
-const post = ref<Post>(data.value?.data.items || {} as Post);
+const post = ref<Post>(data.value?.data.items || ({} as Post));
 
 // Format date
 const formatDate = (dateStr: string) => {
