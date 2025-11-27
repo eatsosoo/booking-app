@@ -101,7 +101,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { useFetch } from "#app";
-import Pagination from "~/components/PaginationPage.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   InputGroup,
@@ -128,7 +127,11 @@ const apiUrl = computed(
     `${config.public.apiBase}/home/posts?page=${page.value}&search=${search.value}`
 );
 
-const { data } = useFetch<Response<Post[]>>(apiUrl);
+const { data } = await useFetch<Response<Post[]>>(apiUrl, {
+  server: true,
+  lazy: false,
+  immediate: true,
+});
 
 const posts = computed(() => data.value?.data.items ?? []);
 

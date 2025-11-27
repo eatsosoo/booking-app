@@ -16,7 +16,7 @@ import {
   useVueTable,
 } from "@tanstack/vue-table";
 import { createReusableTemplate } from "@vueuse/core";
-import { ChevronDown, MoreHorizontal } from "lucide-vue-next";
+import { MoreHorizontal } from "lucide-vue-next";
 import { h, ref } from "vue";
 
 import { valueUpdater } from "@/lib/utils";
@@ -41,21 +41,56 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Post, Response } from "~/types";
+import { toast } from "vue-sonner";
 
 const config = useRuntimeConfig();
-const page = ref(1);
-const search = ref<string | number>("");
 
+// STATE
+const page = ref<number>(1);
+const search = ref<string | number>("");
+const message = ref<string>("");
+
+// API URL
 const apiUrl = computed(
   () =>
     `${config.public.apiBase}/posts?page=${page.value}&search=${search.value}`
 );
 
-const { data } = useFetch<Response<Post[]>>(apiUrl);
+// --- GET LIST POSTS ---
+const { data, refresh } = await useAsyncData(
+  "posts-list",
+  () => $fetch<Response<Post[]>>(apiUrl.value),
+  {
+    watching: [apiUrl],
+  }
+);
+
+// computed
 const posts = computed(() => data.value?.data.items ?? []);
 const pagination = computed(
   () => data.value?.result?.pagination ?? { current_page: 1, last_page: 1 }
 );
+
+// --- DELETE ---
+async function deleteItem(itemId: number) {
+  const titleNotify = "Xoá bài viết";
+
+  try {
+    await $fetch(`${config.public.apiBase}/posts/${itemId}`, {
+      method: "DELETE",
+    });
+
+    toast.success(titleNotify, {
+      description: "Bài viết đã được xoá thành công!",
+    });
+
+    refresh(); // load lại danh sách
+  } catch (err: any) {
+    message.value =
+      err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
+    toast.error(titleNotify, { description: message.value });
+  }
+}
 
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
   post: {
@@ -84,6 +119,12 @@ const columns: ColumnDef<Post>[] = [
       }),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
+    enableSorting: false,
   },
   {
     accessorKey: "title",
@@ -175,9 +216,11 @@ function copy(id: number) {
             Sao chép ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Xoá</DropdownMenuItem>
+          <DropdownMenuItem @click="deleteItem(post.id)">Xoá</DropdownMenuItem>
           <DropdownMenuItem>
-            <NuxtLink :to="`/admin/quan-ly-bai-viet/${post.id}`">Chi tiết</NuxtLink>
+            <NuxtLink :to="`/admin/quan-ly-bai-viet/${post.id}`" class="w-full"
+              >Chi tiết</NuxtLink
+            >
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -193,7 +236,8 @@ function copy(id: number) {
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button variant="outline" class="ml-auto">
-              Cột <ChevronDown class="ml-2 h-4 w-4" />
+              Cột
+              <!-- Cột <ChevronDown class="ml-2 h-4" /> -->
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -268,11 +312,11 @@ function copy(id: number) {
           {{ table.getFilteredRowModel().rows.length }} hàng được chọn.
         </div>
         <PaginationPage
-            class="mt-6"
-            :page="pagination.current_page"
-            :total-pages="pagination.last_page"
-            @change="page = $event"
-          />
+          class="mt-6"
+          :page="pagination.current_page"
+          :total-pages="pagination.last_page"
+          @change="page = $event"
+        />
       </div>
     </div>
   </section>
