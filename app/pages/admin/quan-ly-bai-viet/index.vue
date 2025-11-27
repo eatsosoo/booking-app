@@ -216,7 +216,9 @@ function copy(id: number) {
             Sao chép ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem @click="deleteItem(post.id)">Xoá</DropdownMenuItem>
+          <DropdownMenuItem @click="deleteItem(post.id)">
+            Xoá
+          </DropdownMenuItem>
           <DropdownMenuItem>
             <NuxtLink :to="`/admin/quan-ly-bai-viet/${post.id}`" class="w-full"
               >Chi tiết</NuxtLink
