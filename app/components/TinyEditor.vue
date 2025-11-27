@@ -29,11 +29,15 @@ import {
 } from "lucide-vue-next";
 import type { Response } from "~/types";
 
+const config = useRuntimeConfig();
+
 const modelValue = defineModel<string>({ default: "" });
+const emits = defineEmits<{
+  (e: "update:modelValue", value: string): void;
+}>();
+
 const imageInput = ref<HTMLInputElement | null>(null);
 const editor = ref<Editor | null>(null);
-
-const config = useRuntimeConfig();
 
 onMounted(() => {
   editor.value = new Editor({
@@ -50,6 +54,7 @@ onMounted(() => {
     ],
     onUpdate({ editor }) {
       modelValue.value = editor.getHTML();
+      emits("update:modelValue", modelValue.value);
     },
   });
 });
@@ -82,7 +87,11 @@ const handleImageUpload = async (e: Event) => {
 
     const imageUrl = data.value?.data.items ?? "";
 
-    editor.value?.chain().focus().setImage({ src: imageUrl as string }).run();
+    editor.value
+      ?.chain()
+      .focus()
+      .setImage({ src: imageUrl as string })
+      .run();
   } catch (error) {
     console.error("Upload image error:", error);
   } finally {
@@ -298,7 +307,7 @@ const setLink = () => {
       <EditorContent
         v-if="editor"
         :editor="editor"
-        class="w-7xl p-3 max-h-[800px] focus:outline-none ProseMirror format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
+        class="w-7xl my-2 max-h-[800px] focus:outline-none ProseMirror format format-sm sm:format-base lg:format-lg format-blue dark:format-invert border border-dashed rounded-md"
       />
     </div>
   </div>
