@@ -16,7 +16,7 @@ import {
   useVueTable,
 } from "@tanstack/vue-table";
 import { createReusableTemplate } from "@vueuse/core";
-import { ChevronDown, MoreHorizontal } from "lucide-vue-next";
+import { ChevronDown, MoreHorizontal, PlusSquareIcon } from "lucide-vue-next";
 import { h, ref } from "vue";
 
 import { valueUpdater } from "@/lib/utils";
@@ -42,6 +42,10 @@ import {
 } from "@/components/ui/table";
 import type { Faq, Response } from "~/types";
 import { toast } from "vue-sonner";
+
+definePageMeta({
+    layout: 'admin'
+})
 
 const config = useRuntimeConfig();
 const page = ref(1);
@@ -199,7 +203,7 @@ async function deleteFaq(id: number) {
       </DropdownMenu>
     </DefineTemplate>
     <div class="w-full">
-      <div class="flex items-center py-4 gap-4">
+      <div class="flex items-center py-4 gap-2">
         <Input
           class="max-w-sm"
           placeholder="Tìm kiếm theo tiêu đề..."
@@ -207,10 +211,9 @@ async function deleteFaq(id: number) {
           @update:model-value="search = $event"
         />
         <NuxtLink
-          to="/admin/quan-ly-faq/tao-moi"
-          class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border bg-primary text-primary-foreground hover:bg-primary/90 transition"
+          to="/admin/quan-ly-faq/them-moi"
         >
-          Tạo mới
+          <Button><PlusSquareIcon />Tạo mới</Button>
         </NuxtLink>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>

@@ -16,7 +16,7 @@ import {
   useVueTable,
 } from "@tanstack/vue-table";
 import { createReusableTemplate } from "@vueuse/core";
-import { MoreHorizontal } from "lucide-vue-next";
+import { MoreHorizontal, PlusSquareIcon } from "lucide-vue-next";
 import { h, ref } from "vue";
 
 import { valueUpdater } from "@/lib/utils";
@@ -44,6 +44,10 @@ import type { Post, Response } from "~/types";
 import { toast } from "vue-sonner";
 import { PUBLISHED_STATUSES } from "~/constants";
 
+definePageMeta({
+    layout: 'admin'
+})
+
 const config = useRuntimeConfig();
 
 // STATE
@@ -62,7 +66,7 @@ const { data, refresh } = await useAsyncData(
   "posts-list",
   () => $fetch<Response<Post[]>>(apiUrl.value),
   {
-    watching: [apiUrl],
+    watch: [apiUrl],
   }
 );
 
@@ -247,13 +251,18 @@ function copy(id: number) {
       </DropdownMenu>
     </DefineTemplate>
     <div class="w-full">
-      <div class="flex items-center py-4">
+      <div class="flex items-center py-4 gap-2">
         <Input
           class="max-w-sm"
           placeholder="Tìm kiếm theo tiêu đề..."
           :model-value="search"
           @update:model-value="search = $event"
         />
+        <NuxtLink
+          to="/admin/quan-ly-bai-viet/them-moi"
+        >
+          <Button><PlusSquareIcon />Tạo mới</Button>
+        </NuxtLink>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button variant="outline" class="ml-auto">

@@ -16,7 +16,7 @@ import {
   useVueTable,
 } from "@tanstack/vue-table";
 import { createReusableTemplate } from "@vueuse/core";
-import { MoreHorizontal, RefreshCcw } from "lucide-vue-next";
+import { MoreHorizontal, PlusSquareIcon, RefreshCcw } from "lucide-vue-next";
 import { h, ref } from "vue";
 
 import { valueUpdater } from "@/lib/utils";
@@ -44,6 +44,10 @@ import type { Properties, Response } from "~/types";
 import { toast } from "vue-sonner";
 import { TYPE_ROOM } from "~/constants";
 
+definePageMeta({
+    layout: 'admin'
+})
+
 const config = useRuntimeConfig();
 
 // STATE
@@ -62,7 +66,7 @@ const { data, refresh } = await useAsyncData(
   "properties-list",
   () => $fetch<Response<Properties[]>>(apiUrl.value),
   {
-    watching: [apiUrl],
+    watch: [apiUrl],
   }
 );
 
@@ -247,7 +251,7 @@ function copy(id: number) {
       </DropdownMenu>
     </DefineTemplate>
     <div class="w-full">
-      <div class="flex items-center py-4">
+      <div class="flex items-center py-4 gap-2">
         <Input
           class="max-w-sm"
           placeholder="Tìm kiếm theo tên..."
@@ -257,6 +261,7 @@ function copy(id: number) {
         <Button variant="secondary" class="ml-2" @click="refresh()">
           <RefreshCcw class="h-4 w-4" />
         </Button>
+        <Button><PlusSquareIcon />Tạo mới</Button>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button variant="outline" class="ml-auto">

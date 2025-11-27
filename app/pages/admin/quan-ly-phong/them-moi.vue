@@ -19,6 +19,10 @@ import {
 } from "@/components/ui/select";
 import { TYPE_ROOM } from "~/constants";
 
+definePageMeta({
+    layout: 'admin'
+})
+
 const config = useRuntimeConfig();
 
 const imageInput = ref<HTMLInputElement | null>(null);

@@ -9,6 +9,10 @@ import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { ImageIcon } from "lucide-vue-next";
 import type { PostForm } from "~/types/booking";
 
+definePageMeta({
+  layout: "admin",
+});
+
 const config = useRuntimeConfig();
 
 const imageInput = ref<HTMLInputElement | null>(null);
@@ -70,7 +74,8 @@ const handleImageUpload = async (e: Event) => {
 
     if (error.value) {
       toast.error(toastTitle, {
-        description: error.value?.data.message || "Có lỗi xảy ra khi tải ảnh lên!",
+        description:
+          error.value?.data.message || "Có lỗi xảy ra khi tải ảnh lên!",
       });
       return;
     }
@@ -90,7 +95,7 @@ const handleImageUpload = async (e: Event) => {
 
 const handleContentChange = (val: string) => {
   post.value.content = val;
-}
+};
 </script>
 
 <template>
@@ -148,10 +153,17 @@ const handleContentChange = (val: string) => {
 
         <div class="p-2 rounded-md shadow-xs border border-dashed">
           <Button size="icon" variant="secondary" @click="imageInput?.click()">
-          <ImageIcon class="w-4 h-4" /> 
-        </Button>
-        <span class="text-md ml-2">{{ post.image ? "Thay đổi ảnh" : "Tải ảnh lên" }}</span>
-        <NuxtImg v-if="post.image" :src="post.image" alt="Ảnh bài viết" class="w-72 h-48 mt-2"/>
+            <ImageIcon class="w-4 h-4" />
+          </Button>
+          <span class="text-md ml-2">{{
+            post.image ? "Thay đổi ảnh" : "Tải ảnh lên"
+          }}</span>
+          <NuxtImg
+            v-if="post.image"
+            :src="post.image"
+            alt="Ảnh bài viết"
+            class="w-72 h-48 mt-2"
+          />
         </div>
       </div>
 
@@ -159,7 +171,10 @@ const handleContentChange = (val: string) => {
       <div class="col-span-1 md:col-span-2">
         <Label for="content" class="mb-2 ml-1">Nội dung bài viết</Label>
         <ClientOnly>
-          <TinyEditor :model-value="post.content" @update:model-value="handleContentChange"/>
+          <TinyEditor
+            :model-value="post.content"
+            @update:model-value="handleContentChange"
+          />
         </ClientOnly>
       </div>
     </div>

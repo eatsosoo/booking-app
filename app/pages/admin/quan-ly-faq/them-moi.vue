@@ -7,6 +7,10 @@ import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
 
+definePageMeta({
+    layout: 'admin'
+})
+
 const router = useRouter();
 const config = useRuntimeConfig();
 

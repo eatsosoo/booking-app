@@ -18,6 +18,10 @@ import {
 import { ImageIcon } from "lucide-vue-next";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 
+definePageMeta({
+    layout: 'admin'
+})
+
 const route = useRoute();
 const config = useRuntimeConfig();
 const id = route.params.id;
@@ -289,7 +293,7 @@ if (typeof home.value.gallery === "string") {
 
     <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" :loading="pending" @click="saveProperties"
+      <Button variant="default" @click="saveProperties"
         >Lưu thay đổi</Button
       >
     </div>
