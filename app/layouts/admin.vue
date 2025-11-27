@@ -2,7 +2,7 @@
   <div>
     <AppHeader />
 
-    <main>
+    <main class="min-h-[calc(100vh-414px)]">
         <div class="px-6 max-w-7xl mx-auto mt-4">
             <AdminBreadcrumb />
         </div>

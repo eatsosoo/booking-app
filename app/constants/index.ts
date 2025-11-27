@@ -9,3 +9,9 @@ export const TYPE_ROOM = {
     hotel: 'Khách sạn',
     apartment: 'Chung cư mini'
 } as const
+
+export const SERVICE_TYPES = {
+    'standard': 'Tiêu chuẩn',
+    'basic': 'Cơ bản',
+    'premium': 'Cao cấp'
+} as const

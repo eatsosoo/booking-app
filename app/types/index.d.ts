@@ -35,6 +35,20 @@ export interface Properties {
   gallery: string[]
 }
 
+export interface Service {
+  id: number,
+  title: string,
+  slug: string,
+  image: string,
+  images: string[],
+  description: string,
+  menu: string,
+  price: string,
+  is_published: number
+  created_at: string,
+  updated_at: string
+}
+
 interface Pagination {
   current_page: number
   last_page: number

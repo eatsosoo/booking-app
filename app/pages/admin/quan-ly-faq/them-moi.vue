@@ -57,16 +57,7 @@ const savefaq = async () => {
 
 <template>
   <section>
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-semibold">Tạo mới FAQ</h1>
-
-      <NuxtLink
-        to="/admin/quan-ly-faq"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-gray-100 transition"
-      >
-        ← Quay lại
-      </NuxtLink>
-    </div>
+    <h1 class="text-2xl font-semibold mb-8">Tạo dịch vụ mới</h1>
 
     <div class="grid grid-cols-1 gap-6">
       <!-- Question -->

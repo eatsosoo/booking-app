@@ -16,6 +16,7 @@ export type PropertiesForm = {
   thumbnail: string
   gallery: string[]
 }
+
 export type PostForm = {
   title: string
   slug: string
@@ -23,4 +24,14 @@ export type PostForm = {
   description: string
   keywords: string
   content: string
+}
+
+export type ServiceForm = {
+  title: string
+  slug: string
+  image: string
+  description: string
+  menu: string
+  price: number
+  is_published: number
 }
