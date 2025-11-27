@@ -7,12 +7,13 @@ import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { ImageIcon } from "lucide-vue-next";
+import type { PostForm } from "~/types/booking";
 
 const config = useRuntimeConfig();
 
 const imageInput = ref<HTMLInputElement | null>(null);
 const message = ref<string>("");
-const post = ref({
+const post = ref<PostForm>({
   title: "",
   slug: "",
   image: "",
@@ -32,8 +33,9 @@ const { execute, pending, error } = useFetch<Response<Post>>(apiUrl, {
 
 const savePost = async () => {
   await execute();
-  console.log("data", error.value?.data);
+
   const titleNotify = "Tạo bài viết mới";
+
   if (error.value) {
     message.value =
       error.value?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
@@ -51,6 +53,7 @@ const savePost = async () => {
 const handleImageUpload = async (e: Event) => {
   const target = e.target as HTMLInputElement;
   const file = target.files?.[0];
+
   if (!file) return;
 
   try {
@@ -77,7 +80,6 @@ const handleImageUpload = async (e: Event) => {
       description: "Ảnh đã được tải lên thành công!",
     });
   } catch (error) {
-    console.error("Upload image error:", error);
     toast.error(toastTitle, {
       description: "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
     });

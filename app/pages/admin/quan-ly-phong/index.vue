@@ -16,7 +16,7 @@ import {
   useVueTable,
 } from "@tanstack/vue-table";
 import { createReusableTemplate } from "@vueuse/core";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-vue-next";
+import { MoreHorizontal } from "lucide-vue-next";
 import { h, ref } from "vue";
 
 import { valueUpdater } from "@/lib/utils";
@@ -40,187 +40,67 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { Properties, Response } from "~/types";
+import { toast } from "vue-sonner";
+import { TYPE_ROOM } from "~/constants";
 
-export interface Room {
-  id: number;
-  name: string;
-  amount: number;
-  status: "pending" | "active" | "inactive" | "maintenance";
-  project: string;
-  type: string;
+const config = useRuntimeConfig();
+
+// STATE
+const page = ref<number>(1);
+const search = ref<string | number>("");
+const message = ref<string>("");
+
+// API URL
+const apiUrl = computed(
+  () =>
+    `${config.public.apiBase}/properties?page=${page.value}&search=${search.value}`
+);
+
+// --- GET LIST properties ---
+const { data, refresh } = await useAsyncData(
+  "properties-list",
+  () => $fetch<Response<Properties[]>>(apiUrl.value),
+  {
+    watching: [apiUrl],
+  }
+);
+
+// computed
+const properties = computed(() => data.value?.data.items ?? []);
+const pagination = computed(
+  () => data.value?.result?.pagination ?? { current_page: 1, last_page: 1 }
+);
+
+// --- DELETE ---
+async function deleteItem(itemId: number) {
+  const titleNotify = "Xoá ";
+
+  try {
+    await $fetch(`${config.public.apiBase}/properties/${itemId}`, {
+      method: "DELETE",
+    });
+
+    toast.success(titleNotify, {
+      description: "Điểm đến đã được xoá thành công!",
+    });
+
+    refresh(); // load lại danh sách
+  } catch (err: any) {
+    message.value =
+      err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
+    toast.error(titleNotify, { description: message.value });
+  }
 }
 
-const data: Room[] = [
-  {
-    id: 1,
-    name: "Vinhomes Smart City Studio",
-    status: "active",
-    project: "Vinhomes Smart City",
-    type: "chung cư mini",
-    amount: 2500000
-  },
-  {
-    id: 2,
-    name: "Sunshine Riverside Villa Premium",
-    status: "pending",
-    project: "Sunshine Riverside",
-    type: "villa",
-    amount: 8500000
-  },
-  {
-    id: 3,
-    name: "Ecopark Grand Hotel & Resort",
-    status: "inactive",
-    project: "Ecopark Grand",
-    type: "khách sạn",
-    amount: 4200000
-  },
-  {
-    id: 4,
-    name: "The Zei Mỹ Đình Mini Apartment",
-    status: "active",
-    project: "The Zei Mỹ Đình",
-    type: "chung cư mini",
-    amount: 1800000
-  },
-  {
-    id: 5,
-    name: "Masteri Centre Point Homestay",
-    status: "maintenance",
-    project: "Masteri Centre Point",
-    type: "homestay",
-    amount: 3200000
-  },
-  {
-    id: 6,
-    name: "FLC Sầm Sơn Luxury Hotel",
-    status: "active",
-    project: "FLC Sầm Sơn",
-    type: "khách sạn",
-    amount: 5500000
-  },
-  {
-    id: 7,
-    name: "Hado Centrosa Garden Villa",
-    status: "pending",
-    project: "Hado Centrosa Garden",
-    type: "villa",
-    amount: 7200000
-  },
-  {
-    id: 8,
-    name: "Times City Park Hill Homestay",
-    status: "active",
-    project: "Times City Park Hill",
-    type: "homestay",
-    amount: 2900000
-  },
-  {
-    id: 9,
-    name: "Vinpearl Discovery Coastal Hotel",
-    status: "inactive",
-    project: "Vinpearl Discovery",
-    type: "khách sạn",
-    amount: 6800000
-  },
-  {
-    id: 10,
-    name: "Vinhomes Ocean Park Mini Studio",
-    status: "maintenance",
-    project: "Vinhomes Ocean Park",
-    type: "chung cư mini",
-    amount: 2100000
-  },
-  {
-    id: 11,
-    name: "Sunshine City Premium Villa",
-    status: "active",
-    project: "Sunshine City",
-    type: "villa",
-    amount: 9200000
-  },
-  {
-    id: 12,
-    name: "Royal City Center Homestay",
-    status: "pending",
-    project: "Royal City",
-    type: "homestay",
-    amount: 3800000
-  },
-  {
-    id: 13,
-    name: "Gemek Premium Business Hotel",
-    status: "active",
-    project: "Gemek Premium",
-    type: "khách sạn",
-    amount: 4700000
-  },
-  {
-    id: 14,
-    name: "Lotte Residence Mini Apartment",
-    status: "maintenance",
-    project: "Lotte Residence",
-    type: "chung cư mini",
-    amount: 1950000
-  },
-  {
-    id: 15,
-    name: "InterContinental Phú Quốc Beach Villa",
-    status: "active",
-    project: "InterContinental Phú Quốc",
-    type: "villa",
-    amount: 12500000
-  },
-  {
-    id: 16,
-    name: "Mường Thanh Grand Hotel",
-    status: "inactive",
-    project: "Mường Thanh",
-    type: "khách sạn",
-    amount: 3600000
-  },
-  {
-    id: 17,
-    name: "D'.El Dorado Homestay",
-    status: "active",
-    project: "D'.El Dorado",
-    type: "homestay",
-    amount: 2750000
-  },
-  {
-    id: 18,
-    name: "Harbor City Mini Studio",
-    status: "pending",
-    project: "Harbor City",
-    type: "chung cư mini",
-    amount: 2200000
-  },
-  {
-    id: 19,
-    name: "Astra Garden Luxury Villa",
-    status: "active",
-    project: "Astra Garden",
-    type: "villa",
-    amount: 7800000
-  },
-  {
-    id: 20,
-    name: "Somerset Chancellor Court Hotel",
-    status: "maintenance",
-    project: "Somerset",
-    type: "khách sạn",
-    amount: 5100000
-  }
-];
-
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
-  room: {
+  home: {
     id: number;
   };
   onExpand: () => void;
 }>();
 
-const columns: ColumnDef<Room>[] = [
+const columns: ColumnDef<Properties>[] = [
   {
     id: "select",
     header: ({ table }) =>
@@ -242,76 +122,49 @@ const columns: ColumnDef<Room>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return h(
-        Button,
-        {
-          variant: "ghost",
-          onClick: () => column.toggleSorting(column.getIsSorted() === "asc"),
-        },
-        () => ["Tên địa điểm", h(ArrowUpDown, { class: "ml-2 h-4 w-4" })]
-      );
-    },
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("name")),
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
+    enableSorting: false,
   },
   {
-    accessorKey: "project",
-    header: ({ column }) => {
-      return h(
-        Button,
-        {
-          variant: "ghost",
-          onClick: () => column.toggleSorting(column.getIsSorted() === "asc"),
-        },
-        () => ["Dự án", h(ArrowUpDown, { class: "ml-2 h-4 w-4" })]
-      );
-    },
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("project")),
+    accessorKey: "name",
+    header: "Tên",
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("name")),
+    enableSorting: false,
+  },
+  {
+    accessorKey: "address",
+    header: "Địa chỉ",
+    cell: ({ row }) =>
+      h("div", { class: "capitalize" }, row.getValue("address")),
   },
   {
     accessorKey: "type",
-    header: ({ column }) => {
-      return h(
-        Button,
-        {
-          variant: "ghost",
-          onClick: () => column.toggleSorting(column.getIsSorted() === "asc"),
-        },
-        () => ["Danh mục", h(ArrowUpDown, { class: "ml-2 h-4 w-4" })]
-      );
-    },
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("type")),
-  },
-  {
-    accessorKey: "status",
-    header: "Trạng thái",
+    header: "Hạng mục",
     cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("status")),
+      h(
+        "div",
+        { class: "capitalize" },
+        TYPE_ROOM[
+          row.getValue("type") as keyof typeof TYPE_ROOM
+        ]
+      ),
   },
   {
-    accessorKey: "amount",
-    header: () => h("div", { class: "text-right" }, "Giá tiền"),
-    cell: ({ row }) => {
-      const amount = Number.parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("vi-VN", {
-        style: "currency",
-        currency: "VND",
-      }).format(amount);
-
-      return h("div", { class: "text-right font-medium" }, formatted);
-    },
+    accessorKey: "created_at",
+    header: "Ngày tạo",
+    cell: ({ row }) =>
+      h("div", { class: "capitalize" }, convertUTC(row.getValue("created_at"))),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const room = row.original;
+      const home = row.original;
 
       return h(ReuseTemplate, {
-        room,
+        home,
         onExpand: row.toggleExpanded,
       });
     },
@@ -325,7 +178,7 @@ const rowSelection = ref({});
 const expanded = ref<ExpandedState>({});
 
 const table = useVueTable({
-  data,
+  data: properties,
   columns,
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
@@ -366,9 +219,9 @@ function copy(id: number) {
 
 <template>
   <section class="w-full px-6 py-10 max-w-7xl mx-auto mt-4 min-h-[90%]">
-    <h1 class="font-semibold text-2xl">Quản lý danh sách phòng</h1>
+    <h1 class="font-semibold text-2xl">Quản lý danh sách điểm đến</h1>
 
-    <DefineTemplate v-slot="{ room }">
+    <DefineTemplate v-slot="{ home }">
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
           <Button variant="ghost" class="h-8 w-8 p-0">
@@ -378,13 +231,17 @@ function copy(id: number) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Hành động</DropdownMenuLabel>
-          <DropdownMenuItem @click="copy(room.id)">
+          <DropdownMenuItem @click="copy(home.id)">
             Sao chép ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Xoá</DropdownMenuItem>
+          <DropdownMenuItem @click="deleteItem(home.id)">
+            Xoá
+          </DropdownMenuItem>
           <DropdownMenuItem>
-            <NuxtLink :to="`/admin/quan-ly-phong/${room.id}`">Chi tiết</NuxtLink>
+            <NuxtLink :to="`/admin/quan-ly-phong/${home.id}`" class="w-full"
+              >Chi tiết</NuxtLink
+            >
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -393,14 +250,15 @@ function copy(id: number) {
       <div class="flex items-center py-4">
         <Input
           class="max-w-sm"
-          placeholder="Lọc theo tên phòng..."
-          :model-value="table.getColumn('name')?.getFilterValue() as string"
-          @update:model-value="table.getColumn('name')?.setFilterValue($event)"
+          placeholder="Tìm kiếm theo tên..."
+          :model-value="search"
+          @update:model-value="search = $event"
         />
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button variant="outline" class="ml-auto">
-              Cột <ChevronDown class="ml-2 h-4 w-4" />
+              Cột
+              <!-- Cột <ChevronDown class="ml-2 h-4" /> -->
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -474,24 +332,12 @@ function copy(id: number) {
           {{ table.getFilteredSelectedRowModel().rows.length }} trong số
           {{ table.getFilteredRowModel().rows.length }} hàng được chọn.
         </div>
-        <div class="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            :disabled="!table.getCanPreviousPage()"
-            @click="table.previousPage()"
-          >
-            Trước
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            :disabled="!table.getCanNextPage()"
-            @click="table.nextPage()"
-          >
-            Sau
-          </Button>
-        </div>
+        <PaginationPage
+          class="mt-6"
+          :page="pagination.current_page"
+          :total-pages="pagination.last_page"
+          @change="page = $event"
+        />
       </div>
     </div>
   </section>

@@ -81,7 +81,7 @@
                   </Button>
                 </div>
               </div>
-              <div class="grid grid-cols-3 items-center gap-4">
+              <!-- <div class="grid grid-cols-3 items-center gap-4">
                 <Label for="infantsNum">Trẻ sơ sinh</Label>
                 <div class="flex justify-between col-span-2">
                   <Button
@@ -105,7 +105,7 @@
                     <FontAwesomeIcon :icon="['fas', 'plus']" />
                   </Button>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </PopoverContent>

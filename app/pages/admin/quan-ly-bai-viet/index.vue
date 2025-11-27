@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/table";
 import type { Post, Response } from "~/types";
 import { toast } from "vue-sonner";
+import { PUBLISHED_STATUSES } from "~/constants";
 
 const config = useRuntimeConfig();
 
@@ -139,6 +140,18 @@ const columns: ColumnDef<Post>[] = [
       h("div", { class: "capitalize" }, row.getValue("keywords")),
   },
   {
+    accessorKey: "is_published",
+    header: "Trạng thái",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        PUBLISHED_STATUSES[
+          row.getValue("is_published") as keyof typeof PUBLISHED_STATUSES
+        ]
+      ),
+  },
+  {
     accessorKey: "created_at",
     header: "Ngày tạo",
     cell: ({ row }) =>
@@ -206,7 +219,7 @@ function copy(id: number) {
 
 <template>
   <section class="w-full px-6 py-10 max-w-7xl mx-auto mt-4 min-h-[90%]">
-    <h1 class="font-semibold text-2xl">Quản lý danh sách phòng</h1>
+    <h1 class="font-semibold text-2xl">Quản lý danh sách bài viết</h1>
 
     <DefineTemplate v-slot="{ post }">
       <DropdownMenu>

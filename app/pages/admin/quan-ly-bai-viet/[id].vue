@@ -17,7 +17,6 @@ const apiUrl = `${config.public.apiBase}/posts/${id}`;
 const { data } = await useFetch<Response<Post>>(apiUrl);
 
 watch(data, (val) => {
-  console.log(val);
   if (val?.data.items) {
     post.value = val.data.items; // ✔ update sau khi fetch xong
   }
@@ -31,7 +30,6 @@ const { execute, pending, error } = useFetch<Response<Post>>(apiUrl, {
 
 const savePost = async () => {
   await execute();
-  console.log("data", error.value?.data);
   if (error.value) {
     message.value =
       error.value?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau!";

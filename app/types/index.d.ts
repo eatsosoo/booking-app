@@ -15,6 +15,26 @@ export interface Post {
   created_at: string
 }
 
+export interface Properties {
+  id: number
+  name: string
+  description: string
+  address: string
+  type: string
+  area: number
+  guest: number
+  bedrooms: number
+  bathrooms: number
+  bed: number
+  base_hours: number
+  extra_hour: number
+  per_day: number
+  per_night: number
+  content: string
+  thumbnail: string
+  gallery: string[]
+}
+
 interface Pagination {
   current_page: number
   last_page: number
