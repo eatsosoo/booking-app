@@ -1,19 +1,20 @@
 <template>
   <div class="flex items-center justify-center gap-3 select-none">
     <!-- Prev -->
-    <button
-      class="flex items-center gap-1 text-gray-700 hover:text-black disabled:opacity-40"
+    <Button
+      variant="ghost"
       :disabled="page <= 1"
       @click="$emit('change', page - 1)"
     >
       ‹ Trước
-    </button>
+    </Button>
 
     <!-- Numbers -->
     <div class="flex items-center gap-2">
-      <button
+      <Button
         v-for="p in pagesToShow"
         :key="p.key"
+        variant="ghost"
         :disabled="p.type === 'dots'"
         class="w-9 h-9 flex items-center justify-center rounded-md border transition hover:bg-gray-100 disabled:bg-transparent disabled:border-none disabled:cursor-default"
         :class="{
@@ -23,29 +24,28 @@
       >
         <span v-if="p.type === 'page'">{{ p.number }}</span>
         <span v-else class="text-xl">…</span>
-      </button>
+      </Button>
     </div>
 
     <!-- Next -->
-    <button
-      class="flex items-center gap-1 text-gray-700 hover:text-black disabled:opacity-40"
+    <Button
+      variant="ghost"
       :disabled="page >= totalPages"
       @click="$emit('change', page + 1)"
     >
       Sau ›
-    </button>
+    </Button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
+import Button from "./ui/button/Button.vue";
 
 const props = defineProps({
   page: { type: Number, required: true },
   totalPages: { type: Number, required: true },
 });
-
-const emits = defineEmits(['change'])
 
 const pagesToShow = computed(() => {
   const current = props.page;

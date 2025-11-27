@@ -16,7 +16,7 @@ import {
   useVueTable,
 } from "@tanstack/vue-table";
 import { createReusableTemplate } from "@vueuse/core";
-import { MoreHorizontal } from "lucide-vue-next";
+import { MoreHorizontal, RefreshCcw } from "lucide-vue-next";
 import { h, ref } from "vue";
 
 import { valueUpdater } from "@/lib/utils";
@@ -84,7 +84,7 @@ async function deleteItem(itemId: number) {
     toast.success(titleNotify, {
       description: "Điểm đến đã được xoá thành công!",
     });
-
+    page.value = 1;
     refresh(); // load lại danh sách
   } catch (err: any) {
     message.value =
@@ -254,6 +254,9 @@ function copy(id: number) {
           :model-value="search"
           @update:model-value="search = $event"
         />
+        <Button variant="secondary" class="ml-2" @click="refresh()">
+          <RefreshCcw class="h-4 w-4" />
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button variant="outline" class="ml-auto">
