@@ -101,7 +101,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { useFetch } from "#app";
-import Pagination from "~/components/PaginationPage.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   InputGroup,
