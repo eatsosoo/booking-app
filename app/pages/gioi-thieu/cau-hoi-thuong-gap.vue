@@ -13,7 +13,7 @@ const config = useRuntimeConfig();
 const faqs = ref<Faq[]>([]);
 
 const { data, error } = await useFetch<Response<Faq[]>>(
-  `${config.public.apiBase}/faqs`
+  `${config.public.apiBase}/home/faqs`
 );
 if (error.value) {
   console.error("Failed to fetch FAQs:", error.value);
