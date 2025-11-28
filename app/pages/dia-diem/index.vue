@@ -19,7 +19,14 @@
     </section>
 
     <section class="max-w-7xl mx-auto mt-22 p-4">
-      <SearchRooms />
+      <SearchRooms
+        :place="keyword"
+        :title="title"
+        :bath-room-num="bathRoomNum"
+        :bed-room-num="bedRoomNum"
+        :services="services"
+        @submit="handleSubmit"
+      />
 
       <div class="flex justify-between items-center">
         <h2 class="text-xl font-bold my-6 text-blue-900">
@@ -29,9 +36,7 @@
 
         <Popover>
           <PopoverTrigger as-child>
-            <Button variant="outline">
-              Sắp xếp
-            </Button>
+            <Button variant="outline"> Sắp xếp </Button>
           </PopoverTrigger>
           <PopoverContent>
             <div class="grid gap-4">
@@ -76,23 +81,27 @@
                 {{ room.description }}
               </p>
               <ClientOnly>
-                <p class="text-gray-600 mb-2 line-clamp-2">
+                <p class="text-gray-600 mb-2 line-clamp-2 text-[14px]">
                   <FontAwesomeIcon
                     :icon="['fas', 'location-dot']"
                     class="mr-2"
                   />
                   {{ room.address }}
                 </p>
-                <p class="text-gray-600 mb-2">
+                <p class="text-gray-600 mb-2 text-[14px]">
                   <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
-                  {{ room.bedrooms }}
+                  {{ room.bedrooms }} phòng ngủ
                 </p>
-                <p class="text-gray-600 mb-2">
+                <p class="text-gray-600 mb-2 text-[14px]">
+                  <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
+                  {{ room.bathrooms }} phòng tắm
+                </p>
+                <p class="text-gray-600 mb-2 text-[14px]">
                   <FontAwesomeIcon
                     :icon="['fas', 'people-group']"
                     class="mr-2"
                   />
-                  {{ room.guest }}
+                  {{ room.guest }} người
                 </p>
               </ClientOnly>
               <p class="text-lg font-bold text-blue-900">
@@ -143,9 +152,14 @@ const page = computed(() => {
   const p = Number(route.query.page) || 1;
   return p < 1 ? 1 : p;
 });
-const perPage = computed(() => Number(route.query.per_page) || 12);
+const perPage = computed(() => route.query.per_page || 12);
 const keyword = computed(() => route.query.place || "");
 const propertyType = computed(() => route.query.property_types || "");
+const title = computed(() => route.query.title || "");
+const bathRoomNum = computed(() => route.query.bath || "");
+const bedRoomNum = computed(() => route.query.bed || "");
+const services = computed(() => route.query.services || "");
+
 const rooms = ref<Properties[]>([]);
 const paginate = ref<Pagination>({
   current_page: 1,
@@ -157,7 +171,7 @@ const paginate = ref<Pagination>({
 
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/properties?page=${page.value}&per_page=${perPage.value}&property_types=${propertyType.value}`
+    `${config.public.apiBase}/properties?page=${page.value}&per_page=${perPage.value}&property_types=${propertyType.value}&title=${title.value}&bed=${bedRoomNum.value}&bath=${bathRoomNum.value}`
 );
 
 const { data, pending, error, refresh } = await useAsyncData(
@@ -181,4 +195,19 @@ watchEffect(() => {
     paginate.value = data.value.result?.pagination || paginate.value;
   }
 });
+
+const handleSubmit = (formData: any) => {
+  router.push({
+    query: {
+      page: 1,
+      per_page: 12,
+      property_types: propertyType.value,
+      title: formData.title,
+      bath: formData.bathroom,
+      bed: formData.bedroom,
+      services: formData.services.join(","),
+      place: formData.place,
+    },
+  });
+};
 </script>

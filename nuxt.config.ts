@@ -85,5 +85,9 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/admin/**': { ssr: false },
+  },
+
+  nitro: {
+    preset: "node-server"
   }
 })

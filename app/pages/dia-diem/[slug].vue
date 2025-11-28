@@ -96,6 +96,15 @@
             </p>
           </div>
 
+          <!-- Dịch vụ -->
+          <div class="p-4 border rounded-2xl shadow-sm bg-white mb-4">
+            <h2 class="font-semibold text-lg mb-2">Dịch vụ</h2>
+            <Separator class="mb-4" />
+            <p v-for="service in home.services" :key="service.id" class="italic font-xs">
+              {{ service.title }}
+            </p>
+          </div>
+
           <!-- Giới thiệu -->
           <div
             class="p-4 border rounded-2xl shadow-sm bg-white leading-relaxed text-sm"
