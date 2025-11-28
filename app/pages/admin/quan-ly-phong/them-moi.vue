@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Post, Response } from "~/types";
+import type { Option, Post, Response, Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TYPE_ROOM } from "~/constants";
+import { PROPERTY_TYPES, TYPE_ROOM } from "~/constants";
 
 definePageMeta({
     layout: 'admin'
@@ -25,8 +25,8 @@ definePageMeta({
 
 const config = useRuntimeConfig();
 
+const serviceOptions = ref<Option[]>([]);
 const imageInput = ref<HTMLInputElement | null>(null);
-const message = ref<string>("");
 const post = ref<PropertiesForm>({
   name: "",
   description: "",
@@ -44,12 +44,15 @@ const post = ref<PropertiesForm>({
   content: "<p>Nội dung giới thiệu...</p>",
   thumbnail: "",
   gallery: [],
+  services: [],
+  property_types: []
 });
 
 const toastTitle = "Tải ảnh lên";
 const apiUrl = `${config.public.apiBase}/properties`;
+const { data: servicesData } = await useFetch<Response<Service[]>>("/api/services")
 
-const { execute, pending, error } = useFetch<Response<Post>>(apiUrl, {
+const { execute, pending } = useFetch<Response<Post>>(apiUrl, {
   method: "POST",
   body: post.value,
   immediate: false,
@@ -117,6 +120,11 @@ const handleImageUpload = async (e: Event) => {
 const handleContentChange = (val: string) => {
   post.value.content = val;
 };
+
+serviceOptions.value = servicesData.value?.data.items.map((service) => ({
+  label: service.title,
+  value: service.id,
+})) || [];
 </script>
 
 <template>
@@ -258,6 +266,28 @@ const handleContentChange = (val: string) => {
           v-model="post.per_night"
           type="number"
           placeholder="Nhập số tiền..."
+        />
+      </div>
+
+      <!-- Hạng mục -->
+      <div>
+        <Label for="property_types" class="mb-2 ml-1">Hạng mục</Label>
+        <MultiSelect
+          v-model="post.property_types"
+          :options="PROPERTY_TYPES"
+          placeholder="Chọn hạng mục..."
+          class="w-64"
+        />
+      </div>
+
+      <!-- Dịch vụ đi kèm -->
+      <div>
+        <Label for="property_types" class="mb-2 ml-1">Dịch vụ đi kèm</Label>
+        <MultiSelect
+          v-model="post.services"
+          :options="serviceOptions"
+          placeholder="Chọn dịch vụ..."
+          class="w-64"
         />
       </div>
 

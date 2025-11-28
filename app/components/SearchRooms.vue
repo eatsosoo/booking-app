@@ -8,7 +8,7 @@
           <SelectValue placeholder="Chọn địa điểm..." />
         </SelectTrigger>
         <SelectContent>
-          <SelectGroup v-for="group in groups" :key="group.label">
+          <SelectGroup v-for="group in PLACE_GROUPS" :key="group.label">
             <SelectLabel>{{ group.label }}</SelectLabel>
             <SelectItem v-for="item in group.value" :key="item" :value="item">
               {{ item }}
@@ -68,12 +68,12 @@
         <p>DỊCH VỤ ĐI KÈM</p>
         <div class="grid grid-cols-3 mt-2 gap-4">
           <label
-            v-for="service in services"
-            :key="service.value"
+            v-for="service in servicesData?.data.items"
+            :key="service.id"
             class="flex space-x-2 text-[0.8rem]"
           >
             <Checkbox />
-            <span>{{ service.label }}</span>
+            <span>{{ service.title }}</span>
           </label>
         </div>
       </div>
@@ -100,44 +100,12 @@ import Button from "./ui/button/Button.vue";
 import Checkbox from "@/components/ui/checkbox/Checkbox.vue";
 import { Input } from "@/components/ui/input";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import type { Response, Service } from "~/types";
+import { PLACE_GROUPS } from "~/constants";
 
-const groups = [
-  {
-    label: "Khu vực Miền Bắc",
-    value: [
-      "Hà Nội",
-      "Hoà Bình",
-      "Ba Vì",
-      "Sóc Sơn",
-      "Tam Đảo",
-      "Đại Lải",
-      "Hạ Long",
-      "Tuần Châu",
-      "Ninh Bình",
-      "Mộc Châu",
-      "Sa Pa",
-    ],
-  },
-  {
-    label: "Khu vực Miền Trung",
-    value: [
-      "FLC Sầm Sơn",
-      "Hải Tiến",
-      "Huế",
-      "Đà Nẵng",
-      "Hội An",
-      "Quy Nhơn",
-      "Nha Trang",
-      "Mũi Né",
-      "Phú Yên",
-      "Đà Lạt",
-    ],
-  },
-  {
-    label: "Khu vực Miền Nam",
-    value: ["Vũng Tàu", "Hồ Tràm", "Sài Gòn", "Phú Quốc"],
-  },
-];
+const { data: servicesData } = await useFetch<Response<Service[]>>("/api/services")
+
+
 
 const bedRoomNum = [
   {
@@ -182,61 +150,6 @@ const bathRoomNum = [
   {
     value: ">=5",
     label: "Từ 5 phòng tắm",
-  },
-];
-
-const services = [
-  {
-    value: "1",
-    label: "Có bể bơi",
-  },
-  {
-    value: "2",
-    label: "Bữa sáng miễn phí",
-  },
-  {
-    value: "3",
-    label: "Quán cafe",
-  },
-  {
-    value: "4",
-    label: "Cho thuê xe",
-  },
-  {
-    value: "5",
-    label: "Tiệc BBQ",
-  },
-  {
-    value: "6",
-    label: "Nhà hàng",
-  },
-  {
-    value: "7",
-    label: "Chỗ đậu xe",
-  },
-  {
-    value: "8",
-    label: "Phòng xông hơi",
-  },
-  {
-    value: "9",
-    label: "Ti vi",
-  },
-  {
-    value: "10",
-    label: "Ban công",
-  },
-  {
-    value: "11",
-    label: "View biển",
-  },
-  {
-    value: "12",
-    label: "Karaoke",
-  },
-  {
-    value: "13",
-    label: "Dịch vụ lau dọn",
   },
 ];
 

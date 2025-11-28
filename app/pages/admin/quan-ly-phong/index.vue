@@ -42,7 +42,6 @@ import {
 } from "@/components/ui/table";
 import type { Properties, Response } from "~/types";
 import { toast } from "vue-sonner";
-import { TYPE_ROOM } from "~/constants";
 import type { SelectOption } from "~/types/booking";
 
 definePageMeta({
@@ -156,7 +155,7 @@ const columns: ColumnDef<Properties>[] = [
           { class: "capitalize" },
           (row.getValue("property_types") as SelectOption[])
             .map((type) => type.name)
-            .join(",")
+            .join(" | ")
         )
       ),
   },

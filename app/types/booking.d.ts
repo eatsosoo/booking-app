@@ -15,6 +15,8 @@ export type PropertiesForm = {
   content: string
   thumbnail: string
   gallery: string[]
+  services: number[]
+  property_types: number[]
 }
 
 export type PostForm = {
