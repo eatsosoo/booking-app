@@ -16,7 +16,7 @@ import {
   useVueTable,
 } from "@tanstack/vue-table";
 import { createReusableTemplate } from "@vueuse/core";
-import { MoreHorizontal, PlusSquareIcon, RefreshCcw } from "lucide-vue-next";
+import { ChevronDown, MoreHorizontal, PlusSquareIcon, RefreshCcw } from "lucide-vue-next";
 import { h, ref } from "vue";
 
 import { valueUpdater } from "@/lib/utils";
@@ -270,8 +270,7 @@ function copy(id: number) {
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button variant="outline" class="ml-auto">
-              Cột
-              <!-- Cột <ChevronDown class="ml-2 h-4" /> -->
+              Cột <ChevronDown class="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Response } from "~/types";
+import type { Response, Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
@@ -24,19 +24,17 @@ definePageMeta({
 const router = useRouter();
 const config = useRuntimeConfig();
 
-const apiCreate = `${config.public.apiBase}/services`;
+const apiUrl = `${config.public.apiBase}/services/${router.currentRoute.value.params.id}`;
+const { data } = await useFetch<Response<Service>>(
+  `${apiUrl}`,
+  {
+    method: "GET",
+  }
+);
 
 // form
 const imageInput = ref<HTMLInputElement | null>(null);
-const service = ref<ServiceForm>({
-  title: "",
-  slug: "",
-  image: "",
-  description: "",
-  menu: "",
-  price: 0,
-  is_published: 1,
-});
+const service = ref<Service>({} as Service);
 
 const pending = ref(false);
 
@@ -44,13 +42,13 @@ const saveService = async () => {
   pending.value = true;
 
   try {
-    await $fetch(apiCreate, {
+    await $fetch(apiUrl, {
       method: "PUT",
       body: service.value,
     });
 
     toast.success("Tạo dịch vụ mới", {
-      description: "Dịch vụ mới đã được thêm.",
+      description: "Dịch vụ đã được cập nhật.",
     });
 
     router.push("/admin/quan-ly-dich-vu");
@@ -102,6 +100,11 @@ const handleImageUpload = async (e: Event) => {
     target.value = "";
   }
 };
+
+service.value = data.value?.data.items || ({} as Service);
+if (typeof service.value.images === "string") {
+  service.value.images = JSON.parse(service.value.images as unknown as string);
+}
 </script>
 
 <template>
@@ -181,6 +184,8 @@ const handleImageUpload = async (e: Event) => {
         </Select>
       </div>
 
+      <div></div>
+
       <!-- Image -->
       <div>
         <Label for="thumbnail" class="mb-2 ml-1">Hình ảnh</Label>
@@ -215,13 +220,14 @@ const handleImageUpload = async (e: Event) => {
           id="description"
           v-model="service.description"
           placeholder="Nhập mô tả..."
+          class="h-[254px]"
         />
       </div>
     </div>
 
     <div class="mt-6">
       <Button variant="default" :loading="pending" @click="saveService">
-        Tạo mới
+        Cập nhật
       </Button>
     </div>
   </section>

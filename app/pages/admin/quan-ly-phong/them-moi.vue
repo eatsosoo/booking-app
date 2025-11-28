@@ -56,20 +56,23 @@ const { execute, pending, error } = useFetch<Response<Post>>(apiUrl, {
 });
 
 const savePost = async () => {
-  await execute();
+  const title = "Tạo phòng mới";
 
-  const titleNotify = "Tạo phòng mới";
-  if (error.value) {
-    message.value =
-      error.value?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
-    toast.error(titleNotify, {
-      description: message.value,
-    });
-  } else {
-    toast.success(titleNotify, {
+  try {
+    await execute(); // nếu useFetch gọi API fail → throw error
+
+    toast.success(title, {
       description: "Phòng mới đã được tạo thành công!",
     });
+
     return navigateTo("/admin/quan-ly-bai-viet");
+  } catch (err: any) {
+    const msg =
+      err?.data?.message ||
+      err?.message ||
+      "Có lỗi xảy ra, vui lòng thử lại sau!";
+
+    toast.error(title, { description: msg });
   }
 };
 
