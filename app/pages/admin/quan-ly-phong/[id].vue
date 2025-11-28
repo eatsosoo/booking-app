@@ -29,7 +29,6 @@ const id = route.params.id;
 
 const message = ref<string>("");
 const home = ref<Properties>({} as Properties);
-const imageInput = ref<HTMLInputElement | null>(null);
 const multiSelected = reactive({
   property_types: [] as (string | number)[],
   services: [] as (string | number)[],
@@ -64,43 +63,7 @@ const saveProperties = async () => {
   }
 };
 
-const handleImageUpload = async (e: Event) => {
-  const target = e.target as HTMLInputElement;
-  const file = target.files?.[0];
-  if (!file) return;
 
-  try {
-    const formData = new FormData();
-    formData.append("media", file);
-
-    const { data, error } = await useFetch<Response<string>>(
-      `${config.public.apiBase}/home/upload`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-
-    if (error.value) {
-      toast.error(toastTitle, {
-        description:
-          error.value?.data.message || "Có lỗi xảy ra khi tải ảnh lên!",
-      });
-      return;
-    }
-
-    home.value.thumbnail = data.value?.data.items[0] ?? "";
-    toast.success(toastTitle, {
-      description: "Ảnh đã được tải lên thành công!",
-    });
-  } catch (error) {
-    toast.error(toastTitle, {
-      description: "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
-    });
-  } finally {
-    target.value = "";
-  }
-};
 
 home.value = data.value?.data.items || ({} as Properties);
 multiSelected.property_types = home.value.property_types.map((item) => item.id);
@@ -274,36 +237,17 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
           id="description"
           v-model="home.description"
           placeholder="Nhập mô tả..."
-          class="h-62"
+          class="h-64"
         />
       </div>
 
       <!-- Image -->
       <div>
         <Label for="thumbnail" class="mb-2 ml-1">Hình ảnh (thumbnail)</Label>
-        <input
-          ref="imageInput"
-          type="file"
-          accept="image/*"
-          class="hidden"
-          @change="handleImageUpload"
-        />
-
-        <div class="p-2 rounded-md shadow-xs border border-dashed">
-          <Button size="icon" variant="secondary" @click="imageInput?.click()">
-            <ImageIcon class="w-4 h-4" />
-          </Button>
-          <span class="text-md ml-2">{{
-            home.thumbnail ? "Thay đổi ảnh" : "Tải ảnh lên"
-          }}</span>
-          <NuxtImg
-            v-if="home.thumbnail"
-            :src="home.thumbnail"
-            alt="Ảnh điểm đến"
-            class="w-72 h-48 mt-2"
-          />
-        </div>
+        <UploadImage :url="home.thumbnail" @uploaded="home.thumbnail = $event" />
       </div>
+
+      <!-- Gallery -->
 
       <!-- Content -->
       <div class="col-span-1 md:col-span-2">
