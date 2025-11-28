@@ -1,13 +1,12 @@
 <template>
-  <input
-    ref="imageInput"
-    type="file"
-    accept="image/*"
-    class="hidden"
-    @change="handleImageUpload"
-  />
-
   <div class="p-2 rounded-md shadow-xs border border-dashed">
+    <input
+      ref="imageInput"
+      type="file"
+      accept="image/*"
+      class="hidden"
+      @change="handleImageUpload"
+    />
     <Button size="icon" variant="secondary" @click="imageInput?.click()">
       <ImageIcon class="w-4 h-4" />
     </Button>
@@ -65,7 +64,7 @@ const handleImageUpload = async (e: Event) => {
       return;
     }
 
-    imageUrl.value = data.value?.data.items[0] ?? ""
+    imageUrl.value = data.value?.data.items[0] ?? "";
     emit("uploaded", imageUrl.value);
     toast.success(toastTitle, {
       description: "Ảnh đã được tải lên thành công!",

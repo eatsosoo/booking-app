@@ -248,6 +248,10 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
       </div>
 
       <!-- Gallery -->
+      <div class="col-span-1 md:col-span-2">
+        <Label for="gallery" class="mb-2 ml-1">Ảnh trưng bày</Label>
+        <UploadMultiImage :urls="home.gallery" @uploaded="home.gallery = $event" />
+      </div>
 
       <!-- Content -->
       <div class="col-span-1 md:col-span-2">
