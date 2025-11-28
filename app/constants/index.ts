@@ -15,3 +15,22 @@ export const SERVICE_TYPES = {
     'basic': 'Cơ bản',
     'premium': 'Cao cấp'
 } as const
+
+export const PROPERTY_TYPES = [
+    {
+        label: 'Villa',
+        value: 0,
+    },
+    {
+        label: 'Homestay',
+        value: 1,
+    },
+    {
+        label: 'Khách sạn',
+        value: 2,
+    },
+    {
+        label: 'Chung cư mini',
+        value: 3,
+    },
+]

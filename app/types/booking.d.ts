@@ -35,3 +35,8 @@ export type ServiceForm = {
   price: number
   is_published: number
 }
+
+export type SelectOption = {
+  id: number
+  name: string
+}

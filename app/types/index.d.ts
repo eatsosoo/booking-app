@@ -33,6 +33,8 @@ export interface Properties {
   content: string
   thumbnail: string
   gallery: string[]
+  services: { id: number, title: string }[]
+  property_types: { id: number, name: string }[] 
 }
 
 export interface Service {

@@ -43,10 +43,11 @@ import {
 import type { Properties, Response } from "~/types";
 import { toast } from "vue-sonner";
 import { TYPE_ROOM } from "~/constants";
+import type { SelectOption } from "~/types/booking";
 
 definePageMeta({
-    layout: 'admin'
-})
+  layout: "admin",
+});
 
 const config = useRuntimeConfig();
 
@@ -144,23 +145,27 @@ const columns: ColumnDef<Properties>[] = [
       h("div", { class: "capitalize" }, row.getValue("address")),
   },
   {
-    accessorKey: "type",
+    accessorKey: "property_types",
     header: "Hạng mục",
     cell: ({ row }) =>
       h(
         "div",
         { class: "capitalize" },
-        TYPE_ROOM[
-          row.getValue("type") as keyof typeof TYPE_ROOM
-        ]
+        h(
+          "div",
+          { class: "capitalize" },
+          (row.getValue("property_types") as SelectOption[])
+            .map((type) => type.name)
+            .join(",")
+        )
       ),
   },
-  {
-    accessorKey: "created_at",
-    header: "Ngày tạo",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, convertUTC(row.getValue("created_at"))),
-  },
+  // {
+  //   accessorKey: "created_at",
+  //   header: "Ngày tạo",
+  //   cell: ({ row }) =>
+  //     h("div", { class: "capitalize" }, convertUTC(row.getValue("created_at"))),
+  // },
   {
     id: "actions",
     enableHiding: false,

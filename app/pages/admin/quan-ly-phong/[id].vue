@@ -5,7 +5,7 @@ import Button from "~/components/ui/button/Button.vue";
 import type { Properties, Response } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
-import { TYPE_ROOM } from "~/constants";
+import { PROPERTY_TYPES, TYPE_ROOM } from "~/constants";
 import {
   Select,
   SelectContent,
@@ -17,10 +17,11 @@ import {
 } from "@/components/ui/select";
 import { ImageIcon } from "lucide-vue-next";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
+import Separator from "~/components/ui/separator/Separator.vue";
 
 definePageMeta({
-    layout: 'admin'
-})
+  layout: "admin",
+});
 
 const route = useRoute();
 const config = useRuntimeConfig();
@@ -29,6 +30,10 @@ const id = route.params.id;
 const message = ref<string>("");
 const home = ref<Properties>({} as Properties);
 const imageInput = ref<HTMLInputElement | null>(null);
+const multiSelected = reactive({
+  property_types: [] as (string | number)[],
+  services: [] as (string | number)[],
+});
 
 const toastTitle = "Tải ảnh lên";
 const apiUrl = `${config.public.apiBase}/properties/${id}`;
@@ -92,9 +97,8 @@ const handleImageUpload = async (e: Event) => {
 };
 
 home.value = data.value?.data.items || ({} as Properties);
-if (typeof home.value.gallery === "string") {
-  home.value.gallery = JSON.parse(home.value.gallery as unknown as string);
-}
+multiSelected.property_types = home.value.property_types.map((item) => item.id);
+multiSelected.services = home.value.services.map((item) => item.id);
 </script>
 
 <template>
@@ -118,28 +122,6 @@ if (typeof home.value.gallery === "string") {
         />
       </div>
 
-      <!-- Loại -->
-      <div>
-        <Label for="type" class="mb-2 ml-1">Hạng mục</Label>
-        <Select v-model="home.type">
-          <SelectTrigger class="w-full">
-            <SelectValue placeholder="Chọn hàng mục" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Lựa chọn</SelectLabel>
-              <SelectItem
-                v-for="(label, key) in TYPE_ROOM"
-                :key="key"
-                :value="key"
-              >
-                {{ label }}
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
-
       <!-- Area -->
       <div>
         <Label for="area" class="mb-2 ml-1">Diện tích</Label>
@@ -150,7 +132,11 @@ if (typeof home.value.gallery === "string") {
           placeholder="Nhập diện tích..."
         />
       </div>
+    </div>
 
+    <Separator class="my-6" />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Bathrooms -->
       <div>
         <Label for="bathrooms" class="mb-2 ml-1">Số phòng tắm</Label>
@@ -194,7 +180,11 @@ if (typeof home.value.gallery === "string") {
           placeholder="Nhập số lượng khách..."
         />
       </div>
+    </div>
 
+    <Separator class="my-6" />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Base hours -->
       <div>
         <Label for="base_hours" class="mb-2 ml-1">Phí giờ đầu (VND)</Label>
@@ -238,6 +228,32 @@ if (typeof home.value.gallery === "string") {
           v-model="home.per_night"
           type="number"
           placeholder="Nhập số tiền..."
+        />
+      </div>
+    </div>
+
+    <Separator class="my-6" />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <!-- Hạng mục -->
+      <div>
+        <Label for="property_types" class="mb-2 ml-1">Hạng mục</Label>
+        <MultiSelect
+          v-model="multiSelected.property_types"
+          :options="PROPERTY_TYPES"
+          placeholder="Chọn hạng mục..."
+          class="w-64"
+        />
+      </div>
+
+      <!-- Dịch vụ đi kèm -->
+      <div>
+        <Label for="property_types" class="mb-2 ml-1">Dịch vụ đi kèm</Label>
+        <MultiSelect
+          v-model="multiSelected.services"
+          :options="PROPERTY_TYPES"
+          placeholder="Chọn dịch vụ..."
+          class="w-64"
         />
       </div>
 
@@ -293,9 +309,7 @@ if (typeof home.value.gallery === "string") {
 
     <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" @click="saveProperties"
-        >Lưu thay đổi</Button
-      >
+      <Button variant="default" @click="saveProperties">Lưu thay đổi</Button>
     </div>
   </section>
 </template>
