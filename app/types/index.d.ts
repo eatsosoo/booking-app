@@ -51,6 +51,11 @@ export interface Service {
   updated_at: string
 }
 
+export interface Option {
+  label: string;
+  value: string | number;
+}
+
 interface Pagination {
   current_page: number
   last_page: number
@@ -68,7 +73,6 @@ export interface Response<T> {
     message: string
     data: {
       items: T,
-      pagination?: Pagination
     },
     result?: {
       pagination: Pagination

@@ -17,11 +17,7 @@ import {
 
 import { Check, ChevronsUpDown, X } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
-
-interface Option {
-  label: string;
-  value: string | number;
-}
+import type { Option } from "~/types";
 
 const props = defineProps<{
   options: Option[];

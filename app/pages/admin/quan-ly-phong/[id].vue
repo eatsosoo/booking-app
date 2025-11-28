@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Properties, Response } from "~/types";
+import type { Option, Properties, Response, Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import { PROPERTY_TYPES, TYPE_ROOM } from "~/constants";
@@ -34,26 +34,32 @@ const multiSelected = reactive({
   property_types: [] as (string | number)[],
   services: [] as (string | number)[],
 });
+const serviceOptions = ref<Option[]>([]);
 
 const toastTitle = "Tải ảnh lên";
 const apiUrl = `${config.public.apiBase}/properties/${id}`;
 const { data } = await useFetch<Response<Properties>>(apiUrl);
+const { data: servicesData } = await useFetch<Response<Service[]>>("/api/services")
 
 const saveProperties = async () => {
-  const { error } = useFetch<Response<Properties>>(apiUrl, {
+  const { data } = useFetch<Response<Properties>>(apiUrl, {
     method: "PUT",
-    body: home.value,
+    body: {
+      ...home.value,
+      property_types: multiSelected.property_types,
+      services: multiSelected.services,
+    },
   });
 
-  if (error.value) {
+  if (data.value?.statusCode !== 200) {
     message.value =
-      error.value?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
+      data.value?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
     toast.error("Cập nhật điểm đến", {
       description: message.value,
     });
   } else {
     toast.success("Cập nhật điểm đến", {
-      description: "Bài viết đã được cập nhật thành công!",
+      description: "Phòng đã được cập nhật thành công!",
     });
   }
 };
@@ -83,7 +89,7 @@ const handleImageUpload = async (e: Event) => {
       return;
     }
 
-    home.value.thumbnail = data.value?.data.items ?? "";
+    home.value.thumbnail = data.value?.data.items[0] ?? "";
     toast.success(toastTitle, {
       description: "Ảnh đã được tải lên thành công!",
     });
@@ -99,6 +105,10 @@ const handleImageUpload = async (e: Event) => {
 home.value = data.value?.data.items || ({} as Properties);
 multiSelected.property_types = home.value.property_types.map((item) => item.id);
 multiSelected.services = home.value.services.map((item) => item.id);
+serviceOptions.value = servicesData.value?.data.items.map((service) => ({
+  label: service.title,
+  value: service.id,
+})) || [];
 </script>
 
 <template>
@@ -251,7 +261,7 @@ multiSelected.services = home.value.services.map((item) => item.id);
         <Label for="property_types" class="mb-2 ml-1">Dịch vụ đi kèm</Label>
         <MultiSelect
           v-model="multiSelected.services"
-          :options="PROPERTY_TYPES"
+          :options="serviceOptions"
           placeholder="Chọn dịch vụ..."
           class="w-64"
         />
