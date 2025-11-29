@@ -15,6 +15,7 @@ export default withNuxt(
       'vue/no-unused-components': 'warn',
       'vue/no-unused-vars': 'warn',
       'vue/require-default-prop': 'off',
+      'vue/html-self-closing': 'off',
       
       // General rules
       'no-console': 'warn',

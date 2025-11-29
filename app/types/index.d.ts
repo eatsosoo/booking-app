@@ -66,6 +66,11 @@ export interface Option {
   value: string | number;
 }
 
+export interface Option2 {
+  label: string;
+  value: string;
+}
+
 interface Pagination {
   current_page: number
   last_page: number

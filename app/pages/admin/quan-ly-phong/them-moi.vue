@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Category, Option, Post, Response, Service } from "~/types";
+import type { Category, Option, Option2, Post, Response, Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
@@ -20,7 +20,7 @@ definePageMeta({
 const config = useRuntimeConfig();
 
 const serviceOptions = ref<Option[]>([]);
-const categoryOptions = ref<Option[]>([]);
+const categoryOptions = ref<Option2[]>([]);
 const post = ref<PropertiesForm>({
   name: "",
   description: "",
