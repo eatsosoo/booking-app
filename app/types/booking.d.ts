@@ -38,6 +38,12 @@ export type ServiceForm = {
   is_published: number
 }
 
+export type CategoryForm = {
+  name: string
+  image: string
+  description: string
+}
+
 export type SelectOption = {
   id: number
   name: string

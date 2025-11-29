@@ -31,5 +31,9 @@ const blocks = [
     label: "Quản lý dịch vụ",
     url: "/admin/quan-ly-dich-vu",
   },
+  {
+    label: "Quản lý dự án",
+    url: "/admin/quan-ly-danh-muc",
+  },
 ];
 </script>

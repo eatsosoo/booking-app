@@ -77,4 +77,11 @@ const handleImageUpload = async (e: Event) => {
     target.value = "";
   }
 };
+
+watch(
+  props,
+  () => {
+    imageUrl.value = props.url;
+  }
+)
 </script>

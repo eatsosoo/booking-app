@@ -51,6 +51,15 @@ export interface Service {
   updated_at: string
 }
 
+export interface Category {
+  id: number
+  name: string
+  image: string
+  description: string
+  created_at: string
+  updated_at: string
+}
+
 export interface Option {
   label: string;
   value: string | number;
