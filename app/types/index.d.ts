@@ -17,6 +17,7 @@ export interface Post {
 
 export interface Properties {
   id: number
+  category_id: number
   name: string
   description: string
   address: string

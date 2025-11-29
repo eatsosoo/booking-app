@@ -2,36 +2,30 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Option, Post, Response, Service } from "~/types";
+import type { Category, Option, Post, Response, Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
-import { ImageIcon } from "lucide-vue-next";
 import type { PropertiesForm } from "~/types/booking";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { PROPERTY_TYPES, TYPE_ROOM } from "~/constants";
+import { PROPERTY_TYPES } from "~/constants";
+import MultiSelect from "~/components/common/MultiSelect.vue";
+import Separator from "~/components/ui/separator/Separator.vue";
+import SearchSelect from "~/components/common/SearchSelect.vue";
+import { genSlug } from "~/utils/string-helper";
 
 definePageMeta({
-    layout: 'admin'
-})
+  layout: "admin",
+});
 
 const config = useRuntimeConfig();
 
 const serviceOptions = ref<Option[]>([]);
-const imageInput = ref<HTMLInputElement | null>(null);
+const categoryOptions = ref<Option[]>([]);
 const post = ref<PropertiesForm>({
   name: "",
   description: "",
   address: "",
-  type: "",
+  type: "villa",
   area: 50,
   guest: 1,
   bedrooms: 1,
@@ -45,14 +39,20 @@ const post = ref<PropertiesForm>({
   thumbnail: "",
   gallery: [],
   services: [],
-  property_types: []
+  property_types: [],
+  category_id: 1,
+  slug: "",
 });
 
-const toastTitle = "Tải ảnh lên";
 const apiUrl = `${config.public.apiBase}/properties`;
-const { data: servicesData } = await useFetch<Response<Service[]>>("/api/services")
+const { data: servicesData } = await useFetch<Response<Service[]>>(
+  "/api/services"
+);
+const { data: categoriesData } = await useFetch<Response<Category[]>>(
+  `${config.public.apiBase}/categories`
+);
 
-const { execute, pending } = useFetch<Response<Post>>(apiUrl, {
+const { execute, pending, data, error } = useFetch<Response<Post>>(apiUrl, {
   method: "POST",
   body: post.value,
   immediate: false,
@@ -62,58 +62,29 @@ const savePost = async () => {
   const title = "Tạo phòng mới";
 
   try {
-    await execute(); // nếu useFetch gọi API fail → throw error
+    // Gọi API
+    await execute();
+
+    if (data.value?.statusCode !== 200) {
+      const msg =
+        data.value?.message ||
+        error.value?.data?.message ||
+        "Có lỗi xảy ra, vui lòng thử lại sau!";
+
+      toast.error(title, { description: msg });
+      return;
+    }
 
     toast.success(title, {
       description: "Phòng mới đã được tạo thành công!",
     });
 
-    return navigateTo("/admin/quan-ly-bai-viet");
+    return navigateTo("/admin/quan-ly-phong");
   } catch (err: any) {
     const msg =
-      err?.data?.message ||
-      err?.message ||
-      "Có lỗi xảy ra, vui lòng thử lại sau!";
+      err?.data?.message || err?.message || "Không thể kết nối đến máy chủ!";
 
     toast.error(title, { description: msg });
-  }
-};
-
-const handleImageUpload = async (e: Event) => {
-  const target = e.target as HTMLInputElement;
-  const file = target.files?.[0];
-  if (!file) return;
-
-  try {
-    const formData = new FormData();
-    formData.append("media", file);
-
-    const { data, error } = await useFetch<Response<string>>(
-      `${config.public.apiBase}/home/upload`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-
-    if (error.value) {
-      toast.error(toastTitle, {
-        description:
-          error.value?.data.message || "Có lỗi xảy ra khi tải ảnh lên!",
-      });
-      return;
-    }
-
-    post.value.thumbnail = data.value?.data.items ?? "";
-    toast.success(toastTitle, {
-      description: "Ảnh đã được tải lên thành công!",
-    });
-  } catch (error) {
-    toast.error(toastTitle, {
-      description: "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
-    });
-  } finally {
-    target.value = "";
   }
 };
 
@@ -121,10 +92,16 @@ const handleContentChange = (val: string) => {
   post.value.content = val;
 };
 
-serviceOptions.value = servicesData.value?.data.items.map((service) => ({
-  label: service.title,
-  value: service.id,
-})) || [];
+serviceOptions.value =
+  servicesData.value?.data.items.map((service) => ({
+    label: service.title,
+    value: service.id,
+  })) || [];
+categoryOptions.value =
+  categoriesData.value?.data.items.map((service) => ({
+    label: service.name,
+    value: service.id.toString(),
+  })) || [];
 </script>
 
 <template>
@@ -135,7 +112,12 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
       <!-- Title -->
       <div>
         <Label for="title" class="mb-2 ml-1">Tiêu đề</Label>
-        <Input id="title" v-model="post.name" placeholder="Nhập tiêu đề..." />
+        <Input
+          id="title"
+          v-model="post.name"
+          placeholder="Nhập tiêu đề..."
+          @change="post.slug = genSlug($event.target.value)"
+        />
       </div>
 
       <!-- Address -->
@@ -148,31 +130,9 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
         />
       </div>
 
-      <!-- Loại -->
-      <div>
-        <Label for="type" class="mb-2 ml-1">Hạng mục</Label>
-        <Select v-model="post.type">
-          <SelectTrigger class="w-full">
-            <SelectValue placeholder="Chọn hàng mục" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Lựa chọn</SelectLabel>
-              <SelectItem
-                v-for="(label, key) in TYPE_ROOM"
-                :key="key"
-                :value="key"
-              >
-                {{ label }}
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
-
       <!-- Area -->
       <div>
-        <Label for="area"  class="mb-2 ml-1">Diện tích</Label>
+        <Label for="area" class="mb-2 ml-1">Diện tích</Label>
         <Input
           id="area"
           v-model="post.area"
@@ -181,9 +141,22 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
         />
       </div>
 
+      <!-- Loại -->
+      <div>
+        <Label for="type" class="mb-2 ml-1">Loại dự án</Label>
+        <SearchSelect
+          :model-value="post.category_id.toString()"
+          :frameworks="categoryOptions"
+          @update:model-value="post.category_id = $event"
+        />
+      </div>
+    </div>
+
+    <Separator class="my-6" />
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Bathrooms -->
       <div>
-        <Label for="bathrooms"  class="mb-2 ml-1">Số phòng tắm</Label>
+        <Label for="bathrooms" class="mb-2 ml-1">Số phòng tắm</Label>
         <Input
           id="bathrooms"
           v-model="post.bathrooms"
@@ -194,7 +167,7 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
 
       <!-- bedrooms -->
       <div>
-        <Label for="bedrooms"  class="mb-2 ml-1">Số phòng ngủ</Label>
+        <Label for="bedrooms" class="mb-2 ml-1">Số phòng ngủ</Label>
         <Input
           id="bedrooms"
           v-model="post.bedrooms"
@@ -205,7 +178,7 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
 
       <!-- bed -->
       <div>
-        <Label for="bed"  class="mb-2 ml-1">Số giường ngủ</Label>
+        <Label for="bed" class="mb-2 ml-1">Số giường ngủ</Label>
         <Input
           id="bed"
           v-model="post.bed"
@@ -216,7 +189,7 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
 
       <!-- guest -->
       <div>
-        <Label for="guest"  class="mb-2 ml-1">Sức chứa (khách)</Label>
+        <Label for="guest" class="mb-2 ml-1">Sức chứa (khách)</Label>
         <Input
           id="guest"
           v-model="post.guest"
@@ -224,10 +197,14 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
           placeholder="Nhập số lượng khách..."
         />
       </div>
+    </div>
 
+    <Separator class="my-6" />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Base hours -->
       <div>
-        <Label for="base_hours"  class="mb-2 ml-1">Phí giờ đầu (VND)</Label>
+        <Label for="base_hours" class="mb-2 ml-1">Phí giờ đầu (VND)</Label>
         <Input
           id="base_hours"
           v-model="post.base_hours"
@@ -238,7 +215,9 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
 
       <!-- Extra hours -->
       <div>
-        <Label for="extra_hour"  class="mb-2 ml-1">Phí giờ tiếp theo (VND)</Label>
+        <Label for="extra_hour" class="mb-2 ml-1"
+          >Phí giờ tiếp theo (VND)</Label
+        >
         <Input
           id="extra_hour"
           v-model="post.extra_hour"
@@ -249,7 +228,7 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
 
       <!-- Per day -->
       <div>
-        <Label for="per_day"  class="mb-2 ml-1">Thuê trong ngày (VND)</Label>
+        <Label for="per_day" class="mb-2 ml-1">Thuê trong ngày (VND)</Label>
         <Input
           id="per_day"
           v-model="post.per_day"
@@ -260,7 +239,7 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
 
       <!-- Per day -->
       <div>
-        <Label for="per_night"  class="mb-2 ml-1">Thuê qua đêm (VND)</Label>
+        <Label for="per_night" class="mb-2 ml-1">Thuê qua đêm (VND)</Label>
         <Input
           id="per_night"
           v-model="post.per_night"
@@ -268,7 +247,11 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
           placeholder="Nhập số tiền..."
         />
       </div>
+    </div>
 
+    <Separator class="my-6" />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Hạng mục -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Hạng mục</Label>
@@ -304,28 +287,19 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
       <!-- Image -->
       <div>
         <Label for="thumbnail" class="mb-2 ml-1">Hình ảnh (thumbnail)</Label>
-        <input
-          ref="imageInput"
-          type="file"
-          accept="image/*"
-          class="hidden"
-          @change="handleImageUpload"
+        <UploadImage
+          :url="post.thumbnail"
+          @uploaded="post.thumbnail = $event"
         />
+      </div>
 
-        <div class="p-2 rounded-md shadow-xs border border-dashed">
-          <Button size="icon" variant="secondary" @click="imageInput?.click()">
-            <ImageIcon class="w-4 h-4" />
-          </Button>
-          <span class="text-md ml-2">{{
-            post.thumbnail ? "Thay đổi ảnh" : "Tải ảnh lên"
-          }}</span>
-          <NuxtImg
-            v-if="post.thumbnail"
-            :src="post.thumbnail"
-            alt="Ảnh bài viết"
-            class="w-72 h-48 mt-2"
-          />
-        </div>
+      <!-- Gallery -->
+      <div class="col-span-1 md:col-span-2">
+        <Label for="gallery" class="mb-2 ml-1">Ảnh trưng bày</Label>
+        <UploadMultiImage
+          :urls="post.gallery"
+          @uploaded="post.gallery = $event"
+        />
       </div>
 
       <!-- Content -->

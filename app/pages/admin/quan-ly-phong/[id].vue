@@ -2,21 +2,14 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Option, Properties, Response, Service } from "~/types";
+import type { Category, Option, Properties, Response, Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import { PROPERTY_TYPES } from "~/constants";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
+import MultiSelect from "~/components/common/MultiSelect.vue";
+import SearchSelect from "~/components/common/SearchSelect.vue";
 
 definePageMeta({
   layout: "admin",
@@ -26,6 +19,7 @@ const route = useRoute();
 const config = useRuntimeConfig();
 const id = route.params.id;
 
+const loading = ref<boolean>(false);
 const message = ref<string>("");
 const home = ref<Properties>({} as Properties);
 const multiSelected = reactive({
@@ -33,43 +27,71 @@ const multiSelected = reactive({
   services: [] as (string | number)[],
 });
 const serviceOptions = ref<Option[]>([]);
+const categoryOptions = ref<Option[]>([]);
 
 const apiUrl = `${config.public.apiBase}/properties/${id}`;
 const { data } = await useFetch<Response<Properties>>(apiUrl);
-const { data: servicesData } = await useFetch<Response<Service[]>>("/api/services")
+const { data: servicesData } = await useFetch<Response<Service[]>>(
+  "/api/services"
+);
+const { data: categoriesData } = await useFetch<Response<Category[]>>(
+  `${config.public.apiBase}/categories`
+);
 
 const saveProperties = async () => {
-  const { data } = useFetch<Response<Properties>>(apiUrl, {
-    method: "PUT",
-    body: {
-      ...home.value,
-      property_types: multiSelected.property_types,
-      services: multiSelected.services,
-    },
-  });
-
-  if (data.value?.statusCode !== 200) {
-    message.value =
-      data.value?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
-    toast.error("Cập nhật điểm đến", {
-      description: message.value,
+  loading.value = true;
+  try {
+    const { data, error } = await useFetch<Response<Properties>>(apiUrl, {
+      method: "PUT",
+      body: {
+        ...home.value,
+        property_types: multiSelected.property_types,
+        services: multiSelected.services,
+        slug: genSlug(home.value.name),
+        category_id: Number(home.value.category_id),
+      },
     });
-  } else {
+
+    if (data.value?.statusCode !== 200) {
+      const msg =
+        data.value?.message ||
+        error.value?.data?.message ||
+        "Có lỗi xảy ra, vui lòng thử lại sau!";
+
+      toast.error("Cập nhật điểm đến", { description: msg });
+      message.value = msg;
+      return;
+    }
+
     toast.success("Cập nhật điểm đến", {
       description: "Phòng đã được cập nhật thành công!",
     });
+  } catch (err: any) {
+    const msg = err?.message || "Không thể kết nối đến máy chủ!";
+    toast.error("Cập nhật điểm đến", {
+      description: msg,
+    });
+
+    message.value = msg;
+  } finally {
+    loading.value = false;
   }
 };
-
-
 
 home.value = data.value?.data.items || ({} as Properties);
 multiSelected.property_types = home.value.property_types.map((item) => item.id);
 multiSelected.services = home.value.services.map((item) => item.id);
-serviceOptions.value = servicesData.value?.data.items.map((service) => ({
-  label: service.title,
-  value: service.id,
-})) || [];
+
+serviceOptions.value =
+  servicesData.value?.data.items.map((service) => ({
+    label: service.title,
+    value: service.id,
+  })) || [];
+categoryOptions.value =
+  categoriesData.value?.data.items.map((service) => ({
+    label: service.name,
+    value: service.id.toString(),
+  })) || [];
 </script>
 
 <template>
@@ -101,6 +123,16 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
           v-model="home.area"
           type="number"
           placeholder="Nhập diện tích..."
+        />
+      </div>
+
+      <!-- Loại -->
+      <div>
+        <Label for="type" class="mb-2 ml-1">Loại dự án</Label>
+        <SearchSelect
+          :model-value="home.category_id.toString()"
+          :frameworks="categoryOptions"
+          @update:model-value="home.category_id = $event"
         />
       </div>
     </div>
@@ -242,13 +274,19 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
       <!-- Image -->
       <div>
         <Label for="thumbnail" class="mb-2 ml-1">Hình ảnh (thumbnail)</Label>
-        <UploadImage :url="home.thumbnail" @uploaded="home.thumbnail = $event" />
+        <UploadImage
+          :url="home.thumbnail"
+          @uploaded="home.thumbnail = $event"
+        />
       </div>
 
       <!-- Gallery -->
       <div class="col-span-1 md:col-span-2">
         <Label for="gallery" class="mb-2 ml-1">Ảnh trưng bày</Label>
-        <UploadMultiImage :urls="home.gallery" @uploaded="home.gallery = $event" />
+        <UploadMultiImage
+          :urls="home.gallery"
+          @uploaded="home.gallery = $event"
+        />
       </div>
 
       <!-- Content -->
@@ -265,7 +303,7 @@ serviceOptions.value = servicesData.value?.data.items.map((service) => ({
 
     <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" @click="saveProperties">Lưu thay đổi</Button>
+      <Button variant="default" :loading="loading" @click="saveProperties">Lưu thay đổi</Button>
     </div>
   </section>
 </template>

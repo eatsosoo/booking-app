@@ -16,7 +16,12 @@ import {
   useVueTable,
 } from "@tanstack/vue-table";
 import { createReusableTemplate } from "@vueuse/core";
-import { ChevronDown, MoreHorizontal, PlusSquareIcon, RefreshCcw } from "lucide-vue-next";
+import {
+  ChevronDown,
+  MoreHorizontal,
+  PlusSquareIcon,
+  RefreshCcw,
+} from "lucide-vue-next";
 import { h, ref } from "vue";
 
 import { valueUpdater } from "@/lib/utils";
@@ -265,7 +270,9 @@ function copy(id: number) {
         <Button variant="secondary" class="ml-2" @click="refresh()">
           <RefreshCcw class="h-4 w-4" />
         </Button>
-        <Button><PlusSquareIcon />Tạo mới</Button>
+        <NuxtLink to="/admin/quan-ly-phong/them-moi">
+          <Button><PlusSquareIcon />Tạo mới</Button>
+        </NuxtLink>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button variant="outline" class="ml-auto">
