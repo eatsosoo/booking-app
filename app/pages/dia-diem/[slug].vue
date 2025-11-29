@@ -223,6 +223,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DatePicker from "~/components/DatePicker.vue";
 import { AFTERNOON_TIMES, MORNING_TIMES } from "~/constants";
 import type { Properties, Response } from "~/types";
+import { formatCurrency } from '~/utils/string-helper';
 
 const route = useRoute();
 const id = route.params.slug;

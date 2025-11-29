@@ -5,7 +5,7 @@ import Button from "~/components/ui/button/Button.vue";
 import type { Option, Properties, Response, Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
-import { PROPERTY_TYPES, TYPE_ROOM } from "~/constants";
+import { PROPERTY_TYPES } from "~/constants";
 import {
   Select,
   SelectContent,
@@ -15,7 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ImageIcon } from "lucide-vue-next";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
 
@@ -35,7 +34,6 @@ const multiSelected = reactive({
 });
 const serviceOptions = ref<Option[]>([]);
 
-const toastTitle = "Tải ảnh lên";
 const apiUrl = `${config.public.apiBase}/properties/${id}`;
 const { data } = await useFetch<Response<Properties>>(apiUrl);
 const { data: servicesData } = await useFetch<Response<Service[]>>("/api/services")

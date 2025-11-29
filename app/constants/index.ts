@@ -127,3 +127,49 @@ export const AFTERNOON_TIMES = [
   "23:30",
 ] as const;
 
+export const BEDROOM_OPTIONS = [
+  {
+    value: "1,3",
+    label: "Từ 1 đến 3 phòng ngủ",
+  },
+  {
+    value: "3,5",
+    label: "Từ 3 đến 5 phòng ngủ",
+  },
+  {
+    value: "5,7",
+    label: "Từ 5 đến 7 phòng ngủ",
+  },
+  {
+    value: "7,9",
+    label: "Từ 7 đến 9 phòng ngủ",
+  },
+  {
+    value: "10",
+    label: "Từ 10 phòng ngủ",
+  },
+] as const;
+
+export const BATHROOM_OPTIONS = [
+  {
+    value: "1",
+    label: "1 phòng tắm",
+  },
+  {
+    value: "2",
+    label: "2 phòng tắm",
+  },
+  {
+    value: "3",
+    label: "3 phòng tắm",
+  },
+  {
+    value: "4",
+    label: "4 phòng tắm",
+  },
+  {
+    value: "5",
+    label: "Từ 5 phòng tắm",
+  },
+] as const;
+

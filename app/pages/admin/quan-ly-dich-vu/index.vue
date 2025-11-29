@@ -43,6 +43,7 @@ import {
 import type { Service, Response } from "~/types";
 import { toast } from "vue-sonner";
 import { PUBLISHED_STATUSES } from "~/constants";
+import { formatCurrency } from '~/utils/string-helper';
 
 definePageMeta({
     layout: 'admin'

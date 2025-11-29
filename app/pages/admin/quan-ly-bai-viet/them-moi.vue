@@ -8,6 +8,7 @@ import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { ImageIcon } from "lucide-vue-next";
 import type { PostForm } from "~/types/booking";
+import { genSlug } from "~/utils/string-helper";
 
 definePageMeta({
   layout: "admin",

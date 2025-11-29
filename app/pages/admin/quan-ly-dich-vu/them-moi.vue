@@ -16,6 +16,7 @@ import SelectLabel from "~/components/ui/select/SelectLabel.vue";
 import SelectItem from "~/components/ui/select/SelectItem.vue";
 import { PUBLISHED_STATUSES, SERVICE_TYPES } from "~/constants";
 import { ImageIcon } from "lucide-vue-next";
+import { genSlug } from "~/utils/string-helper";
 
 definePageMeta({
   layout: "admin",

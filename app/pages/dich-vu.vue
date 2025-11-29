@@ -54,6 +54,7 @@
 
 <script setup lang="ts">
 import type { Response, Service } from '~/types';
+import { formatCurrency } from '~/utils/string-helper';
 
 const config = useRuntimeConfig();
 const apiUrl = computed(

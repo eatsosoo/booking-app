@@ -137,6 +137,7 @@ import PopoverContent from "~/components/ui/popover/PopoverContent.vue";
 import PopoverTrigger from "~/components/ui/popover/PopoverTrigger.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
 import type { Pagination, Properties, Response } from "~/types";
+import { formatCurrency } from '~/utils/string-helper';
 
 useSeoMeta({
   title: "Danh sách phòng",

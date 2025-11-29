@@ -24,7 +24,7 @@
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Số phòng ngủ</SelectLabel>
-            <SelectItem v-for="room in bedRoomNum" :key="room.label" :value="room.value">
+            <SelectItem v-for="room in BEDROOM_OPTIONS" :key="room.label" :value="room.value">
               {{ room.label }}
             </SelectItem>
           </SelectGroup>
@@ -38,7 +38,7 @@
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Số phòng tắm</SelectLabel>
-            <SelectItem v-for="bath in bathRoomNum" :key="bath.label" :value="bath.value">
+            <SelectItem v-for="bath in BATHROOM_OPTIONS" :key="bath.label" :value="bath.value">
               {{ bath.label }}
             </SelectItem>
           </SelectGroup>
@@ -88,7 +88,7 @@ import Button from "./ui/button/Button.vue";
 import Checkbox from "@/components/ui/checkbox/Checkbox.vue";
 import { Input } from "@/components/ui/input";
 import type { Response, Service } from "~/types";
-import { PLACE_GROUPS } from "~/constants";
+import { BATHROOM_OPTIONS, BEDROOM_OPTIONS, PLACE_GROUPS } from "~/constants";
 import { ChevronDown, ChevronUp } from "lucide-vue-next";
 import Label from "./ui/label/Label.vue";
 
@@ -112,52 +112,6 @@ const formData = reactive({
   services: props.services.split(","),
 })
 
-const bedRoomNum = [
-  {
-    value: "1,3",
-    label: "Từ 1 đến 3 phòng ngủ",
-  },
-  {
-    value: "3,5",
-    label: "Từ 3 đến 5 phòng ngủ",
-  },
-  {
-    value: "5,7",
-    label: "Từ 5 đến 7 phòng ngủ",
-  },
-  {
-    value: "7,9",
-    label: "Từ 7 đến 9 phòng ngủ",
-  },
-  {
-    value: "10",
-    label: "Từ 10 phòng ngủ",
-  },
-];
-
-const bathRoomNum = [
-  {
-    value: "1",
-    label: "1 phòng tắm",
-  },
-  {
-    value: "2",
-    label: "2 phòng tắm",
-  },
-  {
-    value: "3",
-    label: "3 phòng tắm",
-  },
-  {
-    value: "4",
-    label: "4 phòng tắm",
-  },
-  {
-    value: "5",
-    label: "Từ 5 phòng tắm",
-  },
-];
-
 const isOpen = ref(false);
 
 const handleChange = (id: string, event: boolean) => {
@@ -166,7 +120,6 @@ const handleChange = (id: string, event: boolean) => {
 }
 
 const submit = () => {
-  console.log(formData);
   emits("submit", formData)
 }
 </script>

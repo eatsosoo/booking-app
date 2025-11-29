@@ -6,7 +6,6 @@ import type { Response, Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
-import type { ServiceForm } from "~/types/booking";
 import Select from "~/components/ui/select/Select.vue";
 import SelectTrigger from "~/components/ui/select/SelectTrigger.vue";
 import SelectValue from "~/components/ui/select/SelectValue.vue";
@@ -16,6 +15,7 @@ import SelectLabel from "~/components/ui/select/SelectLabel.vue";
 import SelectItem from "~/components/ui/select/SelectItem.vue";
 import { PUBLISHED_STATUSES, SERVICE_TYPES } from "~/constants";
 import { ImageIcon } from "lucide-vue-next";
+import { genSlug } from "~/utils/string-helper";
 
 definePageMeta({
   layout: "admin",
