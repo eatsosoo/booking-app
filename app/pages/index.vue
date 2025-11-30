@@ -152,19 +152,19 @@
           >
             <!-- Image -->
             <NuxtImg
-              :src="project.image_url"
+              :src="project.image"
               class="h-48 w-full object-cover"
-              :alt="project.slug"
+              :alt="project.name"
             />
 
             <!-- Content -->
             <div class="p-5 flex flex-col flex-1">
-              <h3 class="text-xl font-semibold mb-2">{{ project.title }}</h3>
+              <h3 class="text-xl font-semibold mb-2">{{ project.name }}</h3>
               <p class="text-muted-foreground text-sm flex-1">
                 {{ project.description }}
               </p>
               <div class="mx-auto">
-                <NuxtLink :to="`/du-an/${project.slug}`">
+                <NuxtLink :to="`/du-an/${project.name}`">
                   <Button class="mt-4 w-fit" variant="link">
                     Xem chi tiết
                   </Button>
@@ -189,6 +189,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Button from "~/components/ui/button/Button.vue";
+import type { Category, Response } from "~/types";
 
 useSeoMeta({
   title: "Trang chủ",
@@ -196,78 +197,20 @@ useSeoMeta({
     "Trang đặt phòng khách sạn, resort, homestay dễ sử dụng và tối ưu SEO.",
 });
 
-const projects = ref([
-  {
-    title: "Khu đô thị Vinhomes Smart City",
-    description:
-      "Khu đô thị thông minh với hệ thống tiện ích đồng bộ, công viên cây xanh và hạ tầng hiện đại bậc nhất Hà Nội",
-    image_url:
-      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    slug: "khu-do-thi-vinhomes-smart-city",
-  },
-  {
-    title: "Dự án Sunshine Riverside",
-    description:
-      "Tổ hợp căn hộ cao cấp view sông Hồng, thiết kế sang trọng với không gian sống xanh và tiện nghi đẳng cấp",
-    image_url:
-      "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    slug: "du-an-sunshine-riverside",
-  },
-  {
-    title: "Khu nghỉ dưỡng FLC Sầm Sơn",
-    description:
-      "Tổ hợp nghỉ dưỡng 5 sao với bãi biển riêng, sân golf và hệ thống villa, khách sạn cao cấp",
-    image_url:
-      "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    slug: "khu-nghi-duong-flc-sam-son",
-  },
-  {
-    title: "Dự án The Zei Mỹ Đình",
-    description:
-      "Căn hộ thương mại - dịch vụ cao cấp tại trung tâm Mỹ Đình, kết hợp không gian sống và kinh doanh",
-    image_url:
-      "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    slug: "du-an-the-zei-my-dinh",
-  },
-  {
-    title: "Khu đô thị Ecopark Grand",
-    description:
-      "Thành phố xanh với hệ sinh thái hoàn chỉnh, công viên rộng lớn và cộng đồng cư dân văn minh",
-    image_url:
-      "https://images.pexels.com/photos/1438832/pexels-photo-1438832.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    slug: "khu-do-thi-ecopark-grand",
-  },
-  {
-    title: "Dự án Masteri Centre Point",
-    description:
-      "Tòa tháp đôi cao cấp tại trung tâm quận 2, TP.HCM với view sông Sài Gòn toàn cảnh",
-    image_url:
-      "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    slug: "du-an-masteri-centre-point",
-  },
-  // {
-  //   title: "Khu nghỉ dưỡng InterContinental Phú Quốc",
-  //   description: "Resort 5 sao quốc tế với villa trên biển, spa cao cấp và ẩm thực đa dạng từ các đầu bếp hàng đầu",
-  //   image_url: "https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  //   slug: "khu-nghi-duong-intercontinental-phu-quoc"
-  // },
-  // {
-  //   title: "Dự án Hado Centrosa Garden",
-  //   description: "Tổ hợp căn hộ xanh với thiết kế vườn thẳng đứng, không gian sống gần gũi thiên nhiên giữa lòng thành phố",
-  //   image_url: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  //   slug: "du-an-hado-centrosa-garden"
-  // },
-  // {
-  //   title: "Khu đô thị Times City Park Hill",
-  //   description: "Phân khu cao cấp trong khu đô thị Times City với view công viên và hồ nước rộng lớn",
-  //   image_url: "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  //   slug: "khu-do-thi-times-city-park-hill"
-  // },
-  // {
-  //   title: "Dự án Vinpearl Discovery Coastalland",
-  //   description: "Tổ hợp du lịch - nghỉ dưỡng - giải trí với công viên nước, thủy cung và hệ thống khách sạn tiêu chuẩn quốc tế",
-  //   image_url: "https://images.pexels.com/photos/2613239/pexels-photo-2613239.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  //   slug: "du-an-vinpearl-discovery-coastalland"
-  // }
-]);
+const config = useRuntimeConfig();
+// =========================
+// FETCH API
+// =========================
+const apiUrl = computed(
+  () =>
+    `${config.public.apiBase}/categories?page=1&per_page=6`
+);
+
+const { data } = await useFetch<Response<Category[]>>(apiUrl, {
+  server: true,
+  lazy: false,
+  immediate: true,
+});
+
+const projects = computed(() => data.value?.data.items ?? []);
 </script>
