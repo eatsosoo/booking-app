@@ -33,7 +33,7 @@
     <section class="bg-primary cus-background">
       <div class="cus-container">
         <div class="md:flex md:justify-center w-full mb-12">
-          <SearchForm />
+          <SearchForm :groups="groupOptions" />
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
@@ -164,7 +164,9 @@
                 {{ project.description }}
               </p>
               <div class="mx-auto">
-                <NuxtLink :to="`/du-an/${project.name}`">
+                <NuxtLink
+                  :to="`/du-an/tim-kiem?page=1&per_page=12&category_id=${project.id}`"
+                >
                   <Button class="mt-4 w-fit" variant="link">
                     Xem chi tiết
                   </Button>
@@ -175,7 +177,7 @@
         </div>
 
         <div class="flex justify-center">
-          <NuxtLink to="/du-an/tat-ca">
+          <NuxtLink to="/du-an/tim-kiem?page=1&per_page=12">
             <Button class="mt-4 w-fit" variant="default">
               Xem tất cả tự án
             </Button>
@@ -189,7 +191,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Button from "~/components/ui/button/Button.vue";
-import type { Category, Response } from "~/types";
+import type { Category, Region, Response } from "~/types";
 
 useSeoMeta({
   title: "Trang chủ",
@@ -201,16 +203,36 @@ const config = useRuntimeConfig();
 // =========================
 // FETCH API
 // =========================
-const apiUrl = computed(
-  () =>
-    `${config.public.apiBase}/home/categories?page=1&per_page=6`
+const apiUrl = computed(() => `${config.public.apiBase}/home`);
+
+const { data: categories } = await useFetch<Response<Category[]>>(
+  `${apiUrl.value}/categories?page=1&per_page=6`,
+  {
+    server: true,
+    lazy: false,
+    immediate: true,
+  }
 );
 
-const { data } = await useFetch<Response<Category[]>>(apiUrl, {
-  server: true,
-  lazy: false,
-  immediate: true,
-});
+const { data: provinces } = await useFetch<Response<Region[]>>(
+  `${apiUrl.value}/provinces`,
+  {
+    server: true,
+    lazy: false,
+    immediate: true,
+  }
+);
 
-const projects = computed(() => data.value?.data.items ?? []);
+const projects = computed(() => categories.value?.data.items ?? []);
+
+const result = provinces.value?.data.items ?? [];
+const groupOptions: any = {};
+
+result.forEach((element) => {
+  if (groupOptions[`${element.region}`]) {
+    groupOptions[`${element.region}`].push(element.name);
+  } else {
+    groupOptions[`${element.region}`] = [element.name];
+  }
+});
 </script>

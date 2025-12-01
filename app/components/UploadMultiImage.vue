@@ -48,7 +48,7 @@ import { toast } from "vue-sonner";
 import { ImagesIcon } from "lucide-vue-next";
 
 const props = defineProps({
-  urls: { type: Array as PropType<string[]>, default: [] },
+  urls: { type: Array as PropType<string[]>, default: () => [] },
 });
 
 const emit = defineEmits<{
@@ -67,7 +67,7 @@ const handleFiles = async (e: Event) => {
   try {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
-      formData.append("media", files[i]); // nhiều file cùng key "media"
+      formData.append("media", files[i] as File); // nhiều file cùng key "media"
     }
 
     const { data, error } = await useFetch<{ data: { items: string[] } }>(

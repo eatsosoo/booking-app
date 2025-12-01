@@ -61,6 +61,13 @@ export interface Category {
   updated_at: string
 }
 
+export interface Region {
+  id: number
+  name: string
+  slug: string
+  region: string
+}
+
 export interface Option {
   label: string;
   value: string | number;
