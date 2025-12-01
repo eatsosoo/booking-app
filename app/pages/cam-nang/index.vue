@@ -124,7 +124,7 @@ let debounce: string | number | NodeJS.Timeout | undefined = undefined
 // =========================
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/posts?page=${page.value}&search=${search.value}`
+    `${config.public.apiBase}/home/posts?page=${page.value}&search=${search.value}`
 );
 
 const { data } = await useFetch<Response<Post[]>>(apiUrl, {

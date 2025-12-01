@@ -203,7 +203,7 @@ const config = useRuntimeConfig();
 // =========================
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/categories?page=1&per_page=6`
+    `${config.public.apiBase}/home/categories?page=1&per_page=6`
 );
 
 const { data } = await useFetch<Response<Category[]>>(apiUrl, {

@@ -59,7 +59,7 @@ import { formatCurrency } from '~/utils/string-helper';
 const config = useRuntimeConfig();
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/services`
+    `${config.public.apiBase}/home/services`
 );
 
 const { data } = await useFetch<Response<Service[]>>(apiUrl, {

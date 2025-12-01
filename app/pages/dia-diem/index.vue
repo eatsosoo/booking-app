@@ -172,7 +172,7 @@ const paginate = ref<Pagination>({
 
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/properties?page=${page.value}&per_page=${perPage.value}&property_types=${propertyType.value}&title=${title.value}&bed=${bedRoomNum.value}&bath=${bathRoomNum.value}`
+    `${config.public.apiBase}/home/properties?page=${page.value}&per_page=${perPage.value}&property_types=${propertyType.value}&title=${title.value}&bed=${bedRoomNum.value}&bath=${bathRoomNum.value}`
 );
 
 const { data, pending, error, refresh } = await useAsyncData(
