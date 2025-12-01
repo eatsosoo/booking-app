@@ -15,6 +15,7 @@ import { genSlug } from "~/utils/string-helper";
 
 definePageMeta({
   layout: "admin",
+  middleware: "auth",
 });
 
 const config = useRuntimeConfig();

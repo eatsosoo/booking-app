@@ -7,8 +7,9 @@ import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 
 definePageMeta({
-    layout: 'admin'
-})
+  layout: "admin",
+  middleware: "auth",
+});
 
 const route = useRoute();
 const config = useRuntimeConfig();

@@ -44,8 +44,9 @@ import type { Faq, Response } from "~/types";
 import { toast } from "vue-sonner";
 
 definePageMeta({
-    layout: 'admin'
-})
+  layout: "admin",
+  middleware: "auth",
+});
 
 const config = useRuntimeConfig();
 const page = ref(1);
@@ -210,9 +211,7 @@ async function deleteFaq(id: number) {
           :model-value="search"
           @update:model-value="search = $event"
         />
-        <NuxtLink
-          to="/admin/quan-ly-faq/them-moi"
-        >
+        <NuxtLink to="/admin/quan-ly-faq/them-moi">
           <Button><PlusSquareIcon />Tạo mới</Button>
         </NuxtLink>
         <DropdownMenu>

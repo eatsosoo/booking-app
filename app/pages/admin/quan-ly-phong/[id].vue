@@ -13,6 +13,7 @@ import SearchSelect from "~/components/common/SearchSelect.vue";
 
 definePageMeta({
   layout: "admin",
+  middleware: "auth",
 });
 
 const route = useRoute();

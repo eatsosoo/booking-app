@@ -43,11 +43,12 @@ import {
 import type { Service, Response } from "~/types";
 import { toast } from "vue-sonner";
 import { PUBLISHED_STATUSES } from "~/constants";
-import { formatCurrency } from '~/utils/string-helper';
+import { formatCurrency } from "~/utils/string-helper";
 
 definePageMeta({
-    layout: 'admin'
-})
+  layout: "admin",
+  middleware: "auth",
+});
 
 const config = useRuntimeConfig();
 const page = ref(1);
@@ -97,34 +98,35 @@ const columns: ColumnDef<Service>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-    {
+  {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("id")),
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
     enableSorting: false,
   },
   {
     accessorKey: "title",
     header: "Tên dịch vụ",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("title")),
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("title")),
     enableSorting: false,
   },
   {
     accessorKey: "menu",
     header: "Cấp độ",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("menu")),
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("menu")),
     enableSorting: false,
   },
   {
     accessorKey: "is_published",
     header: "Trạng thái",
     cell: ({ row }) =>
-      h("div", { class: "capitalize" }, PUBLISHED_STATUSES[
+      h(
+        "div",
+        { class: "capitalize" },
+        PUBLISHED_STATUSES[
           row.getValue("is_published") as keyof typeof PUBLISHED_STATUSES
-        ]),
+        ]
+      ),
     enableSorting: false,
   },
   {
@@ -239,9 +241,13 @@ async function deleteService(id: number) {
             Sao chép ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem @click="deleteService(service.id)">Xoá</DropdownMenuItem>
+          <DropdownMenuItem @click="deleteService(service.id)"
+            >Xoá</DropdownMenuItem
+          >
           <DropdownMenuItem>
-            <NuxtLink :to="`/admin/quan-ly-dich-vu/${service.id}`">Chi tiết</NuxtLink>
+            <NuxtLink :to="`/admin/quan-ly-dich-vu/${service.id}`"
+              >Chi tiết</NuxtLink
+            >
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -254,15 +260,14 @@ async function deleteService(id: number) {
           :model-value="search"
           @update:model-value="search = $event"
         />
-        <NuxtLink
-          to="/admin/quan-ly-dich-vu/them-moi"
-        >
-          <Button><PlusSquareIcon />Tạo mới</Button>
+        <NuxtLink to="/admin/quan-ly-dich-vu/them-moi">
+          <Button> <PlusSquareIcon />Tạo mới </Button>
         </NuxtLink>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button variant="outline" class="ml-auto">
-              Cột <ChevronDown class="ml-2 h-4 w-4" />
+              Cột
+              <ChevronDown class="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

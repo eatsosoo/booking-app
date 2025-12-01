@@ -51,6 +51,7 @@ import type { SelectOption } from "~/types/booking";
 
 definePageMeta({
   layout: "admin",
+  middleware: "auth",
 });
 
 const config = useRuntimeConfig();

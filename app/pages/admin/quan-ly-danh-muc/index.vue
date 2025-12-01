@@ -44,8 +44,9 @@ import type { Category, Response } from "~/types";
 import { toast } from "vue-sonner";
 
 definePageMeta({
-    layout: 'admin'
-})
+  layout: "admin",
+  middleware: "auth",
+});
 
 const config = useRuntimeConfig();
 const page = ref(1);
@@ -98,15 +99,13 @@ const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("id")),
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
     enableSorting: false,
   },
   {
     accessorKey: "name",
     header: "Tên dự án",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("name")),
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("name")),
     enableSorting: false,
   },
   {
@@ -216,9 +215,13 @@ async function deleteCategory(id: number) {
             Sao chép ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem @click="deleteCategory(category.id)">Xoá</DropdownMenuItem>
+          <DropdownMenuItem @click="deleteCategory(category.id)"
+            >Xoá</DropdownMenuItem
+          >
           <DropdownMenuItem>
-            <NuxtLink :to="`/admin/quan-ly-danh-muc/${category.id}`">Chi tiết</NuxtLink>
+            <NuxtLink :to="`/admin/quan-ly-danh-muc/${category.id}`"
+              >Chi tiết</NuxtLink
+            >
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -231,15 +234,14 @@ async function deleteCategory(id: number) {
           :model-value="search"
           @update:model-value="search = $event"
         />
-        <NuxtLink
-          to="/admin/quan-ly-danh-muc/them-moi"
-        >
-          <Button><PlusSquareIcon />Tạo mới</Button>
+        <NuxtLink to="/admin/quan-ly-danh-muc/them-moi">
+          <Button> <PlusSquareIcon />Tạo mới </Button>
         </NuxtLink>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
             <Button variant="outline" class="ml-auto">
-              Cột <ChevronDown class="ml-2 h-4 w-4" />
+              Cột
+              <ChevronDown class="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

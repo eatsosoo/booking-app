@@ -61,6 +61,7 @@
 </template>
 
 <script setup lang="ts">
+import { toast } from 'vue-sonner';
 import Button from '~/components/ui/button/Button.vue';
 import Checkbox from '~/components/ui/checkbox/Checkbox.vue';
 import Input from '~/components/ui/input/Input.vue';
@@ -71,23 +72,29 @@ useSeoMeta({
 });
 
 definePageMeta({
-  layout: false
+  layout: false,
+  middleware: []
 })
+
+const { login } = useAuth();
 
 const email = ref('');
 const password = ref('');
 const remember = ref(false);
 
-const handleLogin = () => {
+const handleLogin = async () => {
   if (!email.value || !password.value) {
-    alert('Vui lòng nhập đầy đủ thông tin');
+    toast.error('Vui lòng nhập đầy đủ thông tin');
     return;
   }
 
-  // Sau này sẽ thay bằng gọi API login
-  console.log('Email:', email.value);
-  console.log('Password:', password.value);
-  console.log('Remember:', remember.value);
-  alert('Đăng nhập thành công (demo)');
+  try {
+    await login(email.value, password.value)
+    navigateTo("/")
+  } catch (e) {
+    toast.error("Đăng nhập", {
+      description: "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
+    });
+  }
 };
 </script>

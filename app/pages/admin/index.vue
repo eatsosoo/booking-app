@@ -14,6 +14,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: ['auth']
+})
+
 const blocks = [
   {
     label: "Quản lý bài viết",

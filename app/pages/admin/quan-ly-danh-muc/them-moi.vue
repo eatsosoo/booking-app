@@ -2,15 +2,15 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Faq, Response } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
 import type { CategoryForm } from "~/types/booking";
 
 definePageMeta({
-    layout: 'admin'
-})
+  layout: "admin",
+  middleware: "auth",
+});
 
 const router = useRouter();
 const config = useRuntimeConfig();

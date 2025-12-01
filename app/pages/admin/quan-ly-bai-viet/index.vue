@@ -45,8 +45,9 @@ import { toast } from "vue-sonner";
 import { PUBLISHED_STATUSES } from "~/constants";
 
 definePageMeta({
-    layout: 'admin'
-})
+  layout: "admin",
+  middleware: "auth",
+});
 
 const config = useRuntimeConfig();
 
@@ -258,9 +259,7 @@ function copy(id: number) {
           :model-value="search"
           @update:model-value="search = $event"
         />
-        <NuxtLink
-          to="/admin/quan-ly-bai-viet/them-moi"
-        >
+        <NuxtLink to="/admin/quan-ly-bai-viet/them-moi">
           <Button><PlusSquareIcon />Tạo mới</Button>
         </NuxtLink>
         <DropdownMenu>

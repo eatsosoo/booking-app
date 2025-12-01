@@ -20,6 +20,7 @@ import { genSlug } from "~/utils/string-helper";
 
 definePageMeta({
   layout: "admin",
+  middleware: "auth",
 });
 
 const router = useRouter();
