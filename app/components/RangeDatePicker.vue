@@ -11,11 +11,84 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import type { DateRange } from "reka-ui";
+import { PropType } from "vue";
 
-const start = today(getLocalTimeZone());
-const end = start.add({ days: 7 });
-const dateRange = ref({ start, end }) as Ref<DateRange>;
+// ===========================
+// 📌 Props
+// ===========================
+const props = defineProps({
+  modelValue: {
+    type: Object as PropType<DateRange | null>,
+    default: null,
+  },
+  defaultStart: {
+    type: Object,
+    default: () => today(getLocalTimeZone()),
+  },
+  defaultEnd: {
+    type: Object,
+    default: () =>
+      today(getLocalTimeZone()).add({ days: 7 }),
+  },
+});
+
+
+// ===========================
+// 📌 Emits
+// ===========================
+const emit = defineEmits<{
+  (e: "update:modelValue" | "change", value: DateRange | null): void;
+}>();
+
+
+// ===========================
+// 📌 Internal reactive state
+// ===========================
+const dateRange = ref<DateRange>(
+  props.modelValue ?? {
+    start: props.defaultStart,
+    end: props.defaultEnd,
+  }
+);
+
+function formatISO(dateValue: any) {
+  if (!dateValue) return null;
+  const jsDate = dateValue.toDate(getLocalTimeZone());
+  return format(jsDate, "yyyy-MM-dd");
+}
+
+// ===========================
+// 📌 Watch: Đồng bộ props vào nội bộ
+// ===========================
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (value) dateRange.value = value;
+  }
+);
+
+
+// ===========================
+// 📌 Watch: Emit khi thay đổi range
+// ===========================
+watch(
+  dateRange,
+  (value) => {
+    if (value) {
+      const formatted = {
+        start: formatISO(value.start),
+        end: formatISO(value.end),
+      };
+
+      emit("update:modelValue", value);
+      emit("change", formatted);
+    }
+  },
+  { deep: true }
+);
+
 </script>
+
 
 <template>
   <Popover v-slot="{ close }">
@@ -39,6 +112,7 @@ const dateRange = ref({ start, end }) as Ref<DateRange>;
         }}
       </Button>
     </PopoverTrigger>
+
     <PopoverContent class="w-auto p-0" align="start">
       <RangeCalendar
         v-model="dateRange"
@@ -46,7 +120,6 @@ const dateRange = ref({ start, end }) as Ref<DateRange>;
         :number-of-months="2"
         initial-focus
         disable-days-outside-current-view
-        @update:model-value="close"
       />
     </PopoverContent>
   </Popover>
