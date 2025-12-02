@@ -50,7 +50,7 @@ definePageMeta({
 });
 
 const config = useRuntimeConfig();
-
+const { request } = useApi();
 // STATE
 const page = ref<number>(1);
 const search = ref<string | number>("");
@@ -59,7 +59,7 @@ const message = ref<string>("");
 // API URL
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/posts?page=${page.value}&search=${search.value}`
+    `${config.public.apiBase}/home/posts?page=${page.value}&search=${search.value}`
 );
 
 // --- GET LIST POSTS ---
@@ -82,7 +82,7 @@ async function deleteItem(itemId: number) {
   const titleNotify = "Xoá bài viết";
 
   try {
-    await $fetch(`${config.public.apiBase}/posts/${itemId}`, {
+    await request(`/posts/${itemId}`, {
       method: "DELETE",
     });
 
@@ -90,6 +90,7 @@ async function deleteItem(itemId: number) {
       description: "Bài viết đã được xoá thành công!",
     });
 
+    // 🔄 Refresh lại danh sách nếu dùng useAsyncData
     refresh(); // load lại danh sách
   } catch (err: any) {
     message.value =

@@ -16,7 +16,7 @@ const route = useRoute();
 const id = route.params.id;
 const { request } = useApi();
 
-const { data, pending, error, refresh } = useAsyncData<Response<Faq>>(
+const { data } = useAsyncData(
   `faq-${id}`,          // key
   () => request(`/faqs/${id}`),  // GET /faqs/{id} với token
 );

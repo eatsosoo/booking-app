@@ -13,9 +13,6 @@ definePageMeta({
 });
 
 const router = useRouter();
-const config = useRuntimeConfig();
-
-const apiCreate = `${config.public.apiBase}/faqs`;
 
 // form
 const faq = ref<Faq>({
@@ -23,25 +20,25 @@ const faq = ref<Faq>({
   answer: "",
 } as Faq);
 
+
+const { request } = useApi();
 const pending = ref(false);
 
-const savefaq = async () => {
+const saveFaq = async () => {
   pending.value = true;
 
   try {
-    const res: any = await $fetch(apiCreate, {
+    // POST FAQ mới
+    await request("/faqs", {
       method: "POST",
       body: faq.value,
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     toast.success("Tạo FAQ thành công!", {
       description: "FAQ mới đã được thêm.",
     });
 
-    // chuyển về danh sách
+    // Chuyển hướng về danh sách FAQ
     router.push("/admin/quan-ly-faq");
   } catch (err: any) {
     toast.error("Lỗi!", {
@@ -54,6 +51,7 @@ const savefaq = async () => {
     pending.value = false;
   }
 };
+
 </script>
 
 <template>
@@ -83,7 +81,7 @@ const savefaq = async () => {
     </div>
 
     <div class="mt-6">
-      <Button variant="default" :loading="pending" @click="savefaq">
+      <Button variant="default" :loading="pending" @click="saveFaq">
         Tạo mới
       </Button>
     </div>

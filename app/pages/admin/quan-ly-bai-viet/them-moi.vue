@@ -18,7 +18,6 @@ definePageMeta({
 const config = useRuntimeConfig();
 
 const imageInput = ref<HTMLInputElement | null>(null);
-const message = ref<string>("");
 const post = ref<PostForm>({
   title: "",
   slug: "",
@@ -29,30 +28,31 @@ const post = ref<PostForm>({
 });
 
 const toastTitle = "Tải ảnh lên";
-const apiUrl = `${config.public.apiBase}/posts`;
 
-const { execute, pending, error } = useFetch<Response<Post>>(apiUrl, {
-  method: "POST",
-  body: post.value,
-  immediate: false,
-});
+const { request } = useApi();
 
 const savePost = async () => {
-  await execute();
-
   const titleNotify = "Tạo bài viết mới";
 
-  if (error.value) {
-    message.value =
-      error.value?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
-    toast.error(titleNotify, {
-      description: message.value,
+  try {
+    // POST bài viết mới
+    await request("/posts", {
+      method: "POST",
+      body: post.value,
     });
-  } else {
+
     toast.success(titleNotify, {
       description: "Bài viết đã được tạo thành công!",
     });
+
+    // Nếu muốn cập nhật state hoặc dữ liệu khác:
+    // post.value = res.data;
+
+    // Redirect về trang quản lý bài viết
     return navigateTo("/admin/quan-ly-bai-viet");
+  } catch (err: any) {
+    const msg = err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
+    toast.error(titleNotify, { description: msg });
   }
 };
 
@@ -145,28 +145,10 @@ const handleContentChange = (val: string) => {
       <!-- Image -->
       <div>
         <Label for="image" class="mb-2 ml-1">Hình ảnh</Label>
-        <input
-          ref="imageInput"
-          type="file"
-          accept="image/*"
-          class="hidden"
-          @change="handleImageUpload"
+        <UploadImage
+          :url="post.image"
+          @uploaded="post.image = $event"
         />
-
-        <div class="p-2 rounded-md shadow-xs border border-dashed">
-          <Button size="icon" variant="secondary" @click="imageInput?.click()">
-            <ImageIcon class="w-4 h-4" />
-          </Button>
-          <span class="text-md ml-2">{{
-            post.image ? "Thay đổi ảnh" : "Tải ảnh lên"
-          }}</span>
-          <NuxtImg
-            v-if="post.image"
-            :src="post.image"
-            alt="Ảnh bài viết"
-            class="w-72 h-48 mt-2"
-          />
-        </div>
       </div>
 
       <!-- Content -->
@@ -183,7 +165,7 @@ const handleContentChange = (val: string) => {
 
     <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" :loading="pending" @click="savePost"
+      <Button variant="default" @click="savePost"
         >Tạo mới</Button
       >
     </div>

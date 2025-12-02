@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Post, Response } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
+import type { Post, Response } from "~/types";
 import { toast } from "vue-sonner";
+import { useApi } from "~/composables/useApi";
 
 definePageMeta({
   layout: "admin",
@@ -12,42 +13,38 @@ definePageMeta({
 });
 
 const route = useRoute();
-const config = useRuntimeConfig();
-const id = route.params.id;
+const id = route.params.id as string;
 
-const message = ref<string>("");
 const post = ref<Post>({} as Post);
 
-const apiUrl = `${config.public.apiBase}/posts/${id}`;
-const { data } = await useFetch<Response<Post>>(apiUrl);
+const { request } = useApi();
 
-watch(data, (val) => {
-  if (val?.data.items) {
-    post.value = val.data.items; // ✔ update sau khi fetch xong
-  }
-});
+const { data } = await useAsyncData(
+  `post-${id}`,          // key
+  () => request(`/posts/${id}`),  // GET /faqs/{id} với token
+);
 
-const { execute, pending, error } = useFetch<Response<Post>>(apiUrl, {
-  method: "PUT",
-  body: post.value,
-  immediate: false,
-});
-
+// ---------------------------
+// 2️⃣ Save / Update post
+// ---------------------------
 const savePost = async () => {
-  await execute();
-  if (error.value) {
-    message.value =
-      error.value?.data.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
-    toast.error("Cập nhật bài viết", {
-      description: message.value,
+  try {
+    const res = await request(`/posts/${id}`, {
+      method: "PUT",
+      body: post.value,
     });
-  } else {
+
+    post.value = res.data; // cập nhật lại state nếu cần
+
     toast.success("Cập nhật bài viết", {
       description: "Bài viết đã được cập nhật thành công!",
     });
+    navigateTo("/admin/quan-ly-bai-viet");
+  } catch (err: any) {
+    const msg = err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
+    toast.error("Cập nhật bài viết", { description: msg });
   }
 };
-
 post.value = data.value?.data.items || ({} as Post);
 </script>
 
@@ -99,7 +96,7 @@ post.value = data.value?.data.items || ({} as Post);
 
     <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" :loading="pending" @click="savePost"
+      <Button variant="default" @click="savePost"
         >Lưu thay đổi</Button
       >
     </div>
