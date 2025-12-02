@@ -19,13 +19,8 @@ export const useAuth = () => {
       return error.value?.data;
     }
 
-    token.value = data.value?.data.items.token;
     return data.value;
   };
 
-  const logout = () => {
-    token.value = null;
-  };
-
-  return { login, logout, token };
+  return { login, token };
 };

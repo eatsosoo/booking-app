@@ -23,12 +23,12 @@ const props = defineProps({
   },
   defaultStart: {
     type: Object,
-    default: () => today(getLocalTimeZone()),
+    // default: () => today(getLocalTimeZone()),
   },
   defaultEnd: {
     type: Object,
-    default: () =>
-      today(getLocalTimeZone()).add({ days: 7 }),
+    // default: () =>
+    //   today(getLocalTimeZone()).add({ days: 7 }),
   },
 });
 

@@ -13,17 +13,10 @@
       </div>
 
       <!-- Action buttons -->
-      <div class="hidden md:flex items-center space-x-4">
-        <!-- <NuxtLink to="/login">
-          <Button>
-            Đăng nhập
+      <div v-if="token" class="hidden md:flex items-center space-x-4">
+          <Button variant="outline" @click="logout">
+            Đăng xuất
           </Button>
-        </NuxtLink>
-        <NuxtLink to="/register">
-          <Button variant="secondary">
-            Đăng ký
-          </Button>
-        </NuxtLink> -->
       </div>
 
       <!-- Mobile menu button -->
@@ -73,7 +66,9 @@
 
 <script setup>
 import { ref } from 'vue'
+import Button from './ui/button/Button.vue'
 
+const token = useCookie("token");
 const isOpen = ref(false)
 const toggleMenu = () => (isOpen.value = !isOpen.value)
 const menus = [
@@ -84,4 +79,9 @@ const menus = [
   { title: 'Tư vấn hỗ trợ', link: '/gioi-thieu/tu-van-ho-tro' },
   { title: 'Câu hỏi thường gặp', link: '/gioi-thieu/cau-hoi-thuong-gap' },
 ]
+
+const logout = () => {
+  token.value = null;
+  navigateTo('/');
+}
 </script>

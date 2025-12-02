@@ -2,7 +2,7 @@
   <div class="shadow-md rounded-md bg-white p-8">
     <h2 class="font-semibold">Bạn muốn đi đâu?</h2>
     <div class="grid md:grid-cols-4 gap-4 ">
-      <Select>
+      <Select v-model="selectedLocation">
         <SelectTrigger class="w-full">
           <SelectValue placeholder="Chọn địa điểm..." />
         </SelectTrigger>
@@ -16,7 +16,7 @@
         </SelectContent>
       </Select>
 
-      <RangeDatePicker v-model="range" @change="handleChange"/>
+      <RangeDatePicker @change="handleChange"/>
 
       <Popover>
         <PopoverTrigger as-child>
@@ -89,7 +89,7 @@
 
       <!-- Action -->
       <div class="">
-        <Button class="w-full">Tìm kiếm</Button>
+        <Button class="w-full" @click="submit">Tìm kiếm</Button>
       </div>
     </div>
   </div>
@@ -114,13 +114,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import type { DateRange } from "reka-ui";
 
 const props = defineProps({
   groups: { type: Object as PropType<{ [key: string]: string[]}>, default: () => {} },
 });
 
-const range = ref<DateRange | null>(null);
+const router = useRouter();
+
+const selectedLocation = ref<string>("");
+const range = ref<{ start: string, end: string} | null>(null);
 const roomTypes = ref({
   adults: 0,
   children: 0,
@@ -145,13 +147,13 @@ const selectRoomText = computed(() => {
   return string;
 })
 
-const handleChange = (value: DateRange) => {
+const handleChange = (value: { start: string, end: string} | null) => {
   console.log("Selected range:", value);
+  range.value = value;
 };
-watch(
-  range,
-  () => {
-    console.log(range);
-  }
-)
+
+const submit = () => {
+  const { start, end } = range.value || { start: null, end: null };
+  router.push(`/du-an/tim-kiem?place=${selectedLocation.value}&from_date=${start}&start_date=${end}&guest=${roomTypes.value.adults + roomTypes.value.children}`);
+}
 </script>
