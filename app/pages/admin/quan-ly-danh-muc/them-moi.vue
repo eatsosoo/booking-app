@@ -13,9 +13,7 @@ definePageMeta({
 });
 
 const router = useRouter();
-const config = useRuntimeConfig();
-
-const apiCreate = `${config.public.apiBase}/categories`;
+const { request } = useApi();
 
 // form
 const formData = reactive<CategoryForm>({
@@ -30,16 +28,13 @@ const saveCategory = async () => {
   pending.value = true;
 
   try {
-    await $fetch(apiCreate, {
+    await request(`/categories`, {
       method: "POST",
       body: formData,
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
-    toast.success("Tạo FAQ thành công!", {
-      description: "FAQ mới đã được thêm.",
+    toast.success("Tạo danh mục thành công!", {
+      description: "Danh mục mới đã được thêm.",
     });
 
     // chuyển về danh sách

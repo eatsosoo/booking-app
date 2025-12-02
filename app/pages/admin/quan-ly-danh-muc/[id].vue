@@ -13,13 +13,14 @@ definePageMeta({
 });
 
 const route = useRoute();
-const config = useRuntimeConfig();
 const id = route.params.id;
-
-const apiUrl = `${config.public.apiBase}/categories/${id}`;
+const { request } = useApi();
 
 // GET → lấy dữ liệu FAQ
-const { data } = useFetch<Response<Category>>(apiUrl);
+const { data } = useAsyncData(
+  `project-${id}`,          // key
+  () => request(`/categories/${id}`),  // GET /faqs/{id} với token
+);
 
 const category = ref<Category>({} as Category);
 const loading = ref(false);
@@ -36,12 +37,9 @@ const savecategory = async () => {
   loading.value = true;
 
   try {
-    await $fetch(apiUrl, {
+    await request(`/categories/${id}`, {
       method: "PUT",
-      body: category,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      body: category.value,
     });
 
     toast.success("Cập nhật thành công!", {

@@ -51,10 +51,11 @@ definePageMeta({
 const config = useRuntimeConfig();
 const page = ref(1);
 const search = ref<string | number>("");
+const { request } = useApi();
 
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/categories?page=${page.value}&name=${search.value}`
+    `${config.public.apiBase}/home/categories?page=${page.value}&name=${search.value}`
 );
 
 const { data, refresh } = useAsyncData(
@@ -182,7 +183,7 @@ function copy(id: number) {
 }
 async function deleteCategory(id: number) {
   try {
-    await $fetch(`${config.public.apiBase}/categories/${id}`, {
+    await request(`/categories/${id}`, {
       method: "DELETE",
     });
     await refresh();
