@@ -19,7 +19,7 @@ definePageMeta({
 });
 
 const config = useRuntimeConfig();
-
+const router = useRouter();
 const serviceOptions = ref<Option[]>([]);
 const categoryOptions = ref<Option2[]>([]);
 const post = ref<PropertiesForm>({
@@ -45,47 +45,43 @@ const post = ref<PropertiesForm>({
   slug: "",
 });
 
-const apiUrl = `${config.public.apiBase}/properties`;
 const { data: servicesData } = await useFetch<Response<Service[]>>(
   "/api/services"
 );
 const { data: categoriesData } = await useFetch<Response<Category[]>>(
-  `${config.public.apiBase}/categories`
+  `${config.public.apiBase}/home/categories`
 );
 
-const { execute, pending, data, error } = useFetch<Response<Post>>(apiUrl, {
-  method: "POST",
-  body: post.value,
-  immediate: false,
-});
+const { request } = useApi();
+const pending = ref(false);
 
 const savePost = async () => {
-  const title = "Tạo phòng mới";
+  pending.value = true;
 
   try {
-    // Gọi API
-    await execute();
-
-    if (data.value?.statusCode !== 200) {
-      const msg =
-        data.value?.message ||
-        error.value?.data?.message ||
-        "Có lỗi xảy ra, vui lòng thử lại sau!";
-
-      toast.error(title, { description: msg });
-      return;
-    }
-
-    toast.success(title, {
-      description: "Phòng mới đã được tạo thành công!",
+    // POST FAQ mới
+    await request("/properties", {
+      method: "POST",
+      body: {
+        ...post.value,
+        category_id: Number(post.value.category_id),
+      },
     });
 
-    return navigateTo("/admin/quan-ly-phong");
-  } catch (err: any) {
-    const msg =
-      err?.data?.message || err?.message || "Không thể kết nối đến máy chủ!";
+    toast.success("Phòng mới đã được tạo thành công!", {
+      description: "Phòng mới đã được thêm.",
+    });
 
-    toast.error(title, { description: msg });
+    router.push("/admin/quan-ly-phong");
+  } catch (err: any) {
+    toast.error("Lỗi!", {
+      description:
+        err?.data?.message ||
+        err?.message ||
+        "Có lỗi xảy ra, vui lòng thử lại!",
+    });
+  } finally {
+    pending.value = false;
   }
 };
 
@@ -103,6 +99,8 @@ categoryOptions.value =
     label: service.name,
     value: service.id.toString(),
   })) || [];
+
+post.value.category_id = categoryOptions.value[0]?.value || 1;
 </script>
 
 <template>

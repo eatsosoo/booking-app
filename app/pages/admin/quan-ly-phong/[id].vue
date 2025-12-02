@@ -30,19 +30,24 @@ const multiSelected = reactive({
 const serviceOptions = ref<Option[]>([]);
 const categoryOptions = ref<Option[]>([]);
 
-const apiUrl = `${config.public.apiBase}/properties/${id}`;
-const { data } = await useFetch<Response<Properties>>(apiUrl);
+const { request } = useApi();
+
+const { data } = await useAsyncData(
+  `properties-${id}`,          // key
+  () => request(`/properties/${id}`),  // GET /faqs/{id} với token
+);
+
 const { data: servicesData } = await useFetch<Response<Service[]>>(
   "/api/services"
 );
 const { data: categoriesData } = await useFetch<Response<Category[]>>(
-  `${config.public.apiBase}/categories`
+  `${config.public.apiBase}/home/categories`
 );
 
 const saveProperties = async () => {
   loading.value = true;
   try {
-    const { data, error } = await useFetch<Response<Properties>>(apiUrl, {
+    await request(`/properties/${id}`, {
       method: "PUT",
       body: {
         ...home.value,
@@ -52,17 +57,6 @@ const saveProperties = async () => {
         category_id: Number(home.value.category_id),
       },
     });
-
-    if (data.value?.statusCode !== 200) {
-      const msg =
-        data.value?.message ||
-        error.value?.data?.message ||
-        "Có lỗi xảy ra, vui lòng thử lại sau!";
-
-      toast.error("Cập nhật điểm đến", { description: msg });
-      message.value = msg;
-      return;
-    }
 
     toast.success("Cập nhật điểm đến", {
       description: "Phòng đã được cập nhật thành công!",

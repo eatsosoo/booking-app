@@ -55,6 +55,7 @@ definePageMeta({
 });
 
 const config = useRuntimeConfig();
+const { request } = useApi();
 
 // STATE
 const page = ref<number>(1);
@@ -64,7 +65,7 @@ const message = ref<string>("");
 // API URL
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/properties?page=${page.value}&search=${search.value}`
+    `${config.public.apiBase}/home/properties?page=${page.value}&search=${search.value}`
 );
 
 // --- GET LIST properties ---
@@ -84,17 +85,18 @@ const pagination = computed(
 
 // --- DELETE ---
 async function deleteItem(itemId: number) {
-  const titleNotify = "Xoá ";
+  const titleNotify = "Xoá điểm đến";
 
   try {
-    await $fetch(`${config.public.apiBase}/properties/${itemId}`, {
+    await request(`/properties/${itemId}`, {
       method: "DELETE",
     });
 
     toast.success(titleNotify, {
       description: "Điểm đến đã được xoá thành công!",
     });
-    page.value = 1;
+
+    // 🔄 Refresh lại danh sách nếu dùng useAsyncData
     refresh(); // load lại danh sách
   } catch (err: any) {
     message.value =

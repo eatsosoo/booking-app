@@ -29,12 +29,10 @@ const { data } = await useAsyncData(
 // ---------------------------
 const savePost = async () => {
   try {
-    const res = await request(`/posts/${id}`, {
+    await request(`/posts/${id}`, {
       method: "PUT",
       body: post.value,
     });
-
-    post.value = res.data; // cập nhật lại state nếu cần
 
     toast.success("Cập nhật bài viết", {
       description: "Bài viết đã được cập nhật thành công!",
