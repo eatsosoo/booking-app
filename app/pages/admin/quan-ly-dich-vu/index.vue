@@ -56,7 +56,7 @@ const search = ref<string | number>("");
 
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/services?page=${page.value}&search=${search.value}`
+    `${config.public.apiBase}/home/services?page=${page.value}&search=${search.value}`
 );
 
 const { data, refresh } = useAsyncData(
@@ -207,11 +207,14 @@ function copy(id: number) {
   navigator.clipboard.writeText(id.toString());
 }
 async function deleteService(id: number) {
+  const { request } = useApi();
   try {
-    await $fetch(`${config.public.apiBase}/services/${id}`, {
+    await request(`/services/${id}`, {
       method: "DELETE",
     });
+
     await refresh();
+    
     toast.success("Thành công", {
       description: "Dịch vụ đã được xoá thành công!",
     });

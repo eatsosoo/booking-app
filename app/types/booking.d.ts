@@ -38,6 +38,7 @@ export type ServiceForm = {
   menu: string
   price: number
   is_published: number
+  images: string[]
 }
 
 export type CategoryForm = {

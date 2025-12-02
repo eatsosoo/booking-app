@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Response, Service } from "~/types";
+import type { Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
@@ -14,7 +14,6 @@ import SelectGroup from "~/components/ui/select/SelectGroup.vue";
 import SelectLabel from "~/components/ui/select/SelectLabel.vue";
 import SelectItem from "~/components/ui/select/SelectItem.vue";
 import { PUBLISHED_STATUSES, SERVICE_TYPES } from "~/constants";
-import { ImageIcon } from "lucide-vue-next";
 import { genSlug } from "~/utils/string-helper";
 
 definePageMeta({
@@ -23,18 +22,14 @@ definePageMeta({
 });
 
 const router = useRouter();
-const config = useRuntimeConfig();
-
-const apiUrl = `${config.public.apiBase}/services/${router.currentRoute.value.params.id}`;
-const { data } = await useFetch<Response<Service>>(
-  `${apiUrl}`,
-  {
-    method: "GET",
-  }
+const { request } = useApi();
+const id = router.currentRoute.value.params.id;
+const { data } = await useAsyncData(
+  `service-${router.currentRoute.value.params.id}`,          // key
+  () => request(`/services/${id}`),  // GET /faqs/{id} với token
 );
 
 // form
-const imageInput = ref<HTMLInputElement | null>(null);
 const service = ref<Service>({} as Service);
 
 const pending = ref(false);
@@ -43,7 +38,7 @@ const saveService = async () => {
   pending.value = true;
 
   try {
-    await $fetch(apiUrl, {
+    await request(`/services/${id}`, {
       method: "PUT",
       body: service.value,
     });
@@ -59,46 +54,6 @@ const saveService = async () => {
     });
   } finally {
     pending.value = false;
-  }
-};
-
-
-const handleImageUpload = async (e: Event) => {
-  const toastTitle = "Tải ảnh";
-  const target = e.target as HTMLInputElement;
-  const file = target.files?.[0];
-  if (!file) return;
-
-  try {
-    const formData = new FormData();
-    formData.append("media", file);
-
-    const { data, error } = await useFetch<Response<string>>(
-      `${config.public.apiBase}/home/upload`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-
-    if (error.value) {
-      toast.error(toastTitle, {
-        description:
-          error.value?.data.message || "Có lỗi xảy ra khi tải ảnh lên!",
-      });
-      return;
-    }
-
-    service.value.image = data.value?.data.items[0] ?? "";
-    toast.success(toastTitle, {
-      description: "Ảnh đã được tải lên thành công!",
-    });
-  } catch (error) {
-    toast.error(toastTitle, {
-      description: "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
-    });
-  } finally {
-    target.value = "";
   }
 };
 
@@ -190,28 +145,10 @@ if (typeof service.value.images === "string") {
       <!-- Image -->
       <div>
         <Label for="thumbnail" class="mb-2 ml-1">Hình ảnh</Label>
-        <input
-          ref="imageInput"
-          type="file"
-          accept="image/*"
-          class="hidden"
-          @change="handleImageUpload"
+        <UploadImage
+          :url="service.image"
+          @uploaded="service.image = $event"
         />
-
-        <div class="p-2 rounded-md shadow-xs border border-dashed">
-          <Button size="icon" variant="secondary" @click="imageInput?.click()">
-            <ImageIcon class="w-4 h-4" />
-          </Button>
-          <span class="text-md ml-2">{{
-            service.image ? "Thay đổi ảnh" : "Tải ảnh lên"
-          }}</span>
-          <NuxtImg
-            v-if="service.image"
-            :src="service.image"
-            alt="Ảnh bài viết"
-            class="w-72 h-48 mt-2"
-          />
-        </div>
       </div>
 
       <!-- description -->
