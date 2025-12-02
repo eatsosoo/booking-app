@@ -1,11 +1,11 @@
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-50">
     <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-      <h1 class="text-2xl font-bold text-center text-primary mb-6">
-        Đăng nhập
+      <h1 class="text-2xl font-semibold text-center text-primary mb-6">
+        Booking Now
       </h1>
 
-      <form @submit.prevent="handleLogin" class="space-y-5">
+      <form class="space-y-5" @submit.prevent="handleLogin">
         <div>
           <label for="email" class="block mb-1 text-gray-600">Email</label>
           <Input
@@ -18,7 +18,9 @@
         </div>
 
         <div>
-          <label for="password" class="block mb-1 text-gray-600">Mật khẩu</label>
+          <label for="password" class="block mb-1 text-gray-600"
+            >Mật khẩu</label
+          >
           <Input
             id="password"
             v-model="password"
@@ -42,59 +44,71 @@
           </NuxtLink>
         </div>
 
-        <Button
-          type="submit"
-          class="w-full"
-        >
-          Đăng nhập
-        </Button>
+        <Button type="submit" class="w-full"> Đăng nhập </Button>
       </form>
-
-      <!-- <p class="text-center text-gray-600 text-sm mt-6">
-        Chưa có tài khoản?
-        <NuxtLink to="/register" class="text-primary hover:underline">
-          Đăng ký ngay
-        </NuxtLink>
-      </p> -->
     </div>
+
+    <ClientOnly>
+      <Toaster />
+    </ClientOnly>
   </div>
 </template>
 
 <script setup lang="ts">
-import { toast } from 'vue-sonner';
-import Button from '~/components/ui/button/Button.vue';
-import Checkbox from '~/components/ui/checkbox/Checkbox.vue';
-import Input from '~/components/ui/input/Input.vue';
+import { toast } from "vue-sonner";
+import Button from "~/components/ui/button/Button.vue";
+import Checkbox from "~/components/ui/checkbox/Checkbox.vue";
+import Input from "~/components/ui/input/Input.vue";
+import { Toaster } from "~/components/ui/sonner";
+import 'vue-sonner/style.css'
 
 useSeoMeta({
-  title: 'Đăng nhập',
-  description: 'Trang đăng nhập hệ thống Booking App, tối ưu SEO và bảo mật.',
+  title: "Đăng nhập",
+  description: "Trang đăng nhập hệ thống Booking App, tối ưu SEO và bảo mật.",
 });
 
 definePageMeta({
   layout: false,
-  middleware: []
-})
+  middleware: [],
+});
 
 const { login } = useAuth();
 
-const email = ref('');
-const password = ref('');
+const email = ref("");
+const password = ref("");
 const remember = ref(false);
 
 const handleLogin = async () => {
   if (!email.value || !password.value) {
-    toast.error('Vui lòng nhập đầy đủ thông tin');
+    toast.error("Vui lòng nhập đầy đủ thông tin");
     return;
   }
 
   try {
-    await login(email.value, password.value)
-    navigateTo("/")
+    const result = await login(email.value, password.value);
+
+    if (result.statusCode !== 200) {
+      toast.error("Đăng nhập thất bại *", {
+        description:
+        result.message ||
+          "Sai email hoặc mật khẩu, vui lòng kiểm tra lại.",
+      });
+      return;
+    }
+
+    if (result.data.items.token) {
+      const token = useCookie("token");
+      token.value = result.data.items.token;
+    }
+
+    toast.success("Đăng nhập thành công!");
+
+    return navigateTo("/admin");
   } catch (e) {
-    toast.error("Đăng nhập", {
-      description: "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
+    toast.error("Đăng nhập thất bại **", {
+      description: "Có lỗi xảy ra, vui lòng thử lại!",
     });
   }
 };
+
 </script>

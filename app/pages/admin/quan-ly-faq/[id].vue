@@ -13,16 +13,15 @@ definePageMeta({
 });
 
 const route = useRoute();
-const config = useRuntimeConfig();
 const id = route.params.id;
+const { request } = useApi();
 
-const apiUrl = `${config.public.apiBase}/faqs/${id}`;
-
-// GET → lấy dữ liệu FAQ
-const { data } = useFetch<Response<Faq>>(apiUrl);
+const { data, pending, error, refresh } = useAsyncData<Response<Faq>>(
+  `faq-${id}`,          // key
+  () => request(`/faqs/${id}`),  // GET /faqs/{id} với token
+);
 
 const faq = ref<Faq>({} as Faq);
-const message = ref("");
 
 // Khi GET thành công, gán vào form
 watch(data, (val) => {
@@ -31,41 +30,29 @@ watch(data, (val) => {
   }
 });
 
-// Hàm lưu
-const savefaq = async () => {
-  // PUT → cập nhật FAQ
-  const { execute, error } = useFetch<Response<Faq>>(apiUrl, {
-    method: "PUT",
-    body: faq.value,
-    immediate: true,
-  });
-
-  await execute();
-  if (error.value) {
-    message.value =
-      error.value?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
-    toast.error("Cập nhật câu hỏi thường gặp", {
-      description: message.value,
+const saveFaq = async () => {
+  try {
+    const res = await request(`/faqs/${id}`, {
+      method: "PUT",
+      body: faq.value,
     });
-  } else {
+
     toast.success("Cập nhật câu hỏi thường gặp", {
       description: "Câu hỏi thường gặp đã được cập nhật thành công!",
     });
+
+    return res;
+  } catch (error: any) {
+    const msg = error?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
+    toast.error("Cập nhật câu hỏi thường gặp", { description: msg });
+    return null;
   }
 };
 </script>
 
 <template>
   <section>
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa FAQ</h1>
-      <NuxtLink
-        to="/admin/quan-ly-faq"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-gray-100 transition"
-      >
-        ← Quay lại
-      </NuxtLink>
-    </div>
+    <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa FAQ</h1>
 
     <div class="grid grid-cols-1 gap-6">
       <!-- Question -->
@@ -91,7 +78,7 @@ const savefaq = async () => {
 
     <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" @click="savefaq"> Lưu thay đổi </Button>
+      <Button variant="default" @click="saveFaq"> Lưu thay đổi </Button>
     </div>
   </section>
 </template>

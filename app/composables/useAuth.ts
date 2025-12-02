@@ -1,27 +1,31 @@
+import type { Auth, Response } from "~/types";
+
 export const useAuth = () => {
   const token = useCookie("token", {
     httpOnly: true,
     secure: true,
-    sameSite: "strict"
-  })
+    sameSite: "strict",
+  });
 
   const login = async (email: string, password: string) => {
-    const config = useRuntimeConfig()
+    const config = useRuntimeConfig();
 
-    const { data, error } = await useFetch(`${config.public.apiBase}/auth/login`, {
+    const { data, error } = await useFetch<Response<Auth>>(`${config.public.apiBase}/login`, {
       method: "POST",
-      body: { email, password },
-    })
+      body: { username: email, password },
+    });
 
-    if (error.value) throw error.value
+    if (error.value) {      
+      return error.value?.data;
+    }
 
-    token.value = data.value?.token
-    return data.value
-  }
+    token.value = data.value?.data.items.token;
+    return data.value;
+  };
 
   const logout = () => {
-    token.value = null
-  }
+    token.value = null;
+  };
 
-  return { login, logout, token }
-}
+  return { login, logout, token };
+};

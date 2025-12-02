@@ -47,20 +47,20 @@ definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
-
+const { request } = useApi();
 const config = useRuntimeConfig();
 const page = ref(1);
 const search = ref<string | number>("");
 
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/faqs?page=${page.value}&search=${search.value}`
+    `/faqs?page=${page.value}&search=${search.value}`
 );
 
 const { data, refresh } = useAsyncData(
   "faqs",
-  () => $fetch<Response<Faq[]>>(apiUrl.value),
-  { watch: [apiUrl] }
+  () => request(`/faqs?page=${page.value}&search=${search.value}`),
+  { watch: [page, search] }
 );
 
 const faqs = computed(() => data.value?.data.items ?? []);
@@ -163,10 +163,12 @@ function copy(id: number) {
 }
 async function deleteFaq(id: number) {
   try {
-    await $fetch(`${config.public.apiBase}/faqs/${id}`, {
+    await request(`/faqs/${id}`, {
       method: "DELETE",
     });
+
     await refresh();
+    
     toast.success("Thành công", {
       description: "FAQ đã được xoá thành công!",
     });

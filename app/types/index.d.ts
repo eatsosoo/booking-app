@@ -101,3 +101,10 @@ export interface Response<T> {
     }
 }
 
+export interface Auth {
+  user_id: number
+  token_type: string
+  token: string
+  expired_time: string
+}
+

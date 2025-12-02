@@ -1,19 +1,24 @@
+// composables/useApi.ts
 export const useApi = () => {
-  const token = useCookie("token")
+  const token = useCookie("token");
+  const config = useRuntimeConfig();
 
   const request = async (url: string, options: any = {}) => {
-    const config = useRuntimeConfig()
-
     const headers = {
       ...(options.headers || {}),
-      Authorization: token.value ? `Bearer ${token.value}` : ""
+      ...(token.value ? { Authorization: `Bearer ${token.value}` } : {})
+    };
+
+    try {
+      return await $fetch(`${config.public.apiBase}${url}`, {
+        ...options,
+        headers
+      });
+    } catch (err: any) {
+      console.error("API Error:", err);
+      throw err;
     }
+  };
 
-    return await $fetch(`${config.public.apiBase}${url}`, {
-      ...options,
-      headers
-    })
-  }
-
-  return { request }
-}
+  return { request };
+};
