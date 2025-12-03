@@ -12,7 +12,6 @@ definePageMeta({
   middleware: "auth",
 });
 
-const router = useRouter();
 const { request } = useApi();
 
 // form
@@ -38,7 +37,7 @@ const saveCategory = async () => {
     });
 
     // chuyển về danh sách
-    router.push("/admin/quan-ly-danh-muc");
+    navigateTo("/admin/quan-ly-danh-muc");
   } catch (err: any) {
     toast.error("Lỗi!", {
       description:

@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Faq, Response } from "~/types";
+import type { Faq } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
@@ -11,8 +11,6 @@ definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
-
-const router = useRouter();
 
 // form
 const faq = ref<Faq>({
@@ -39,7 +37,7 @@ const saveFaq = async () => {
     });
 
     // Chuyển hướng về danh sách FAQ
-    router.push("/admin/quan-ly-faq");
+    navigateTo("/admin/quan-ly-faq");
   } catch (err: any) {
     toast.error("Lỗi!", {
       description:

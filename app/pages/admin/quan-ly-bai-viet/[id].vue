@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
 import Label from "~/components/ui/label/Label.vue";
-import type { Post, Response } from "~/types";
+import type { Post } from "~/types";
 import { toast } from "vue-sonner";
 import { useApi } from "~/composables/useApi";
 
@@ -14,7 +14,7 @@ definePageMeta({
 
 const route = useRoute();
 const id = route.params.id as string;
-
+const loading = ref<boolean>(false);
 const post = ref<Post>({} as Post);
 const { request } = useApi();
 
@@ -28,6 +28,7 @@ post.value = res.data.items;
    UPDATE
 ------------------------- */
 const savePost = async () => {
+  loading.value = true;
   try {
     await request(`/posts/${id}`, {
       method: "PUT",
@@ -41,6 +42,8 @@ const savePost = async () => {
     toast.error("Cập nhật thất bại", {
       description: err?.data?.message || "Vui lòng thử lại."
     });
+  } finally {
+    loading.value = false;
   }
 };
 </script>
@@ -93,7 +96,7 @@ const savePost = async () => {
 
     <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" @click="savePost"
+      <Button variant="default" :loading="loading" @click="savePost"
         >Lưu thay đổi</Button
       >
     </div>

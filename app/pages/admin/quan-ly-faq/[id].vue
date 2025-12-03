@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Faq, Response } from "~/types";
+import type { Faq } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
@@ -13,39 +13,41 @@ definePageMeta({
 });
 
 const route = useRoute();
-const id = route.params.id;
 const { request } = useApi();
+const id = route.params.id;
 
-const { data } = useAsyncData(
-  `faq-${id}`,          // key
-  () => request(`/faqs/${id}`),  // GET /faqs/{id} với token
+/* -----------------------
+   GET DATA
+------------------------- */
+const { data } = await useAsyncData(`faq-${id}`, () =>
+  request<Faq>(`/faqs/${id}`)
 );
+const faq = ref<Faq>(data.value?.data.items || ({} as Faq));
+const loading = ref<boolean>(false);
 
-const faq = ref<Faq>({} as Faq);
-
-// Khi GET thành công, gán vào form
-watch(data, (val) => {
-  if (val?.data) {
-    faq.value = val.data.items;
-  }
-});
-
+/* -----------------------
+   UPDATE DATA
+------------------------- */
 const saveFaq = async () => {
+  loading.value = true;
+
   try {
-    const res = await request(`/faqs/${id}`, {
+    await request<Faq>(`/faqs/${id}`, {
       method: "PUT",
       body: faq.value,
     });
 
-    toast.success("Cập nhật câu hỏi thường gặp", {
-      description: "Câu hỏi thường gặp đã được cập nhật thành công!",
+    toast.success("Tạo FAQ mới", {
+      description: "FAQ đã được cập nhật.",
     });
 
-    return res;
-  } catch (error: any) {
-    const msg = error?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
-    toast.error("Cập nhật câu hỏi thường gặp", { description: msg });
-    return null;
+    navigateTo("/admin/quan-ly-faq");
+  } catch (err: any) {
+    toast.error("Lỗi!", {
+      description: err?.data?.message ?? err?.message ?? "Có lỗi xảy ra!",
+    });
+  } finally {
+    loading.value = false;
   }
 };
 </script>

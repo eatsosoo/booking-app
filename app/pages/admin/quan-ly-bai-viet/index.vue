@@ -23,13 +23,11 @@ definePageMeta({
   middleware: "auth",
 });
 
-const config = useRuntimeConfig();
 const { request } = useApi();
 
 // STATE
 const page = ref<number>(1);
 const search = ref<string>("");
-const message = ref<string>("");
 
 // Table states
 const sorting = ref<SortingState>([]);
@@ -41,7 +39,7 @@ const expanded = ref<ExpandedState>({});
 // --- GET LIST POSTS ---
 const { data, refresh, pending } = await useAsyncData(
   "posts-list",
-  () => request<Response<Post[]>>(`/posts?page=${page.value}&search=${search.value}`),
+  () => request<Post[]>(`/posts?page=${page.value}&search=${search.value}`),
   {
     watch: [page, search],
   }
@@ -68,9 +66,7 @@ async function deleteItem(itemId: number) {
 
     refresh();
   } catch (err: any) {
-    message.value =
-      err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
-    toast.error(titleNotify, { description: message.value });
+    toast.error(titleNotify, { description: err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!" });
   }
 }
 

@@ -6,7 +6,6 @@ import type { Post, Response } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
-import { ImageIcon } from "lucide-vue-next";
 import type { PostForm } from "~/types/booking";
 import { genSlug } from "~/utils/string-helper";
 
@@ -15,9 +14,6 @@ definePageMeta({
   middleware: "auth",
 });
 
-const config = useRuntimeConfig();
-
-const imageInput = ref<HTMLInputElement | null>(null);
 const post = ref<PostForm>({
   title: "",
   slug: "",
@@ -27,8 +23,6 @@ const post = ref<PostForm>({
   content: "Nội dung bài viết...",
 });
 
-const toastTitle = "Tải ảnh lên";
-
 const { request } = useApi();
 
 const savePost = async () => {
@@ -36,7 +30,7 @@ const savePost = async () => {
 
   try {
     // POST bài viết mới
-    await request("/posts", {
+    await request<Response<Post>>("/posts", {
       method: "POST",
       body: post.value,
     });
@@ -45,53 +39,11 @@ const savePost = async () => {
       description: "Bài viết đã được tạo thành công!",
     });
 
-    // Nếu muốn cập nhật state hoặc dữ liệu khác:
-    // post.value = res.data;
-
     // Redirect về trang quản lý bài viết
     return navigateTo("/admin/quan-ly-bai-viet");
   } catch (err: any) {
     const msg = err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
     toast.error(titleNotify, { description: msg });
-  }
-};
-
-const handleImageUpload = async (e: Event) => {
-  const target = e.target as HTMLInputElement;
-  const file = target.files?.[0];
-
-  if (!file) return;
-
-  try {
-    const formData = new FormData();
-    formData.append("media", file);
-
-    const { data, error } = await useFetch<Response<string>>(
-      `${config.public.apiBase}/home/upload`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-
-    if (error.value) {
-      toast.error(toastTitle, {
-        description:
-          error.value?.data.message || "Có lỗi xảy ra khi tải ảnh lên!",
-      });
-      return;
-    }
-
-    post.value.image = data.value?.data.items ?? "";
-    toast.success(toastTitle, {
-      description: "Ảnh đã được tải lên thành công!",
-    });
-  } catch (error) {
-    toast.error(toastTitle, {
-      description: "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
-    });
-  } finally {
-    target.value = "";
   }
 };
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Category, Response } from "~/types";
+import type { Category } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
@@ -16,28 +16,23 @@ const route = useRoute();
 const id = route.params.id;
 const { request } = useApi();
 
-// GET → lấy dữ liệu FAQ
-const { data } = useAsyncData(
-  `project-${id}`,          // key
-  () => request(`/categories/${id}`),  // GET /faqs/{id} với token
+/* -----------------------
+   GET DATA
+------------------------- */
+const { data } = await useAsyncData(`project-${id}`, () =>
+  request<Category>(`/categories/${id}`)
 );
+const category = ref<Category>(data.value?.data.items || ({} as Category));
+const loading = ref<boolean>(false);
 
-const category = ref<Category>({} as Category);
-const loading = ref(false);
-
-// Khi GET thành công, gán vào form
-watch(data, (val) => {
-  if (val?.data) {
-    category.value = val.data.items;
-  }
-});
-
-// Hàm lưu
-const savecategory = async () => {
+/* -----------------------
+   UPDATE DATA
+------------------------- */
+const saveCategory = async () => {
   loading.value = true;
 
   try {
-    await request(`/categories/${id}`, {
+    await request<Category>(`/categories/${id}`, {
       method: "PUT",
       body: category.value,
     });
@@ -45,6 +40,7 @@ const savecategory = async () => {
     toast.success("Cập nhật thành công!", {
       description: "Dự án đã được cập nhật.",
     });
+    navigateTo("/admin/quan-ly-danh-muc");
   } catch (err: any) {
     toast.error("Lỗi!", {
       description:
@@ -91,7 +87,9 @@ const savecategory = async () => {
 
     <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" :loading="loading" @click="savecategory"> Lưu thay đổi </Button>
+      <Button variant="default" :loading="loading" @click="saveCategory">
+        Lưu thay đổi
+      </Button>
     </div>
   </section>
 </template>

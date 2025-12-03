@@ -21,24 +21,27 @@ definePageMeta({
   middleware: "auth",
 });
 
-const router = useRouter();
+const route = useRoute();
 const { request } = useApi();
-const id = router.currentRoute.value.params.id;
-const { data } = await useAsyncData(
-  `service-${router.currentRoute.value.params.id}`,          // key
-  () => request(`/services/${id}`),  // GET /faqs/{id} với token
+const id = route.params.id;
+
+/* -----------------------
+   GET DATA
+------------------------- */
+const { data } = await useAsyncData(`project-${id}`, () =>
+  request<Service>(`/services/${id}`)
 );
+const service = ref<Service>(data.value?.data.items || ({} as Service));
+const loading = ref<boolean>(false);
 
-// form
-const service = ref<Service>({} as Service);
-
-const pending = ref(false);
-
+/* -----------------------
+   UPDATE DATA
+------------------------- */
 const saveService = async () => {
-  pending.value = true;
+  loading.value = true;
 
   try {
-    await request(`/services/${id}`, {
+    await request<Service>(`/services/${id}`, {
       method: "PUT",
       body: service.value,
     });
@@ -47,17 +50,16 @@ const saveService = async () => {
       description: "Dịch vụ đã được cập nhật.",
     });
 
-    router.push("/admin/quan-ly-dich-vu");
+    navigateTo("/admin/quan-ly-dich-vu");
   } catch (err: any) {
     toast.error("Lỗi!", {
       description: err?.data?.message ?? err?.message ?? "Có lỗi xảy ra!",
     });
   } finally {
-    pending.value = false;
+    loading.value = false;
   }
 };
 
-service.value = data.value?.data.items || ({} as Service);
 if (typeof service.value.images === "string") {
   service.value.images = JSON.parse(service.value.images as unknown as string);
 }
@@ -164,7 +166,7 @@ if (typeof service.value.images === "string") {
     </div>
 
     <div class="mt-6">
-      <Button variant="default" :loading="pending" @click="saveService">
+      <Button variant="default" :loading="loading" @click="saveService">
         Cập nhật
       </Button>
     </div>

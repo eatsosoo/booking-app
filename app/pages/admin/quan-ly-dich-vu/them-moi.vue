@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Response } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
@@ -16,13 +15,14 @@ import SelectLabel from "~/components/ui/select/SelectLabel.vue";
 import SelectItem from "~/components/ui/select/SelectItem.vue";
 import { PUBLISHED_STATUSES, SERVICE_TYPES } from "~/constants";
 import { genSlug } from "~/utils/string-helper";
+import type { Service } from "~/types";
 
 definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
 
-const router = useRouter();
+const { request } = useApi();
 
 // form
 const service = ref<ServiceForm>({
@@ -40,9 +40,8 @@ const pending = ref(false);
 
 const saveService = async () => {
   pending.value = true;
-  const { request } = useApi();
   try {
-    await request(`/services`, {
+    await request<Service>(`/services`, {
       method: "POST",
       body: service.value,
     });
@@ -51,7 +50,7 @@ const saveService = async () => {
       description: "Dịch vụ mới đã được thêm.",
     });
 
-    router.push("/admin/quan-ly-dich-vu");
+    navigateTo("/admin/quan-ly-dich-vu");
   } catch (err: any) {
     toast.error("Lỗi!", {
       description: err?.data?.message ?? err?.message ?? "Có lỗi xảy ra!",
