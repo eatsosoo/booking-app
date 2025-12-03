@@ -158,7 +158,6 @@ import type {
   ExpandedState,
   SortingState,
   VisibilityState,
-  Table as TanstackTable,
 } from "@tanstack/vue-table";
 import {
   FlexRender,
@@ -169,12 +168,10 @@ import {
   getSortedRowModel,
   useVueTable,
 } from "@tanstack/vue-table";
-import { ChevronDown, ClosedCaptionIcon, X } from "lucide-vue-next";
-import { computed } from "vue";
+import { ChevronDown, Loader2, X } from "lucide-vue-next";
 
 import { valueUpdater } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -198,8 +195,8 @@ import InputGroupButton from "~/components/ui/input-group/InputGroupButton.vue";
 
 // Props
 interface Props<TData> {
-  data: TData[];
-  columns: ColumnDef<TData>[];
+  data?: TData[];
+  columns?: ColumnDef<TData>[];
   // Table state
   sorting?: SortingState;
   columnFilters?: ColumnFiltersState;
@@ -215,10 +212,10 @@ interface Props<TData> {
   showSelectionInfo?: boolean;
   tableClass?: string;
   // Loading state
-  loading: boolean;
-  loadingText: string;
-  showSkeleton: boolean;
-  skeletonRows: number;
+  loading?: boolean;
+  loadingText?: string;
+  showSkeleton?: boolean;
+  skeletonRows?: number;
 }
 
 const props = withDefaults(defineProps<Props<any>>(), {
