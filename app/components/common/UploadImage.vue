@@ -26,7 +26,7 @@
 import { ImageIcon } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import type { Response } from "~/types";
-import Button from "./ui/button/Button.vue";
+import Button from "~/components/ui/button/Button.vue";
 
 const props = defineProps({
   url: { type: String, default: "" },
@@ -69,9 +69,9 @@ const handleImageUpload = async (e: Event) => {
     toast.success(toastTitle, {
       description: "Ảnh đã được tải lên thành công!",
     });
-  } catch (error) {
+  } catch (error: any) {
     toast.error(toastTitle, {
-      description: "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
+      description: error?.data.message ?? "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
     });
   } finally {
     target.value = "";

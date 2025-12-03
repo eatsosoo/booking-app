@@ -28,8 +28,8 @@
 
         <!-- Nút x hiện khi hover -->
         <button
-          @click="removeImage(index)"
           class="absolute top-1 right-1 hidden group-hover:flex items-center justify-center w-6 h-6 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+          @click="removeImage(index)"
         >
           ×
         </button>

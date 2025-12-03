@@ -8,7 +8,41 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { PLACE_GROUPS, PROPERTY_TYPES } from "~/constants";
+import { PROPERTY_TYPES } from "~/constants";
+import type { Province, Response } from "~/types";
+
+// Fetch provinces from API
+const config = useRuntimeConfig();
+const {
+  data: provinces,
+} = await useFetch<Response<Province[]>>(
+  `${config.public.apiBase}/home/provinces`,
+  {
+    lazy: true,
+    server: true, // SSR for SEO
+  }
+);
+
+const northernProvinces = computed(() => {
+  return provinces.value?.data.items.filter(p => 
+    p.region.includes('Bắc') || 
+    ['Miền Bắc', 'Bắc', 'Bắc Bộ'].includes(p.region)
+  ) || []
+})
+
+const centralProvinces = computed(() => {
+  return provinces.value?.data.items.filter(p => 
+    p.region.includes('Trung') || 
+    ['Miền Trung', 'Trung', 'Trung Bộ'].includes(p.region)
+  ) || []
+})
+
+const southernProvinces = computed(() => {
+  return provinces.value?.data.items.filter(p => 
+    p.region.includes('Nam') || 
+    ['Miền Nam', 'Nam', 'Nam Bộ'].includes(p.region)
+  ) || []
+})
 </script>
 
 <template>
@@ -20,22 +54,51 @@ import { PLACE_GROUPS, PROPERTY_TYPES } from "~/constants";
         </NavigationMenuLink>
       </NavigationMenuItem>
 
-      <NavigationMenuItem v-for="property in PROPERTY_TYPES" :key="property.value">
+      <NavigationMenuItem
+        v-for="property in PROPERTY_TYPES"
+        :key="property.value"
+      >
         <NavigationMenuTrigger>{{ property.label }}</NavigationMenuTrigger>
         <NavigationMenuContent>
           <div class="grid grid-cols-3 gap-2 w-lg">
             <ul
-              v-for="(group, index) in PLACE_GROUPS"
-              :key="index"
               class="grid w-[200px] gap-1"
             >
-              <p>{{ group.label }}</p>
-              <li v-for="(item, idx) in group.value" :key="idx">
+              <p>Miền Bắc</p>
+              <li v-for="(item, idx) in northernProvinces" :key="idx">
                 <NavigationMenuLink as-child>
                   <a
-                    :href="`/dia-diem?page=1&per_page=12&place=${item}&property_types=${property.value}`"
+                    :href="`/dia-diem?page=1&per_page=12&place=${item.name}&property_types=${property.value}`"
                     class="hover:underline hover:text-primary hover:bg-white"
-                    >{{ item }}</a
+                    >{{ item.name }}</a
+                  >
+                </NavigationMenuLink>
+              </li>
+            </ul>
+            <ul
+              class="grid w-[200px] gap-1"
+            >
+              <p>Miền Bắc</p>
+              <li v-for="(item, idx) in centralProvinces" :key="idx">
+                <NavigationMenuLink as-child>
+                  <a
+                    :href="`/dia-diem?page=1&per_page=12&place=${item.name}&property_types=${property.value}`"
+                    class="hover:underline hover:text-primary hover:bg-white"
+                    >{{ item.name }}</a
+                  >
+                </NavigationMenuLink>
+              </li>
+            </ul>
+            <ul
+              class="grid w-[200px] gap-1"
+            >
+              <p>Miền Bắc</p>
+              <li v-for="(item, idx) in southernProvinces" :key="idx">
+                <NavigationMenuLink as-child>
+                  <a
+                    :href="`/dia-diem?page=1&per_page=12&place=${item.name}&property_types=${property.value}`"
+                    class="hover:underline hover:text-primary hover:bg-white"
+                    >{{ item.name }}</a
                   >
                 </NavigationMenuLink>
               </li>

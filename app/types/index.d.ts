@@ -68,6 +68,15 @@ export interface Region {
   region: string
 }
 
+export interface Province {
+  id: number;
+  name: string;
+  slug: string;
+  region: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Option {
   label: string;
   value: string | number;
