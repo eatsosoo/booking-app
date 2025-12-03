@@ -1,7 +1,11 @@
 <template>
   <div class="p-6 bg-gray-100 rounded-tl-3xl rounded-br-3xl shadow-md">
     <div class="grid md:grid-cols-4 gap-4 mb-4">
-      <Input v-model="formData.title" placeholder="Nhập tên lưu trú..." class="bg-white" />
+      <Input
+        v-model="formData.title"
+        placeholder="Nhập tên lưu trú..."
+        class="bg-white"
+      />
 
       <Select v-model="formData.place">
         <SelectTrigger class="w-full bg-white">
@@ -24,7 +28,11 @@
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Số phòng ngủ</SelectLabel>
-            <SelectItem v-for="room in BEDROOM_OPTIONS" :key="room.label" :value="room.value">
+            <SelectItem
+              v-for="room in BEDROOM_OPTIONS"
+              :key="room.label"
+              :value="room.value"
+            >
               {{ room.label }}
             </SelectItem>
           </SelectGroup>
@@ -38,7 +46,11 @@
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Số phòng tắm</SelectLabel>
-            <SelectItem v-for="bath in BATHROOM_OPTIONS" :key="bath.label" :value="bath.value">
+            <SelectItem
+              v-for="bath in BATHROOM_OPTIONS"
+              :key="bath.label"
+              :value="bath.value"
+            >
               {{ bath.label }}
             </SelectItem>
           </SelectGroup>
@@ -55,12 +67,24 @@
     </div>
 
     <transition name="fade">
-      <div v-if="isOpen" class="md:w-3/4 px-8 py-4 mt-2 rounded-md font-semibold bg-white border border-gray-200">
+      <div
+        v-if="isOpen"
+        class="md:w-3/4 px-8 py-4 mt-2 rounded-md font-semibold bg-white border border-gray-200"
+      >
         <p>DỊCH VỤ ĐI KÈM</p>
         <div class="grid grid-cols-3 mt-2 gap-4">
-          <div v-for="service in servicesData?.data.items" :key="service.id" class="flex space-x-2 text-[0.8rem]">
-            <Checkbox :id="`service-${service.id}`" :model-value="formData.services.includes(service.id.toString())"
-              @update:model-value="handleChange(service.id.toString(), $event as boolean)" />
+          <div
+            v-for="service in servicesData?.data.items"
+            :key="service.id"
+            class="flex space-x-2 text-[0.8rem]"
+          >
+            <Checkbox
+              :id="`service-${service.id}`"
+              :model-value="formData.services.includes(service.id.toString())"
+              @update:model-value="
+                handleChange(service.id.toString(), $event as boolean)
+              "
+            />
             <Label :for="`service-${service.id}`">{{ service.title }}</Label>
           </div>
         </div>
@@ -93,16 +117,18 @@ import { ChevronDown, ChevronUp } from "lucide-vue-next";
 import Label from "./ui/label/Label.vue";
 
 const props = defineProps({
-  title: { type: String, default: ""},
-  place: { type: String, default: ""},
-  bedRoomNum: { type: String, default: ""},
-  bathRoomNum: { type: String, default: ""},
+  title: { type: String, default: "" },
+  place: { type: String, default: "" },
+  bedRoomNum: { type: String, default: "" },
+  bathRoomNum: { type: String, default: "" },
   services: { type: String, default: "" },
-})
+});
 
-const emits = defineEmits(['submit'])
+const emits = defineEmits(["submit"]);
 
-const { data: servicesData } = await useFetch<Response<Service[]>>("/api/services")
+const { data: servicesData } = await useFetch<Response<Service[]>>(
+  "/api/services"
+);
 
 const formData = reactive({
   title: props.title,
@@ -110,16 +136,16 @@ const formData = reactive({
   bedroom: props.bedRoomNum,
   bathroom: props.bathRoomNum,
   services: props.services.split(","),
-})
+});
 
 const isOpen = ref(false);
 
 const handleChange = (id: string, event: boolean) => {
-  if (event) formData.services.push(id)
-  else formData.services = formData.services.filter(item => item != id)
-}
+  if (event) formData.services.push(id);
+  else formData.services = formData.services.filter((item) => item != id);
+};
 
 const submit = () => {
-  emits("submit", formData)
-}
+  emits("submit", formData);
+};
 </script>

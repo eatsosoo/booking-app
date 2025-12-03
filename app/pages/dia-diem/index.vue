@@ -20,11 +20,11 @@
 
     <section class="max-w-7xl mx-auto mt-22 p-4">
       <SearchRooms
-        :place="keyword"
-        :title="title"
-        :bath-room-num="bathRoomNum"
-        :bed-room-num="bedRoomNum"
-        :services="services"
+        :place="(keyword as string)"
+        :title="(title as string)"
+        :bath-room-num="(bathRoomNum as string)"
+        :bed-room-num="(bedRoomNum as string)"
+        :services="(services as string)"
         @submit="handleSubmit"
       />
 
@@ -175,7 +175,7 @@ const apiUrl = computed(
     `${config.public.apiBase}/home/properties?page=${page.value}&per_page=${perPage.value}&property_types=${propertyType.value}&title=${title.value}&bed=${bedRoomNum.value}&bath=${bathRoomNum.value}`
 );
 
-const { data, pending, error, refresh } = await useAsyncData(
+const { data } = await useAsyncData(
   () => `places-list-${apiUrl.value}`,
   () => $fetch<Response<Properties[]>>(apiUrl.value),
   { watch: [apiUrl] }

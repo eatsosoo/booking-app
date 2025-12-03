@@ -1,3 +1,5 @@
+import type { Pagination } from "~/types";
+
 export const PUBLISHED_STATUSES = {
   0: "Không hiển thị",
   1: "Hiển thị",
@@ -172,4 +174,12 @@ export const BATHROOM_OPTIONS = [
     label: "Từ 5 phòng tắm",
   },
 ] as const;
+
+export const PAGINATION: Pagination = {
+  current_page: 1,
+  last_page: 1,
+  per_page: 1,
+  total: 0,
+  has_more_pages: false,
+} as const;
 

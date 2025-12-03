@@ -16,34 +16,33 @@ const route = useRoute();
 const id = route.params.id as string;
 
 const post = ref<Post>({} as Post);
-
 const { request } = useApi();
 
-const { data } = await useAsyncData(
-  `post-${id}`,          // key
-  () => request(`/posts/${id}`),  // GET /faqs/{id} với token
-);
+/* -----------------------
+   GET DATA (SSR friendly)
+------------------------- */
+const res = await request<Post>(`/posts/${id}`);
+post.value = res.data.items;
 
-// ---------------------------
-// 2️⃣ Save / Update post
-// ---------------------------
+/* -----------------------
+   UPDATE
+------------------------- */
 const savePost = async () => {
   try {
     await request(`/posts/${id}`, {
       method: "PUT",
-      body: post.value,
+      body: post.value
     });
 
-    toast.success("Cập nhật bài viết", {
-      description: "Bài viết đã được cập nhật thành công!",
-    });
+    toast.success("Cập nhật bài viết thành công!");
     navigateTo("/admin/quan-ly-bai-viet");
+
   } catch (err: any) {
-    const msg = err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
-    toast.error("Cập nhật bài viết", { description: msg });
+    toast.error("Cập nhật thất bại", {
+      description: err?.data?.message || "Vui lòng thử lại."
+    });
   }
 };
-post.value = data.value?.data.items || ({} as Post);
 </script>
 
 <template>
