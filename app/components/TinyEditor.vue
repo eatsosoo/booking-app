@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { Editor, EditorContent } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
@@ -31,8 +31,9 @@ import type { Response } from "~/types";
 
 const config = useRuntimeConfig();
 
-const modelValue = defineModel<string>({ default: "" });
-const emits = defineEmits<{
+// Use explicit props/emits instead of mixed defineModel/defineEmits to avoid confusion
+const props = defineProps<{ modelValue?: string }>();
+const emit = defineEmits<{
   (e: "update:modelValue", value: string): void;
 }>();
 
@@ -40,8 +41,9 @@ const imageInput = ref<HTMLInputElement | null>(null);
 const editor = ref<Editor | null>(null);
 
 onMounted(() => {
+  // Initialize with the incoming prop value (or empty string)
   editor.value = new Editor({
-    content: modelValue.value,
+    content: props.modelValue ?? "",
     extensions: [
       StarterKit.configure({
         bold: {},
@@ -53,8 +55,9 @@ onMounted(() => {
       Image,
     ],
     onUpdate({ editor }) {
-      modelValue.value = editor.getHTML();
-      emits("update:modelValue", modelValue.value);
+      // Only emit; do NOT assign to props/modelValue directly
+      const html = editor.getHTML();
+      emit("update:modelValue", html);
     },
   });
 });
@@ -62,6 +65,19 @@ onMounted(() => {
 onBeforeUnmount(() => {
   editor.value?.destroy();
 });
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    // Sync external changes from parent into the editor, but avoid overwriting
+    if (!editor.value) return;
+    const current = editor.value.getHTML();
+    if ((newVal ?? "") !== current) {
+      // Use setContent to replace only when different
+      editor.value.commands.setContent(newVal ?? "");
+    }
+  }
+);
 
 const handleImageUpload = async (e: Event) => {
   const target = e.target as HTMLInputElement;
@@ -80,7 +96,7 @@ const handleImageUpload = async (e: Event) => {
       }
     );
 
-    if (error.value) {
+    if (error?.value) {
       console.error("Upload failed:", error.value);
       return;
     }
@@ -92,10 +108,11 @@ const handleImageUpload = async (e: Event) => {
       .focus()
       .setImage({ src: imageUrl as string })
       .run();
-  } catch (error) {
-    console.error("Upload image error:", error);
+  } catch (err) {
+    console.error("Upload image error:", err);
   } finally {
-    target.value = "";
+    // reset file input
+    if (target) target.value = "";
   }
 };
 

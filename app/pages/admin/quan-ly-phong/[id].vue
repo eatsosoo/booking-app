@@ -10,6 +10,8 @@ import Textarea from "~/components/ui/textarea/Textarea.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
 import MultiSelect from "~/components/common/MultiSelect.vue";
 import SearchSelect from "~/components/common/SearchSelect.vue";
+import UploadImage from "~/components/common/UploadImage.vue";
+import UploadMultiImage from "~/components/common/UploadMultiImage.vue";
 
 definePageMeta({
   layout: "admin",

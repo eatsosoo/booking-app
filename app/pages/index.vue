@@ -139,30 +139,35 @@
     </section>
 
     <!-- Dự án hiện tại -->
-    <section class="bg-secondary">
-      <div class="cus-container space-y-10">
-        <h2 class="text-3xl font-bold text-center">Dự án đang triển khai</h2>
+    <section class="bg-secondary cus-container">
+      <div
+        v-for="(property, index) in PROPERTY_TYPES"
+        :key="property.value"
+        class="space-y-10 mb-12"
+      >
+        <h2 class="text-3xl font-semibold text-center">
+          Tìm kiếm phòng {{ property.label }}
+        </h2>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
           <!-- Project item -->
           <div
-            v-for="(project, i) in projects"
+            v-for="(project, i) in ['Miền Bắc', 'Miền Trung', 'Miền Nam']"
             :key="i"
             class="bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col"
           >
             <!-- Image -->
-            <NuxtImg
-              :src="project.image"
+            <div
               class="h-48 w-full object-cover"
-              :alt="project.name"
-            />
+              :class="`bg-[url('/rooms/${(index + 1) * (i + 1)}.jpg')]`"
+            ></div>
 
             <!-- Content -->
             <div class="p-5 flex flex-col flex-1">
-              <h3 class="text-xl font-semibold mb-2">{{ project.name }}</h3>
+              <!-- <h3 class="text-xl font-semibold mb-2">{{ project.name }}</h3>
               <p class="text-muted-foreground text-sm flex-1">
                 {{ project.description }}
-              </p>
+              </p> -->
               <div class="mx-auto">
                 <NuxtLink
                   :to="`/du-an/tim-kiem?page=1&per_page=12&category_id=${project.id}`"
@@ -175,14 +180,6 @@
             </div>
           </div>
         </div>
-
-        <div class="flex justify-center">
-          <NuxtLink to="/du-an/tim-kiem?page=1&per_page=12">
-            <Button class="mt-4 w-fit" variant="default">
-              Xem tất cả tự án
-            </Button>
-          </NuxtLink>
-        </div>
       </div>
     </section>
   </div>
@@ -191,6 +188,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Button from "~/components/ui/button/Button.vue";
+import { PROPERTY_TYPES } from "~/constants";
 import type { Category, Region, Response } from "~/types";
 
 useSeoMeta({

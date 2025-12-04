@@ -8,6 +8,7 @@ import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import type { PostForm } from "~/types/booking";
 import { genSlug } from "~/utils/string-helper";
+import UploadImage from "~/components/common/UploadImage.vue";
 
 definePageMeta({
   layout: "admin",
@@ -40,7 +41,7 @@ const savePost = async () => {
     });
 
     // Redirect về trang quản lý bài viết
-    return navigateTo("/admin/quan-ly-bai-viet");
+    // return navigateTo("/admin/quan-ly-bai-viet");
   } catch (err: any) {
     const msg = err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
     toast.error(titleNotify, { description: msg });
