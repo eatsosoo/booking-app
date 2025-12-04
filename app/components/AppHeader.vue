@@ -9,7 +9,7 @@
 
       <!-- Menu desktop -->
       <div class="hidden md:flex space-x-8 text-gray-700 font-medium">
-        <AppMenu />
+        <slot />
       </div>
 
       <!-- Action buttons -->

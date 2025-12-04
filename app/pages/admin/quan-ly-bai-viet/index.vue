@@ -101,14 +101,14 @@ const columns: ColumnDef<Post>[] = [
   {
     accessorKey: "title",
     header: "Tiêu đề",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("title")),
+    cell: ({ row }) => h("div", { class: "capitalize w-50 text-wrap" }, row.getValue("title")),
     enableSorting: false,
   },
   {
     accessorKey: "keywords",
     header: "Từ khoá",
     cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("keywords")),
+      h("div", { class: "capitalize w-50 text-wrap" }, row.getValue("keywords")),
   },
   {
     accessorKey: "is_published",

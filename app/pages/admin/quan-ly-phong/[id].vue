@@ -63,11 +63,11 @@ const saveProperties = async () => {
       },
     });
 
-    toast.success("Cập nhật điểm đến", {
+    toast.success("Cập nhật phòng", {
       description: "Phòng đã được cập nhật thành công!",
     });
   } catch (err: any) {
-    toast.error("Cập nhật điểm đến", {
+    toast.error("Cập nhật phòng", {
       description: err?.message || "Không thể kết nối đến máy chủ!",
     });
   } finally {
@@ -92,7 +92,7 @@ categoryOptions.value =
 
 <template>
   <section>
-    <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa điểm đến</h1>
+    <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa phòng</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Title -->

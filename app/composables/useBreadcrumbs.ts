@@ -4,7 +4,7 @@ export const useBreadcrumbs = () => {
   const titleMap: Record<string, string> = {
     "admin": "Quản trị",
     "quan-ly-bai-viet": "Quản lý bài viết",
-    "quan-ly-phong": "Quản lý điểm đến",
+    "quan-ly-phong": "Quản lý phòng",
     "quan-ly-faq": "Quản lý FAQs",
     "quan-ly-dich-vu": "Quản lý dịch vụ",
     "quan-ly-danh-muc": "Quản lý dự án",

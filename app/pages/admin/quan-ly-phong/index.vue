@@ -149,7 +149,7 @@ async function deleteItem(id: number) {
 
 <template>
   <section>
-    <h1 class="font-semibold text-2xl">Quản lý danh sách điểm đến</h1>
+    <h1 class="font-semibold text-2xl">Quản lý danh sách phòng</h1>
 
     <DataTable
       :data="rooms"
