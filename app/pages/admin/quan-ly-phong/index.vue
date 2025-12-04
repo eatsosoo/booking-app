@@ -85,14 +85,14 @@ const columns: ColumnDef<Properties>[] = [
   {
     accessorKey: "name",
     header: "Tên",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("name")),
+    cell: ({ row }) => h("div", { class: "capitalize max-w-50 text-wrap" }, row.getValue("name")),
     enableSorting: false,
   },
   {
     accessorKey: "address",
     header: "Địa chỉ",
     cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("address")),
+      h("div", { class: "capitalize max-w-50 text-wrap" }, row.getValue("address")),
   },
   {
     accessorKey: "property_types",
@@ -108,6 +108,56 @@ const columns: ColumnDef<Properties>[] = [
             .map((type) => type.name)
             .join(" | ")
         )
+      ),
+  },
+  {
+    accessorKey: "area",
+    header: "Diện tích (m2)",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        h("div", { class: "capitalize" }, row.getValue("area"))
+      ),
+  },
+  {
+    accessorKey: "bedrooms",
+    header: "Phòng ngủ",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        h("div", { class: "capitalize" }, row.getValue("bedrooms"))
+      ),
+  },
+  {
+    accessorKey: "bathrooms",
+    header: "Phòng tắm",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        h("div", { class: "capitalize" }, row.getValue("bathrooms"))
+      ),
+  },
+  {
+    accessorKey: "bed",
+    header: "Giường",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        h("div", { class: "capitalize" }, row.getValue("bed"))
+      ),
+  },
+  {
+    accessorKey: "guest",
+    header: "Sức chứa",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        h("div", { class: "lowercase" }, row.getValue("bed") + " khách")
       ),
   },
   {
