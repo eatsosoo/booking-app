@@ -146,7 +146,7 @@
         class="space-y-10 mb-12"
       >
         <h2 class="text-3xl font-semibold text-center">
-          Tìm kiếm phòng {{ property.label }}
+          Tìm kiếm loại phòng {{ property.label }}
         </h2>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
@@ -154,29 +154,25 @@
           <div
             v-for="(project, i) in ['Miền Bắc', 'Miền Trung', 'Miền Nam']"
             :key="i"
-            class="bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col"
+            class="relative bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col"
           >
             <!-- Image -->
-            <div
-              class="h-48 w-full object-cover"
-              :class="`bg-[url('/rooms/${(index + 1) * (i + 1)}.jpg')]`"
-            ></div>
+            <NuxtImg
+              :src="`/rooms/room-${(index + 1) * (i + 1)}.jpg`"
+              class="h-58 w-full object-cover transition-transform duration-300 hover:scale-105 shadow-sm"
+              :alt="`Tìm kiếm phong loại ${property.label} khu vực ${project}`"
+            ></NuxtImg>
 
             <!-- Content -->
-            <div class="p-5 flex flex-col flex-1">
-              <!-- <h3 class="text-xl font-semibold mb-2">{{ project.name }}</h3>
-              <p class="text-muted-foreground text-sm flex-1">
-                {{ project.description }}
-              </p> -->
-              <div class="mx-auto">
-                <NuxtLink
-                  :to="`/du-an/tim-kiem?page=1&per_page=12&category_id=${project.id}`"
+            <div class="text-center">
+              <h3 class="mt-4 font-semibold italic">{{ project }}</h3>
+              <NuxtLink
+                  :to="`/du-an/tim-kiem?page=1&per_page=12&property_types=${property.value}`"
                 >
-                  <Button class="mt-4 w-fit" variant="link">
-                    Xem chi tiết
+                  <Button class="w-fit underline" variant="link">
+                    Xem thêm
                   </Button>
                 </NuxtLink>
-              </div>
             </div>
           </div>
         </div>

@@ -70,7 +70,7 @@ const southernProvinces = computed(() => {
           <MenubarSubTrigger>Miền Bắc</MenubarSubTrigger>
           <MenubarSubContent>
             <MenubarItem v-for="province in northernProvinces" :key="province.id">
-              <NuxtLink :to="`/dia-diem?page=1&per_page=12&property_type=${property.value}&place=${province.slug}`">
+              <NuxtLink :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`">
                 {{ province.name }}
               </NuxtLink>
             </MenubarItem>
@@ -80,7 +80,7 @@ const southernProvinces = computed(() => {
           <MenubarSubTrigger>Miền Trung</MenubarSubTrigger>
           <MenubarSubContent>
             <MenubarItem v-for="province in centralProvinces" :key="province.id">
-              <NuxtLink :to="`/dia-diem?page=1&per_page=12&property_type=${property.value}&place=${province.slug}`">
+              <NuxtLink :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`">
                 {{ province.name }}
               </NuxtLink>
             </MenubarItem>
@@ -90,7 +90,7 @@ const southernProvinces = computed(() => {
           <MenubarSubTrigger>Miền Nam</MenubarSubTrigger>
           <MenubarSubContent>
             <MenubarItem v-for="province in southernProvinces" :key="province.id">
-              <NuxtLink :to="`/dia-diem?page=1&per_page=12&property_type=${property.value}&place=${province.slug}`">
+              <NuxtLink :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`">
                 {{ province.name }}
               </NuxtLink>
             </MenubarItem>

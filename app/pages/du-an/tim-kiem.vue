@@ -57,7 +57,7 @@
           <div class="grid grid-cols-2 gap-1 h-78">
             <NuxtImg
               :src="room.thumbnail"
-              class="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+              class="object-cover w-full h-78 transition-transform duration-300 hover:scale-105"
             />
             <div class="grid grid-cols-2 grid-rows-2 gap-1 overflow-hidden">
               <NuxtImg
@@ -164,10 +164,11 @@ const page = computed(() => {
 });
 const perPage = computed(() => route.query.per_page || 12);
 const categoryId = computed(() => route.query.category_id || "");
+const propertyTypes = computed(() => route.query.property_types || "");
 
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/home/properties?page=${page.value}&per_page=${perPage.value}&category_id=${categoryId.value}`
+    `${config.public.apiBase}/home/properties?page=${page.value}&per_page=${perPage.value}&property_types=${propertyTypes.value}`
 );
 
 const { data, pending, error, refresh } = await useAsyncData(
