@@ -37,6 +37,10 @@ export const PROPERTY_TYPES = [
   },
 ];
 
+export const REGIONS = [
+  'Miền Bắc', 'Miền Trung', 'Miền Nam'
+] as const
+
 export const PLACE_GROUPS = [
   {
     label: "Khu vực Miền Bắc",

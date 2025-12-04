@@ -139,33 +139,33 @@
     </section>
 
     <!-- Dự án hiện tại -->
-    <section class="bg-secondary">
-      <div class="cus-container space-y-10">
-        <h2 class="text-3xl font-bold text-center">Dự án đang triển khai</h2>
+    <section  class="cus-container">
+      <div v-for="property in PROPERTY_TYPES" :key="property.value" class=" space-y-10 p-10">
+        <h2 class="text-3xl font-bold text-center">Tìm phòng loại {{ property.label }}</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
           <!-- Project item -->
           <div
-            v-for="(project, i) in projects"
+            v-for="(region, i) in REGIONS"
             :key="i"
-            class="bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col"
+            class="bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col bg-[url('/banner4.jpg')]  h-80"
           >
             <!-- Image -->
-            <NuxtImg
-              :src="project.image"
+            <!-- <NuxtImg
+              src="/banner4.jpg"
               class="h-48 w-full object-cover"
-              :alt="project.name"
-            />
+              :alt="`Tìm phòng loại {{ property.label }} khu vực ${region}`"
+            /> -->
 
             <!-- Content -->
             <div class="p-5 flex flex-col flex-1">
-              <h3 class="text-xl font-semibold mb-2">{{ project.name }}</h3>
-              <p class="text-muted-foreground text-sm flex-1">
+              <h3 class="text-xl font-semibold mb-2 text-center text-white">Khu vực {{ region }}</h3>
+              <!-- <p class="text-muted-foreground text-sm flex-1">
                 {{ project.description }}
-              </p>
+              </p> -->
               <div class="mx-auto">
                 <NuxtLink
-                  :to="`/du-an/tim-kiem?page=1&per_page=12&category_id=${project.id}`"
+                  :to="`/du-an/tim-kiem?page=1&per_page=12&category_id=${property.value}`"
                 >
                   <Button class="mt-4 w-fit" variant="link">
                     Xem chi tiết
@@ -175,14 +175,6 @@
             </div>
           </div>
         </div>
-
-        <div class="flex justify-center">
-          <NuxtLink to="/du-an/tim-kiem?page=1&per_page=12">
-            <Button class="mt-4 w-fit" variant="default">
-              Xem tất cả tự án
-            </Button>
-          </NuxtLink>
-        </div>
       </div>
     </section>
   </div>
@@ -191,7 +183,8 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Button from "~/components/ui/button/Button.vue";
-import type { Category, Region, Response } from "~/types";
+import { PROPERTY_TYPES, REGIONS } from "~/constants";
+import type { Region, Response } from "~/types";
 
 useSeoMeta({
   title: "Trang chủ",
@@ -205,15 +198,6 @@ const config = useRuntimeConfig();
 // =========================
 const apiUrl = computed(() => `${config.public.apiBase}/home`);
 
-const { data: categories } = await useFetch<Response<Category[]>>(
-  `${apiUrl.value}/categories?page=1&per_page=6`,
-  {
-    server: true,
-    lazy: false,
-    immediate: true,
-  }
-);
-
 const { data: provinces } = await useFetch<Response<Region[]>>(
   `${apiUrl.value}/provinces`,
   {
@@ -223,7 +207,6 @@ const { data: provinces } = await useFetch<Response<Region[]>>(
   }
 );
 
-const projects = computed(() => categories.value?.data.items ?? []);
 
 const result = provinces.value?.data.items ?? [];
 const groupOptions: any = {};
