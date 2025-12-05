@@ -108,7 +108,7 @@ const columns: ColumnDef<Post>[] = [
     accessorKey: "keywords",
     header: "Từ khoá",
     cell: ({ row }) =>
-      h("div", { class: "capitalize w-50 text-wrap" }, row.getValue("keywords")),
+      h("div", { class: "capitalize w-100 text-wrap" }, row.getValue("keywords")),
   },
   {
     accessorKey: "is_published",
@@ -184,7 +184,7 @@ watch(
       <template #left-actions>
         <NuxtLink to="/admin/quan-ly-bai-viet/them-moi">
           <Button>
-            <PlusSquareIcon class="mr-2 h-4 w-4" />
+            <PlusSquareIcon class="h-4 w-4" />
             Tạo mới
           </Button>
         </NuxtLink>
@@ -203,7 +203,7 @@ watch(
           <div class="text-muted-foreground mb-2">Không có bài viết nào</div>
           <NuxtLink to="/admin/quan-ly-bai-viet/them-moi">
             <Button variant="outline">
-              <PlusSquareIcon class="mr-2 h-4 w-4" />
+              <PlusSquareIcon class="h-4 w-4" />
               Tạo bài viết đầu tiên
             </Button>
           </NuxtLink>

@@ -99,7 +99,7 @@ function removeValue(val: string | number) {
               @select="toggleValue(opt.value)"
             >
               <Check
-                class="mr-2 h-4 w-4"
+                class="h-4 w-4"
                 :class="
                   selectedValues.includes(opt.value)
                     ? 'opacity-100'

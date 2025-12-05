@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { Calendar, Home, Inbox, Search, Settings, MenuIcon, MonitorCloud, FolderKanban } from 'lucide-vue-next'
+import {
+  Calendar,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+  MenuIcon,
+  MonitorCloud,
+  FolderKanban,
+} from "lucide-vue-next";
 import {
   Sidebar,
   SidebarContent,
@@ -9,61 +18,73 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/ui/sidebar'
+} from "@/components/ui/sidebar";
+import SidebarHeader from "./ui/sidebar/SidebarHeader.vue";
 
 // Menu items.
 const items = [
   {
-    title: 'Trang chủ',
-    url: '/',
+    title: "Trang chủ",
+    url: "/",
     icon: Home,
   },
   {
-    title: 'Bài viết',
-    url: '/admin/quan-ly-bai-viet',
+    title: "Bài viết",
+    url: "/admin/quan-ly-bai-viet",
     icon: Inbox,
   },
   {
-    title: 'Phòng',
-    url: '/admin/quan-ly-phong',
+    title: "Phòng",
+    url: "/admin/quan-ly-phong",
     icon: Calendar,
   },
   {
-    title: 'FAQs',
-    url: '/admin/quan-ly-faq',
+    title: "FAQs",
+    url: "/admin/quan-ly-faq",
     icon: Search,
   },
   {
-    title: 'Dịch vụ',
-    url: '/admin/quan-ly-dich-vu',
+    title: "Dịch vụ",
+    url: "/admin/quan-ly-dich-vu",
     icon: MonitorCloud,
   },
   {
-    title: 'Dự án',
-    url: '/admin/quan-ly-danh-muc',
+    title: "Dự án",
+    url: "/admin/quan-ly-danh-muc",
     icon: FolderKanban,
   },
   {
-    title: 'Các lựa chọn của Menu',
-    url: '/admin/quan-ly-tinh-thanh',
+    title: "Các lựa chọn của Menu",
+    url: "/admin/quan-ly-tinh-thanh",
     icon: MenuIcon,
   },
   {
-    title: 'Cấu hình hệ thống',
-    url: '/admin/cau-hinh-he-thong',
+    title: "Cấu hình hệ thống",
+    url: "/admin/cau-hinh-he-thong",
     icon: Settings,
   },
-]
+];
 </script>
 
 <template>
   <Sidebar>
+    <SidebarHeader>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <span class="px-2">Booking Now</span>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    </SidebarHeader>
     <SidebarContent>
       <SidebarGroup>
-        <SidebarGroupLabel>Application</SidebarGroupLabel>
+        <SidebarGroupLabel>Menu</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
-            <SidebarMenuItem v-for="item in items" :key="item.title">
+            <SidebarMenuItem
+              v-for="item in items"
+              :key="item.title"
+              class="py-1"
+            >
               <SidebarMenuButton as-child>
                 <a :href="item.url">
                   <component :is="item.icon" />

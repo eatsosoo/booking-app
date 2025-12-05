@@ -2,7 +2,7 @@
   <div>
     <SidebarProvider>
       <AppSidebar />
-      <main>
+      <main class="w-full">
         <div class="flex space-x-3 items-center p-4">
           <SidebarTrigger /> <div class="h-full border-r border-gray-900"></div><AdminBreadcrumb />
         </div>
@@ -16,7 +16,6 @@
     <ClientOnly>
       <Toaster />
     </ClientOnly>
-    <AppFooter />
   </div>
 </template>
 
