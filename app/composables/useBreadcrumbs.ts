@@ -8,6 +8,7 @@ export const useBreadcrumbs = () => {
     "quan-ly-faq": "Quản lý FAQs",
     "quan-ly-dich-vu": "Quản lý dịch vụ",
     "quan-ly-danh-muc": "Quản lý dự án",
+    "quan-ly-tinh-thanh": "Quản lý tỉnh thành",
     "them-moi": "Tạo mới",
   };
 
