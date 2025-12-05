@@ -19,33 +19,33 @@ definePageMeta({
 });
 
 const blocks = [
-  {
-    label: "Quản lý bài viết",
-    url: "/admin/quan-ly-bai-viet",
-  },
-  {
-    label: "Quản lý phòng",
-    url: "/admin/quan-ly-phong",
-  },
-  {
-    label: "Quản lý FAQs",
-    url: "/admin/quan-ly-faq",
-  },
-  {
-    label: "Quản lý dịch vụ",
-    url: "/admin/quan-ly-dich-vu",
-  },
-  {
-    label: "Quản lý dự án",
-    url: "/admin/quan-ly-danh-muc",
-  },
-  {
-    label: "Quản lý tỉnh thành",
-    url: "/admin/quan-ly-tinh-thanh",
-  },
-  {
-    label: "Cấu hình hệ thống",
-    url: "/admin/cau-hinh-he-thong",
-  }
+  // {
+  //   label: "Quản lý bài viết",
+  //   url: "/admin/quan-ly-bai-viet",
+  // },
+  // {
+  //   label: "Quản lý phòng",
+  //   url: "/admin/quan-ly-phong",
+  // },
+  // {
+  //   label: "Quản lý FAQs",
+  //   url: "/admin/quan-ly-faq",
+  // },
+  // {
+  //   label: "Quản lý dịch vụ",
+  //   url: "/admin/quan-ly-dich-vu",
+  // },
+  // {
+  //   label: "Quản lý dự án",
+  //   url: "/admin/quan-ly-danh-muc",
+  // },
+  // {
+  //   label: "Quản lý tỉnh thành",
+  //   url: "/admin/quan-ly-tinh-thanh",
+  // },
+  // {
+  //   label: "Cấu hình hệ thống",
+  //   url: "/admin/cau-hinh-he-thong",
+  // }
 ];
 </script>

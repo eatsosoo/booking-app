@@ -1,17 +1,17 @@
 <template>
   <div>
-    <AppHeader>
-      <AdminMenu />
-    </AppHeader>
-
-    <main class="min-h-[calc(100vh-414px)]">
-      <div class="px-6 max-w-7xl mx-auto mt-4">
-        <AdminBreadcrumb />
-      </div>
-      <div class="w-full px-6 pt-6 pb-10 max-w-7xl mx-auto">
-        <slot />
-      </div>
-    </main>
+    <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <div class="flex space-x-3 items-center p-4">
+          <SidebarTrigger /> <div class="h-full border-r border-gray-900"></div><AdminBreadcrumb />
+        </div>
+        <Separator />
+        <div class="mx-6 my-4">
+          <slot />
+        </div>
+      </main>
+    </SidebarProvider>
 
     <ClientOnly>
       <Toaster />
@@ -23,4 +23,8 @@
 <script setup lang="ts">
 import "vue-sonner/style.css";
 import { Toaster } from "@/components/ui/sonner";
+import AppSidebar from "~/components/AppSidebar.vue";
+import SidebarProvider from "~/components/ui/sidebar/SidebarProvider.vue";
+import SidebarTrigger from "~/components/ui/sidebar/SidebarTrigger.vue";
+import Separator from "~/components/ui/separator/Separator.vue";
 </script>

@@ -14,7 +14,7 @@ const { breadcrumbs } = useBreadcrumbs();
 <template>
   <Breadcrumb>
     <BreadcrumbList>
-      <BreadcrumbItem v-for="(item, index) in breadcrumbs" :key="index">
+      <BreadcrumbItem v-for="(item, index) in breadcrumbs" :key="index" class="text-lg">
         <template v-if="index < breadcrumbs.length - 1">
           <BreadcrumbLink :href="item.to">{{ item.label }}</BreadcrumbLink>
           <BreadcrumbSeparator />

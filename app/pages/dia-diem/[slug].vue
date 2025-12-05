@@ -1,31 +1,28 @@
 <template>
   <div>
     <section class="p-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-        <NuxtImg
-          :src="home.thumbnail"
-          class="h-70 md:h-full"
-          :alt="home.name"
-        />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2 cursor-pointer">
+        <div
+          class="h-70 md:h-[390px] lg:h-[390px] xl:h-[500px] bg-cover bg-center"
+          :class="`bg-[url(${home.thumbnail})]`"
+        ></div>
         <div class="grid grid-cols-2 gap-2">
-          <NuxtImg
-            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
-          />
-          <NuxtImg
-            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
-          />
-          <NuxtImg
-            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
-          />
+          <div>
+            <NuxtImg :src="home.gallery[0]" class="object-cover h-full w-full" />
+          </div>
+          <div>
+            <NuxtImg :src="home.gallery[1]" class="object-cover h-full w-full" />
+          </div>
+          <div>
+            <NuxtImg :src="home.gallery[2]" class="object-cover h-full w-full" />
+          </div>
           <div class="relative">
-            <NuxtImg
-              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
-            />
+            <NuxtImg :src="home.gallery[3]" class="object-cover h-full w-full" />
             <div
               class="absolute top-0 bottom-0 right-0 left-0 bg-black text-white opacity-50"
             ></div>
             <div
-              class="absolute top-0 bottom-0 right-0 left-0 text-white font-semibold flex justify-center items-center text-center"
+              class="transition-all duration-200 hover:scale-150 absolute top-0 bottom-0 right-0 left-0 text-white font-semibold flex justify-center items-center text-center "
             >
               Xem tất cả <br />
               11 Ảnh
@@ -45,22 +42,27 @@
             <Separator class="mb-4" />
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
               <div class="flex items-center gap-2">
-                <span>Loại phòng:</span><strong>{{ home.property_types.map((item) => item.name).join(', ') }}</strong>
+                <span>Loại phòng:</span
+                ><strong>{{
+                  home.property_types.map((item) => item.name).join(", ")
+                }}</strong>
               </div>
               <div class="flex items-center gap-2">
-                <span>Diện tích:</span><strong>{{ home.area}}m²</strong>
+                <span>Diện tích:</span><strong>{{ home.area }}m²</strong>
               </div>
               <div class="flex items-center gap-2">
                 <span>Số khách:</span><strong>{{ home.guest }} khách</strong>
               </div>
               <div class="flex items-center gap-2">
-                <span>Phòng ngủ:</span><strong>{{ home.bedrooms }} phòng</strong>
+                <span>Phòng ngủ:</span
+                ><strong>{{ home.bedrooms }} phòng</strong>
               </div>
               <div class="flex items-center gap-2">
                 <span>Giường ngủ:</span><strong>{{ home.bed }} giường</strong>
               </div>
               <div class="flex items-center gap-2">
-                <span>Phòng tắm:</span><strong>{{ home.bathrooms }} phòng</strong>
+                <span>Phòng tắm:</span
+                ><strong>{{ home.bathrooms }} phòng</strong>
               </div>
             </div>
           </div>
@@ -71,18 +73,26 @@
             <Separator class="mb-4" />
             <div>
               <p class="font-medium">2 giờ đầu</p>
-              <p class="text-orange-600 font-semibold">{{ formatCurrency(home.base_hours) }}</p>
-              <p class="text-sm text-gray-600">1 giờ tiếp theo + {{ formatCurrency(home.extra_hour) }}</p>
+              <p class="text-orange-600 font-semibold">
+                {{ formatCurrency(home.base_hours) }}
+              </p>
+              <p class="text-sm text-gray-600">
+                1 giờ tiếp theo + {{ formatCurrency(home.extra_hour) }}
+              </p>
             </div>
 
             <div>
               <p class="font-medium">Qua đêm (20:00 - 12:00)</p>
-              <p class="text-orange-600 font-semibold">{{ formatCurrency(home.per_night) }}</p>
+              <p class="text-orange-600 font-semibold">
+                {{ formatCurrency(home.per_night) }}
+              </p>
             </div>
 
             <div>
               <p class="font-medium">Thuê trong ngày (10:00 - 18:00)</p>
-              <p class="text-orange-600 font-semibold">{{ formatCurrency(home.per_day) }}</p>
+              <p class="text-orange-600 font-semibold">
+                {{ formatCurrency(home.per_day) }}
+              </p>
             </div>
           </div>
 
@@ -100,7 +110,11 @@
           <div class="p-4 border rounded-2xl shadow-sm bg-white mb-4">
             <h2 class="font-semibold text-lg mb-2">Dịch vụ</h2>
             <Separator class="mb-4" />
-            <p v-for="service in home.services" :key="service.id" class="italic font-xs">
+            <p
+              v-for="service in home.services"
+              :key="service.id"
+              class="italic font-xs"
+            >
               {{ service.title }}
             </p>
           </div>
@@ -223,7 +237,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DatePicker from "~/components/DatePicker.vue";
 import { AFTERNOON_TIMES, MORNING_TIMES } from "~/constants";
 import type { Properties, Response } from "~/types";
-import { formatCurrency } from '~/utils/string-helper';
+import { formatCurrency } from "~/utils/string-helper";
 
 const route = useRoute();
 const id = route.params.slug;
@@ -232,7 +246,7 @@ const config = useRuntimeConfig();
 
 const home = ref<Properties>({} as Properties);
 
-const apiUrl = `${config.public.apiBase}/properties/${id}`;
+const apiUrl = `${config.public.apiBase}/home/properties/${id}`;
 const { data } = await useFetch<Response<Properties>>(apiUrl);
 
 home.value = data.value?.data.items || ({} as Properties);
