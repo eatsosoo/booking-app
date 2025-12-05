@@ -129,7 +129,7 @@
     margin-bottom: 1.6em;
 }
 .format :where(blockquote):not(:where([class~="not-format"] *))::before {
-    content: "";
+    /* content: ""; */
     background-image: url("data:image/svg+xml,%0A%3Csvg width='32' height='24' viewBox='0 0 32 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.6893 24V14.1453C18.6893 6.54 23.664 1.38533 30.6667 -7.15256e-07L31.9933 2.868C28.7507 4.09066 26.6667 7.71867 26.6667 10.6667H32V24H18.6893ZM-9.53674e-07 24V14.1453C-9.53674e-07 6.54 4.99733 1.384 12 -7.15256e-07L13.328 2.868C10.084 4.09066 8 7.71867 8 10.6667L13.3107 10.6667V24H-9.53674e-07Z' fill='%239CA3AF'/%3E%3C/svg%3E%0A");
     background-repeat: no-repeat;
     color: var(--tw-format-quotes);
@@ -308,8 +308,8 @@
     vertical-align: top;
 }
 .format :where(p):not(:where([class~="not-format"] *)) {
-    margin-top: 1.25em;
-    margin-bottom: 1.25em;
+    /* margin-top: 1.25em;
+    margin-bottom: 1.25em; */
 }
 .format
     :where(blockquote > p:first-child):not(:where([class~="not-format"] *)) {
@@ -401,8 +401,8 @@
     line-height: 1.7142857;
 }
 .format-sm :where(p):not(:where([class~="not-format"] *)) {
-    margin-top: 1em;
-    margin-bottom: 1em;
+    /* margin-top: 1em;
+    margin-bottom: 1em; */
 }
 .format-sm :where([class~="lead"]):not(:where([class~="not-format"] *)) {
     font-size: 1.125em;
@@ -684,8 +684,8 @@
         line-height: 1.75;
     }
     .sm\:format-base :where(p):not(:where([class~="not-format"] *)) {
-        margin-top: 1.25em;
-        margin-bottom: 1.25em;
+        /* margin-top: 1.25em;
+        margin-bottom: 1.25em; */
     }
     .sm\:format-base
         :where([class~="lead"]):not(:where([class~="not-format"] *)) {
@@ -878,8 +878,8 @@
         line-height: 1.7777778;
     }
     .lg\:format-lg :where(p):not(:where([class~="not-format"] *)) {
-        margin-top: 1.3333333em;
-        margin-bottom: 1.3333333em;
+        /* margin-top: 1.3333333em;
+        margin-bottom: 1.3333333em; */
     }
     .lg\:format-lg
         :where([class~="lead"]):not(:where([class~="not-format"] *)) {

@@ -12,6 +12,8 @@ import MultiSelect from "~/components/common/MultiSelect.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
 import SearchSelect from "~/components/common/SearchSelect.vue";
 import { genSlug } from "~/utils/string-helper";
+import UploadImage from "~/components/common/UploadImage.vue";
+import UploadMultiImage from "~/components/common/UploadMultiImage.vue";
 
 definePageMeta({
   layout: "admin",
@@ -19,7 +21,6 @@ definePageMeta({
 });
 
 const config = useRuntimeConfig();
-const router = useRouter();
 const serviceOptions = ref<Option[]>([]);
 const categoryOptions = ref<Option2[]>([]);
 const post = ref<PropertiesForm>({
@@ -59,7 +60,6 @@ const savePost = async () => {
   pending.value = true;
 
   try {
-    // POST FAQ mới
     await request("/properties", {
       method: "POST",
       body: {
@@ -72,7 +72,7 @@ const savePost = async () => {
       description: "Phòng mới đã được thêm.",
     });
 
-    router.push("/admin/quan-ly-phong");
+    navigateTo("/admin/quan-ly-phong");
   } catch (err: any) {
     toast.error("Lỗi!", {
       description:

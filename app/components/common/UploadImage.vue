@@ -16,7 +16,7 @@
     <NuxtImg
       v-if="imageUrl"
       :src="imageUrl"
-      alt="Ảnh điểm đến"
+      alt="Ảnh phòng"
       class="w-72 h-48 mt-2"
     />
   </div>

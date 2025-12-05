@@ -37,7 +37,6 @@ const savePost = async () => {
 
     toast.success("Cập nhật bài viết thành công!");
     navigateTo("/admin/quan-ly-bai-viet");
-
   } catch (err: any) {
     toast.error("Cập nhật thất bại", {
       description: err?.data?.message || "Vui lòng thử lại."
@@ -89,7 +88,7 @@ const savePost = async () => {
       <div class="col-span-1 md:col-span-2">
         <Label for="content" class="mb-2 ml-1">Nội dung bài viết</Label>
         <ClientOnly>
-          <TinyEditor :model-value="post.content" />
+          <TinyEditor :model-value="post.content" @update:model-value="post.content = $event" />
         </ClientOnly>
       </div>
     </div>

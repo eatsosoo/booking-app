@@ -1,7 +1,6 @@
 <template>
   <section class="px-6 py-10 max-w-7xl mx-auto mt-4 min-h-[calc(100vh-415px)]">
-    <h1 class="uppercase text-3xl font-semibold mb-8">Quản trị</h1>
-    <div class="grid grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <div
         v-for="(block, index) in blocks"
         :key="index"
@@ -15,8 +14,9 @@
 
 <script setup lang="ts">
 definePageMeta({
-  middleware: ['auth']
-})
+  layout: "admin",
+  middleware: "auth",
+});
 
 const blocks = [
   {
@@ -24,7 +24,7 @@ const blocks = [
     url: "/admin/quan-ly-bai-viet",
   },
   {
-    label: "Quản lý điểm đến",
+    label: "Quản lý phòng",
     url: "/admin/quan-ly-phong",
   },
   {

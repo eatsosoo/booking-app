@@ -57,7 +57,7 @@
           <div class="grid grid-cols-2 gap-1 h-78">
             <NuxtImg
               :src="room.thumbnail"
-              class="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+              class="object-cover w-full h-78 transition-transform duration-300 hover:scale-105"
             />
             <div class="grid grid-cols-2 grid-rows-2 gap-1 overflow-hidden">
               <NuxtImg
