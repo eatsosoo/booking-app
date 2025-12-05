@@ -156,7 +156,7 @@ async function deleteItem(id: number) {
       description: "Dịch vụ đã được xoá thành công!",
     });
   } catch (error) {
-    toast.error("error", {
+    toast.error("Lỗi!", {
       description: `Có lỗi xảy ra, vui lòng thử lại sau: ${error} !`,
     });
   }

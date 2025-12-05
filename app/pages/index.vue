@@ -199,15 +199,6 @@ const config = useRuntimeConfig();
 // =========================
 const apiUrl = computed(() => `${config.public.apiBase}/home`);
 
-const { data: categories } = await useFetch<Response<Category[]>>(
-  `${apiUrl.value}/categories?page=1&per_page=6`,
-  {
-    server: true,
-    lazy: false,
-    immediate: true,
-  }
-);
-
 const { data: provinces } = await useFetch<Response<Region[]>>(
   `${apiUrl.value}/provinces`,
   {
@@ -217,7 +208,6 @@ const { data: provinces } = await useFetch<Response<Region[]>>(
   }
 );
 
-const projects = computed(() => categories.value?.data.items ?? []);
 
 const result = provinces.value?.data.items ?? [];
 const groupOptions: any = {};

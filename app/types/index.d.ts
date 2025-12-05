@@ -77,6 +77,15 @@ export interface Province {
   updated_at: string;
 }
 
+export interface SystemSetting {
+  home_page: string,
+  phone_number: string,
+  facebook_url: string,
+  tiktok_url: string,
+  zalo_url: string,
+  email: string
+}
+
 export interface Option {
   label: string;
   value: string | number;

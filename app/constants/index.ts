@@ -37,6 +37,8 @@ export const PROPERTY_TYPES = [
   },
 ];
 
+export const REGIONS = ["Miền Bắc", "Miền Trung", "Miền Nam"] as const;
+
 export const PLACE_GROUPS = [
   {
     label: "Khu vực Miền Bắc",
@@ -183,3 +185,83 @@ export const PAGINATION: Pagination = {
   has_more_pages: false,
 } as const;
 
+export const CONTENT_STYLE = `
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; 
+      font-size: 14px; 
+      line-height: 1.6;
+    }
+    h1, h2, h3, h4, h5, h6 { 
+      font-weight: 600; 
+      margin-top: 1em; 
+      margin-bottom: 0.5em;
+    }
+    blockquote { 
+      border-left: 4px solid #ccc; 
+      margin: 1em 0; 
+      padding-left: 1em; 
+      color: #666; 
+      font-style: italic;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1em;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    code {
+      background: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+    /* Horizontal Line styles */
+    hr {
+      height: 2px;
+      border: none;
+      background-color: #e0e0e0;
+      margin: 2em 0;
+    }
+    hr.hr-bold {
+      height: 4px;
+      background-color: #333;
+    }
+    hr.hr-dotted {
+      height: 2px;
+      background: repeating-linear-gradient(to right, #e0e0e0, #e0e0e0 4px, transparent 4px, transparent 8px);
+    }
+    hr.hr-dashed {
+      height: 2px;
+      background: repeating-linear-gradient(to right, #e0e0e0, #e0e0e0 8px, transparent 8px, transparent 16px);
+    }
+    hr.hr-double {
+      height: 6px;
+      border-top: 2px solid #e0e0e0;
+      border-bottom: 2px solid #e0e0e0;
+      background: transparent;
+    }
+    hr.hr-shadow {
+      height: 1px;
+      border: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      background: transparent;
+    }
+    /* Page Break indicator trong editor */
+    .mce-pagebreak {
+      border: 1px dashed #ccc;
+      background: #f9f9f9;
+      display: block;
+      width: 100%;
+      height: 12px;
+      margin: 2em 0;
+      cursor: default;
+    }
+    .mce-pagebreak:after {
+      content: "--- TRANG MỚI ---";
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      color: #999;
+      padding: 2px;
+    }
+  `;

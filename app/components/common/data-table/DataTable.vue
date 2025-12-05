@@ -50,7 +50,7 @@
               :model-value="column.getIsVisible()"
               @update:model-value="(value) => column.toggleVisibility(!!value)"
             >
-              {{ column.id }}
+              {{ column.columnDef.header }}
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
         </DropdownMenu>

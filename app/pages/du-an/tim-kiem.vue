@@ -27,16 +27,16 @@
       </p>
 
       <!-- Filter Buttons -->
-      <!-- <div class="flex flex-wrap gap-2 mt-6">
+      <div class="flex flex-wrap gap-2 mt-6">
         <Button
-          v-for="item in filters"
+          v-for="item in filterOptions"
           :key="item.value"
-          :variant="item.value === filterVal ? 'default' : 'outline'"
-          @click="filterVal = item.value"
+          :variant="item.value.toString() === filterVal ? 'default' : 'outline'"
+          @click="filterPage(item.value as number)"
         >
           {{ item.label }}
         </Button>
-      </div> -->
+      </div>
 
       <!-- Room List -->
       <div class="mt-10 space-y-8">
@@ -140,8 +140,10 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import PaginationPage from "~/components/PaginationPage.vue";
+import Button from "~/components/ui/button/Button.vue";
 // import Button from "~/components/ui/button/Button.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
+import { PROPERTY_TYPES } from "~/constants";
 import type { Pagination, Properties, Response } from "~/types";
 import { formatCurrency } from "~/utils/string-helper";
 
@@ -163,15 +165,20 @@ const page = computed(() => {
   return p < 1 ? 1 : p;
 });
 const perPage = computed(() => route.query.per_page || 12);
-const categoryId = computed(() => route.query.category_id || "");
-const propertyTypes = computed(() => route.query.property_types || "");
+const region = computed(() => route.query.region || "");
+const filterVal = ref<string>("");
 
+/** ------------------------------------------------
+ * API URL
+ */ 
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/home/properties?page=${page.value}&per_page=${perPage.value}&property_types=${propertyTypes.value}`
+    `${config.public.apiBase}/home/properties?page=${page.value}&per_page=${perPage.value}&region=${region.value}&property_types=${filterVal.value}`
 );
 
-const { data, pending, error, refresh } = await useAsyncData(
+const filterOptions = ref([{ label: "Tất cả", value: ""}, ...PROPERTY_TYPES])
+
+const { data } = await useAsyncData(
   () => `places-list-${apiUrl.value}`,
   () => $fetch<Response<Properties[]>>(apiUrl.value),
   { watch: [apiUrl] }
@@ -185,6 +192,16 @@ const updatePage = (newPage: number) => {
     },
   });
 };
+
+const filterPage = (value: number) => {
+  filterVal.value = value.toString();
+  router.push({
+    query: {
+      ...route.query,
+      property_types: value,
+    },
+  });
+}
 
 watchEffect(() => {
   if (data.value) {

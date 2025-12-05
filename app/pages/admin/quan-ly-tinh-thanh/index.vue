@@ -6,15 +6,11 @@ import type {
   SortingState,
   VisibilityState,
 } from "@tanstack/vue-table";
-import {
-  PlusSquareIcon,
-} from "lucide-vue-next";
+import { PlusSquareIcon } from "lucide-vue-next";
 import { h, ref } from "vue";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import type { Properties } from "~/types";
+import type { Province } from "~/types";
 import { toast } from "vue-sonner";
-import type { SelectOption } from "~/types/booking";
 import DataTable from "~/components/common/data-table/DataTable.vue";
 import ActionDropdown from "~/components/common/data-table/ActionDropdown.vue";
 
@@ -22,7 +18,6 @@ definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
-
 const { request } = useApi();
 
 // STATE
@@ -38,10 +33,10 @@ const expanded = ref<ExpandedState>({});
 
 // --- GET LIST CATEGORY ---
 const { data, refresh, pending } = await useAsyncData(
-  "properties-list",
+  "provinces-list",
   () =>
-    request<Properties[]>(
-      `/properties?page=${page.value}&search=${search.value}`
+    request<Province[]>(
+      `/provinces?page=${page.value}&search=${search.value}`
     ),
   {
     watch: [page, search],
@@ -49,116 +44,67 @@ const { data, refresh, pending } = await useAsyncData(
 );
 
 // computed
-const rooms = computed(() => data.value?.data.items ?? []);
+const provinces = computed(() => data.value?.data.items ?? []);
 const pagination = computed(
   () => data.value?.result?.pagination ?? { current_page: 1, last_page: 1 }
 );
 
 // COLUMNS DEFINITION
-const columns: ColumnDef<Properties>[] = [
-  {
-    id: "select",
-    header: ({ table }) =>
-      h(Checkbox, {
-        modelValue:
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate"),
-        "onUpdate:modelValue": (value) =>
-          table.toggleAllPageRowsSelected(!!value),
-        ariaLabel: "Select all",
-      }),
-    cell: ({ row }) =>
-      h(Checkbox, {
-        modelValue: row.getIsSelected(),
-        "onUpdate:modelValue": (value) => row.toggleSelected(!!value),
-        ariaLabel: "Select row",
-      }),
-    enableSorting: false,
-    enableHiding: false,
-  },
+const columns: ColumnDef<Province>[] = [
+  // {
+  //   id: "select",
+  //   header: ({ table }) =>
+  //     h(Checkbox, {
+  //       modelValue:
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate"),
+  //       "onUpdate:modelValue": (value) =>
+  //         table.toggleAllPageRowsSelected(!!value),
+  //       ariaLabel: "Select all",
+  //     }),
+  //   cell: ({ row }) =>
+  //     h(Checkbox, {
+  //       modelValue: row.getIsSelected(),
+  //       "onUpdate:modelValue": (value) => row.toggleSelected(!!value),
+  //       ariaLabel: "Select row",
+  //     }),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
+    cell: ({ row }) =>
+      h("div", { class: "capitalize" }, row.getValue("id")),
     enableSorting: false,
   },
   {
     accessorKey: "name",
     header: "Tên",
-    cell: ({ row }) => h("div", { class: "capitalize max-w-50 text-wrap" }, row.getValue("name")),
+    cell: ({ row }) =>
+      h("div", { class: "capitalize" }, row.getValue("name")),
     enableSorting: false,
   },
   {
-    accessorKey: "address",
-    header: "Địa chỉ",
+    accessorKey: "region",
+    header: "Khu vực",
     cell: ({ row }) =>
-      h("div", { class: "capitalize max-w-50 text-wrap" }, row.getValue("address")),
+      h("div", { class: "capitalize" }, row.getValue("region")),
+    enableSorting: false,
   },
   {
-    accessorKey: "property_types",
-    header: "Hạng mục",
+    accessorKey: "created_at",
+    header: "Ngày tạo",
     cell: ({ row }) =>
-      h(
-        "div",
-        { class: "capitalize" },
-        h(
-          "div",
-          { class: "capitalize" },
-          (row.getValue("property_types") as SelectOption[])
-            .map((type) => type.name)
-            .join(" | ")
-        )
-      ),
+      h("div", { class: "capitalize" }, convertUTC(row.getValue("created_at"))),
+    enableSorting: false,
   },
   {
-    accessorKey: "area",
-    header: "Diện tích (m2)",
+    accessorKey: "updated_at",
+    header: "Ngày cập nhật",
     cell: ({ row }) =>
-      h(
-        "div",
-        { class: "capitalize" },
-        h("div", { class: "capitalize" }, row.getValue("area"))
-      ),
-  },
-  {
-    accessorKey: "bedrooms",
-    header: "Phòng ngủ",
-    cell: ({ row }) =>
-      h(
-        "div",
-        { class: "capitalize" },
-        h("div", { class: "capitalize" }, row.getValue("bedrooms"))
-      ),
-  },
-  {
-    accessorKey: "bathrooms",
-    header: "Phòng tắm",
-    cell: ({ row }) =>
-      h(
-        "div",
-        { class: "capitalize" },
-        h("div", { class: "capitalize" }, row.getValue("bathrooms"))
-      ),
-  },
-  {
-    accessorKey: "bed",
-    header: "Giường",
-    cell: ({ row }) =>
-      h(
-        "div",
-        { class: "capitalize" },
-        h("div", { class: "capitalize" }, row.getValue("bed"))
-      ),
-  },
-  {
-    accessorKey: "guest",
-    header: "Sức chứa",
-    cell: ({ row }) =>
-      h(
-        "div",
-        { class: "capitalize" },
-        h("div", { class: "lowercase" }, row.getValue("bed") + " khách")
-      ),
+      h("div", { class: "capitalize" }, convertUTC(row.getValue("updated_at"))),
+    enableSorting: false,
   },
   {
     id: "actions",
@@ -167,10 +113,8 @@ const columns: ColumnDef<Properties>[] = [
       const post = row.original;
       return h(ActionDropdown, {
         itemId: post.id,
-        showDuplicate: true,
-        editLink: `/admin/quan-ly-phong/${post.id}`,
+        editLink: `/admin/quan-ly-tinh-thanh/${post.id}`,
         onDelete: () => deleteItem(post.id),
-        onDuplicate: () => duplicateItem(),
         onCopy: () => {
           navigator.clipboard.writeText(post.id.toString());
           toast.success("Đã sao chép ID");
@@ -182,34 +126,8 @@ const columns: ColumnDef<Properties>[] = [
 
 async function deleteItem(id: number) {
   try {
-    await request(`/properties/${id}`, {
+    await request(`/provinces/${id}`, {
       method: "DELETE",
-    });
-
-    await refresh();
-    
-    toast.success("Thành công", {
-      description: "Sao chép phòng thành công!",
-    });
-  } catch (error) {
-    toast.error("Lỗi!", {
-      description: `Có lỗi xảy ra, vui lòng thử lại sau: ${error} !`,
-    });
-  }
-}
-
-async function duplicateItem() {
-  const ids = Object.keys(rowSelection.value);
-  if (ids.length < 1) {
-    toast.warning("Cảnh báo!", {
-      description: `Bạn chưa chọn mục để sao chép.`,
-    });
-    return;
-  }
-
-  try {
-    await request(`/properties/copy`, {
-      method: "POST",
     });
 
     await refresh();
@@ -230,7 +148,7 @@ async function duplicateItem() {
     <h1 class="font-semibold text-2xl">Quản lý danh sách phòng</h1>
 
     <DataTable
-      :data="rooms"
+      :data="provinces"
       :columns="columns"
       :sorting="sorting"
       :column-filters="columnFilters"
@@ -239,17 +157,18 @@ async function duplicateItem() {
       :expanded="expanded"
       :search-value="search"
       :loading="pending"
+      :show-selection-info="false"
       search-placeholder="Tìm kiếm theo tiêu đề..."
       @update:sorting="sorting = $event"
       @update:column-filters="columnFilters = $event"
       @update:column-visibility="columnVisibility = $event"
-      @update:row-selection="rowSelection = $event; console.log($event)"
+      @update:row-selection="rowSelection = $event"
       @update:expanded="expanded = $event"
       @update:search="search = $event"
     >
       <!-- Left Actions Slot -->
       <template #left-actions>
-        <NuxtLink to="/admin/quan-ly-phong/them-moi">
+        <NuxtLink to="/admin/quan-ly-tinh-thanh/them-moi">
           <Button>
             <PlusSquareIcon class="mr-2 h-4 w-4" />
             Tạo mới

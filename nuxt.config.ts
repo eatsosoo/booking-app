@@ -9,8 +9,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.API_BASE_URL, // client + server
-      mediaUrl: process.env.MEDIA_BASE_URL,
+      apiBase: process.env.NUXT_API_BASE_URL, // client + server
+      mediaUrl: process.env.NUXT_MEDIA_BASE_URL,
+      tinymceKey: process.env.NUXT_TINYMCE_API_KEY,
     }
   },
 
@@ -51,8 +52,21 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxt/ui',
     'shadcn-nuxt',
-    '@nuxt/fonts'
+    '@nuxt/fonts',
+    '@vee-validate/nuxt',
   ],
+
+  veeValidate: {
+    // disable or enable auto imports
+    autoImports: true,
+    // Use different names for components
+    componentNames: {
+      Form: 'VeeForm',
+      Field: 'VeeField',
+      FieldArray: 'VeeFieldArray',
+      ErrorMessage: 'VeeErrorMessage',
+    },
+  },
 
   css: ['~/assets/css/tailwind.css', '~/assets/css/reverse-format.css', '@fortawesome/fontawesome-svg-core/styles.css'],
   vite: {
