@@ -44,7 +44,7 @@
           </NuxtLink>
         </div>
 
-        <Button type="submit" class="w-full"> Đăng nhập </Button>
+        <Button type="submit" :loading="loading" class="w-full"> Đăng nhập </Button>
       </form>
     </div>
 
@@ -77,12 +77,15 @@ const { login } = useAuth();
 const email = ref("");
 const password = ref("");
 const remember = ref(false);
+const loading = ref(false);
 
 const handleLogin = async () => {
   if (!email.value || !password.value) {
     toast.error("Vui lòng nhập đầy đủ thông tin");
     return;
   }
+
+  loading.value = true;
 
   try {
     const result = await login(email.value, password.value);
@@ -108,7 +111,8 @@ const handleLogin = async () => {
     toast.error("Đăng nhập thất bại **", {
       description: "Có lỗi xảy ra, vui lòng thử lại!",
     });
+  } finally {
+    loading.value = false
   }
 };
-
 </script>

@@ -9,6 +9,7 @@ import Textarea from "~/components/ui/textarea/Textarea.vue";
 import type { PostForm } from "~/types/booking";
 import { genSlug } from "~/utils/string-helper";
 import UploadImage from "~/components/common/UploadImage.vue";
+import EditorCustom from "~/components/common/EditorCustom.vue";
 
 definePageMeta({
   layout: "admin",
@@ -108,7 +109,7 @@ const handleContentChange = (val: string) => {
       <div class="col-span-1 md:col-span-2">
         <Label for="content" class="mb-2 ml-1">Nội dung bài viết</Label>
         <ClientOnly>
-          <TinyEditor
+          <EditorCustom
             :model-value="post.content"
             @update:model-value="handleContentChange"
           />

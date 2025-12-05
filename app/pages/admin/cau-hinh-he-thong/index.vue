@@ -271,7 +271,7 @@ const saveSettings = handleSubmit(async (values) => {
           name="home_page"
         >
           <ClientOnly>
-            <CommonEditorCustom :model-value="field.value" :api-key="config.public.tinymceKey" @update:model-value="field.onChange"/>
+            <CommonEditorCustom :model-value="field.value" @update:model-value="field.onChange"/>
           </ClientOnly>
         </VeeField>
         <span 

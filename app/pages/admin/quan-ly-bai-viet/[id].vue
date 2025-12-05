@@ -6,6 +6,7 @@ import Label from "~/components/ui/label/Label.vue";
 import type { Post } from "~/types";
 import { toast } from "vue-sonner";
 import { useApi } from "~/composables/useApi";
+import EditorCustom from "~/components/common/EditorCustom.vue";
 
 definePageMeta({
   layout: "admin",
@@ -88,7 +89,7 @@ const savePost = async () => {
       <div class="col-span-1 md:col-span-2">
         <Label for="content" class="mb-2 ml-1">Nội dung bài viết</Label>
         <ClientOnly>
-          <TinyEditor :model-value="post.content" @update:model-value="post.content = $event" />
+          <EditorCustom :model-value="post.content" @update:model-value="post.content = $event" />
         </ClientOnly>
       </div>
     </div>

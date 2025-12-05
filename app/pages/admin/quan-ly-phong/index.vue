@@ -199,23 +199,33 @@ async function deleteItem(id: number) {
 }
 
 async function duplicateItem() {
-  const ids = Object.keys(rowSelection.value);
-  if (ids.length < 1) {
+  const indexSelected = Object.keys(rowSelection.value);
+  if (indexSelected.length < 1) {
     toast.warning("Cảnh báo!", {
       description: `Bạn chưa chọn mục để sao chép.`,
     });
     return;
   }
 
+  const ids: number[] = [];
+  rooms.value.forEach((item, index) => {
+    if (indexSelected.includes(index.toString())) {
+      ids.push(item.id)
+    }
+  })
+
   try {
     await request(`/properties/copy`, {
       method: "POST",
+      body: {
+        id: ids
+      }
     });
 
     await refresh();
     
     toast.success("Thành công", {
-      description: "Địa điểm đã được xoá thành công!",
+      description: "Phòng đã được sao chép thành công!",
     });
   } catch (error) {
     toast.error("Lỗi!", {

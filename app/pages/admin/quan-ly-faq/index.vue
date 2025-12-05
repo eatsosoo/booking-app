@@ -34,10 +34,10 @@ const expanded = ref<ExpandedState>({});
 
 // --- GET LIST CATEGORY ---
 const { data, refresh, pending } = await useAsyncData(
-  "services-list",
+  "faqs-list",
   () =>
     request<Faq[]>(
-      `/services?page=${page.value}&search=${search.value}`
+      `/faqs?page=${page.value}&search=${search.value}`
     ),
   {
     watch: [page, search],
@@ -140,7 +140,7 @@ async function deleteItem(id: number) {
     >
       <!-- Left Actions Slot -->
       <template #left-actions>
-        <NuxtLink to="/admin/quan-ly-bai-viet/them-moi">
+        <NuxtLink to="/admin/quan-ly-faq/them-moi">
           <Button>
             <PlusSquareIcon class="mr-2 h-4 w-4" />
             Tạo mới
@@ -159,7 +159,7 @@ async function deleteItem(id: number) {
       <template #empty>
         <div class="text-center py-12">
           <div class="text-muted-foreground mb-2">Không có bài viết nào</div>
-          <NuxtLink to="/admin/quan-ly-bai-viet/them-moi">
+          <NuxtLink to="/admin/quan-ly-faq/them-moi">
             <Button variant="outline">
               <PlusSquareIcon class="mr-2 h-4 w-4" />
               Tạo bài viết đầu tiên

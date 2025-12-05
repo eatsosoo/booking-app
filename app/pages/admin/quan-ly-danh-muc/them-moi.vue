@@ -6,6 +6,7 @@ import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
 import type { CategoryForm } from "~/types/booking";
+import UploadImage from "~/components/common/UploadImage.vue";
 
 definePageMeta({
   layout: "admin",

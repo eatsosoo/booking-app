@@ -14,6 +14,7 @@ import SearchSelect from "~/components/common/SearchSelect.vue";
 import { genSlug } from "~/utils/string-helper";
 import UploadImage from "~/components/common/UploadImage.vue";
 import UploadMultiImage from "~/components/common/UploadMultiImage.vue";
+import EditorCustom from "~/components/common/EditorCustom.vue";
 
 definePageMeta({
   layout: "admin",
@@ -119,6 +120,27 @@ post.value.category_id = categoryOptions.value[0]?.value || 1;
         />
       </div>
 
+      <!-- Hạng mục -->
+      <div>
+        <Label for="property_types" class="mb-2 ml-1">Hạng mục</Label>
+        <MultiSelect
+          v-model="post.property_types"
+          :options="PROPERTY_TYPES"
+          placeholder="Chọn hạng mục..."
+          class="w-64"
+        />
+      </div>
+
+      <!-- Loại -->
+      <div>
+        <Label for="type" class="mb-2 ml-1">Loại dự án</Label>
+        <SearchSelect
+          :model-value="post.category_id.toString()"
+          :frameworks="categoryOptions"
+          @update:model-value="post.category_id = $event"
+        />
+      </div>
+
       <!-- Address -->
       <div>
         <Label for="address" class="mb-2 ml-1">Địa chỉ</Label>
@@ -137,16 +159,6 @@ post.value.category_id = categoryOptions.value[0]?.value || 1;
           v-model="post.area"
           type="number"
           placeholder="Nhập diện tích..."
-        />
-      </div>
-
-      <!-- Loại -->
-      <div>
-        <Label for="type" class="mb-2 ml-1">Loại dự án</Label>
-        <SearchSelect
-          :model-value="post.category_id.toString()"
-          :frameworks="categoryOptions"
-          @update:model-value="post.category_id = $event"
         />
       </div>
     </div>
@@ -246,21 +258,6 @@ post.value.category_id = categoryOptions.value[0]?.value || 1;
           placeholder="Nhập số tiền..."
         />
       </div>
-    </div>
-
-    <Separator class="my-6" />
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Hạng mục -->
-      <div>
-        <Label for="property_types" class="mb-2 ml-1">Hạng mục</Label>
-        <MultiSelect
-          v-model="post.property_types"
-          :options="PROPERTY_TYPES"
-          placeholder="Chọn hạng mục..."
-          class="w-64"
-        />
-      </div>
 
       <!-- Dịch vụ đi kèm -->
       <div>
@@ -272,7 +269,11 @@ post.value.category_id = categoryOptions.value[0]?.value || 1;
           class="w-64"
         />
       </div>
+    </div>
 
+    <Separator class="my-6" />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Description -->
       <div>
         <Label for="description" class="mb-2 ml-1">Mô tả</Label>
@@ -305,7 +306,7 @@ post.value.category_id = categoryOptions.value[0]?.value || 1;
       <div class="col-span-1 md:col-span-2">
         <Label for="content" class="mb-2 ml-1">Nội dung giới thiệu</Label>
         <ClientOnly>
-          <TinyEditor
+          <EditorCustom
             :model-value="post.content"
             @update:model-value="handleContentChange"
           />

@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import Editor from "@tinymce/tinymce-vue";
 import { CONTENT_STYLE } from "~/constants";
 
@@ -20,17 +20,16 @@ interface Props {
   height?: number;
   placeholder?: string;
   disabled?: boolean;
-  apiKey?: string;
 }
 
 const config = useRuntimeConfig();
+const apiKey = config.public.tinymceKey;
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: "",
   height: 720,
   placeholder: "Nhập nội dung...",
   disabled: false,
-  apiKey: "no-api-key",
 });
 
 const emit = defineEmits<{

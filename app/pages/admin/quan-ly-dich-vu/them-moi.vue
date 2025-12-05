@@ -16,6 +16,7 @@ import SelectItem from "~/components/ui/select/SelectItem.vue";
 import { PUBLISHED_STATUSES, SERVICE_TYPES } from "~/constants";
 import { genSlug } from "~/utils/string-helper";
 import type { Service } from "~/types";
+import UploadImage from "~/components/common/UploadImage.vue";
 
 definePageMeta({
   layout: "admin",

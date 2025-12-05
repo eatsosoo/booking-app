@@ -27,6 +27,9 @@ import {
       <MenubarTrigger>
         <NuxtLink to="/admin/quan-ly-danh-muc">Dự án</NuxtLink>
       </MenubarTrigger>
+      <MenubarTrigger>
+        <NuxtLink to="/admin/cau-hinh-he-thong">Hệ thống</NuxtLink>
+      </MenubarTrigger>
     </MenubarMenu>
   </Menubar>
 </template>

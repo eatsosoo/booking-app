@@ -48,7 +48,7 @@ const handleImageUpload = async (e: Event) => {
     const formData = new FormData();
     formData.append("media", file);
 
-    const { data, error } = await useFetch<Response<string>>(
+    const data = await $fetch<Response<string>>(
       `${config.public.apiBase}/home/upload`,
       {
         method: "POST",
@@ -56,15 +56,7 @@ const handleImageUpload = async (e: Event) => {
       }
     );
 
-    if (error.value) {
-      toast.error(toastTitle, {
-        description:
-          error.value?.data.message || "Có lỗi xảy ra khi tải ảnh lên!",
-      });
-      return;
-    }
-
-    imageUrl.value = data.value?.data.items[0] ?? "";
+    imageUrl.value = data.data.items[0] ?? "";
     emit("uploaded", imageUrl.value);
     toast.success(toastTitle, {
       description: "Ảnh đã được tải lên thành công!",

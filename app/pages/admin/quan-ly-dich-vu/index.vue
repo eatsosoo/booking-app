@@ -194,7 +194,7 @@ watch(
     >
       <!-- Left Actions Slot -->
       <template #left-actions>
-        <NuxtLink to="/admin/quan-ly-bai-viet/them-moi">
+        <NuxtLink to="/admin/quan-ly-dich-vu/them-moi">
           <Button>
             <PlusSquareIcon class="mr-2 h-4 w-4" />
             Tạo mới
@@ -213,7 +213,7 @@ watch(
       <template #empty>
         <div class="text-center py-12">
           <div class="text-muted-foreground mb-2">Không có bài viết nào</div>
-          <NuxtLink to="/admin/quan-ly-bai-viet/them-moi">
+          <NuxtLink to="/admin/quan-ly-dich-vu/them-moi">
             <Button variant="outline">
               <PlusSquareIcon class="mr-2 h-4 w-4" />
               Tạo bài viết đầu tiên
