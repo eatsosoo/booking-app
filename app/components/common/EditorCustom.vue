@@ -27,7 +27,7 @@ const config = useRuntimeConfig();
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: "",
-  height: 1000,
+  height: 720,
   placeholder: "Nhập nội dung...",
   disabled: false,
   apiKey: "no-api-key",
@@ -134,17 +134,39 @@ const editorConfig = ref({
   file_picker_types: "image",
   images_upload_url: config.public.mediaUrl,
   images_upload_handler: async (blobInfo: any) => {
-    // Xử lý upload image (tùy chọn)
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        resolve(reader.result as string);
-      };
-      reader.onerror = () => {
-        reject("Upload failed");
-      };
-      reader.readAsDataURL(blobInfo.blob());
-    });
+    // Kiểm tra blob không rỗng
+    const file = blobInfo.blob();
+    const fileName = blobInfo.filename();
+
+    // Kiểm tra file trống
+    if (!file || file.size === 0) {
+      return Promise.reject("File ảnh trống hoặc không hợp lệ (x-empty)");
+    }
+    // Kiểm tra định dạng mime
+    if (!file.type.match(/^image\//)) {
+      return Promise.reject("Chỉ hỗ trợ upload ảnh (image/*)");
+    }
+
+    // Gửi file lên API
+    const formData = new FormData();
+    formData.append("media", file, fileName);
+
+    try {
+      const response = await fetch(`${config.public.apiBase}/home/upload`, {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json();
+
+      // Kiểm tra kết quả từ API trả về
+      if (result.statusCode === 200 && result.data?.items) {
+        return Promise.resolve(result.data.items[0]); // Trả url ảnh lên cho TinyMCE
+      } else {
+        return Promise.reject(result.message || "Upload thất bại");
+      }
+    } catch (err: any) {
+      return Promise.reject("Lỗi upload: " + (err.message || err));
+    }
   },
   //   image_class_list: [
   //     { title: "Không", value: "" },

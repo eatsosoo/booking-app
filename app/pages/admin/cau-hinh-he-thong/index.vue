@@ -111,6 +111,7 @@ const saveSettings = handleSubmit(async (values) => {
     toast.success("Cấu hình hệ thống", {
       description: "Đã được cập nhật.",
     });
+    meta.value.dirty = false;
   } catch (err: any) {
     toast.error("Lỗi!", {
       description: err?.data?.message ?? err?.message ?? "Có lỗi xảy ra!",
@@ -270,11 +271,7 @@ const saveSettings = handleSubmit(async (values) => {
           name="home_page"
         >
           <ClientOnly>
-            <!-- <TinyEditor
-              :model-value="field.value"
-              @update:model-value="field.onChange"
-            /> -->
-            <CommonEditorCustom :api-key="config.public.tinymceKey" />
+            <CommonEditorCustom :model-value="field.value" :api-key="config.public.tinymceKey" @update:model-value="field.onChange"/>
           </ClientOnly>
         </VeeField>
         <span 
