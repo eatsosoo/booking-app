@@ -14,6 +14,7 @@ definePageMeta({
   middleware: "auth",
 });
 
+const config = useRuntimeConfig()
 const route = useRoute();
 const { request } = useApi();
 const id = route.params.id;
@@ -269,10 +270,11 @@ const saveSettings = handleSubmit(async (values) => {
           name="home_page"
         >
           <ClientOnly>
-            <TinyEditor
+            <!-- <TinyEditor
               :model-value="field.value"
               @update:model-value="field.onChange"
-            />
+            /> -->
+            <CommonEditorCustom :api-key="config.public.tinymceKey" />
           </ClientOnly>
         </VeeField>
         <span 

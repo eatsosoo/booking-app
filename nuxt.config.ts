@@ -9,8 +9,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.API_BASE_URL, // client + server
-      mediaUrl: process.env.MEDIA_BASE_URL,
+      apiBase: process.env.NUXT_API_BASE_URL, // client + server
+      mediaUrl: process.env.NUXT_MEDIA_BASE_URL,
+      tinymceKey: process.env.NUXT_TINYMCE_API_KEY,
     }
   },
 
