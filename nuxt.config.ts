@@ -51,8 +51,21 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxt/ui',
     'shadcn-nuxt',
-    '@nuxt/fonts'
+    '@nuxt/fonts',
+    '@vee-validate/nuxt',
   ],
+
+  veeValidate: {
+    // disable or enable auto imports
+    autoImports: true,
+    // Use different names for components
+    componentNames: {
+      Form: 'VeeForm',
+      Field: 'VeeField',
+      FieldArray: 'VeeFieldArray',
+      ErrorMessage: 'VeeErrorMessage',
+    },
+  },
 
   css: ['~/assets/css/tailwind.css', '~/assets/css/reverse-format.css', '@fortawesome/fontawesome-svg-core/styles.css'],
   vite: {

@@ -39,5 +39,13 @@ const blocks = [
     label: "Quản lý dự án",
     url: "/admin/quan-ly-danh-muc",
   },
+  {
+    label: "Quản lý tỉnh thành",
+    url: "/admin/quan-ly-tinh-thanh",
+  },
+  {
+    label: "Cấu hình hệ thống",
+    url: "/admin/cau-hinh-he-thong",
+  }
 ];
 </script>
