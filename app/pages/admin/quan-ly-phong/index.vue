@@ -117,8 +117,10 @@ const columns: ColumnDef<Properties>[] = [
       const post = row.original;
       return h(ActionDropdown, {
         itemId: post.id,
+        showDuplicate: true,
         editLink: `/admin/quan-ly-phong/${post.id}`,
         onDelete: () => deleteItem(post.id),
+        onDuplicate: () => duplicateItem(),
         onCopy: () => {
           navigator.clipboard.writeText(post.id.toString());
           toast.success("Đã sao chép ID");
@@ -137,10 +139,36 @@ async function deleteItem(id: number) {
     await refresh();
     
     toast.success("Thành công", {
+      description: "Sao chép phòng thành công!",
+    });
+  } catch (error) {
+    toast.error("Lỗi!", {
+      description: `Có lỗi xảy ra, vui lòng thử lại sau: ${error} !`,
+    });
+  }
+}
+
+async function duplicateItem() {
+  const ids = Object.keys(rowSelection.value);
+  if (ids.length < 1) {
+    toast.warning("Cảnh báo!", {
+      description: `Bạn chưa chọn mục để sao chép.`,
+    });
+    return;
+  }
+
+  try {
+    await request(`/properties/copy`, {
+      method: "POST",
+    });
+
+    await refresh();
+    
+    toast.success("Thành công", {
       description: "Địa điểm đã được xoá thành công!",
     });
   } catch (error) {
-    toast.error("error", {
+    toast.error("Lỗi!", {
       description: `Có lỗi xảy ra, vui lòng thử lại sau: ${error} !`,
     });
   }
@@ -165,7 +193,7 @@ async function deleteItem(id: number) {
       @update:sorting="sorting = $event"
       @update:column-filters="columnFilters = $event"
       @update:column-visibility="columnVisibility = $event"
-      @update:row-selection="rowSelection = $event"
+      @update:row-selection="rowSelection = $event; console.log($event)"
       @update:expanded="expanded = $event"
       @update:search="search = $event"
     >
