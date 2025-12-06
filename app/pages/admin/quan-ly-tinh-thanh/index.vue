@@ -9,7 +9,7 @@ import type {
 import { PlusSquareIcon } from "lucide-vue-next";
 import { h, ref } from "vue";
 import { Button } from "@/components/ui/button";
-import type { Province } from "~/types";
+import type { Faq } from "~/types";
 import { toast } from "vue-sonner";
 import DataTable from "~/components/common/data-table/DataTable.vue";
 import ActionDropdown from "~/components/common/data-table/ActionDropdown.vue";
@@ -33,9 +33,9 @@ const expanded = ref<ExpandedState>({});
 
 // --- GET LIST CATEGORY ---
 const { data, refresh, pending } = await useAsyncData(
-  "provinces-list",
+  "menu-list",
   () =>
-    request<Province[]>(
+    request<Faq[]>(
       `/provinces?page=${page.value}&search=${search.value}`
     ),
   {
@@ -44,13 +44,13 @@ const { data, refresh, pending } = await useAsyncData(
 );
 
 // computed
-const provinces = computed(() => data.value?.data.items ?? []);
+const faqs = computed(() => data.value?.data.items ?? []);
 const pagination = computed(
   () => data.value?.result?.pagination ?? { current_page: 1, last_page: 1 }
 );
 
 // COLUMNS DEFINITION
-const columns: ColumnDef<Province>[] = [
+const columns: ColumnDef<Faq>[] = [
   // {
   //   id: "select",
   //   header: ({ table }) =>
@@ -133,7 +133,7 @@ async function deleteItem(id: number) {
     await refresh();
     
     toast.success("Thành công", {
-      description: "Địa điểm đã được xoá thành công!",
+      description: "Menu đã được xoá thành công!",
     });
   } catch (error) {
     toast.error("Lỗi!", {
@@ -145,10 +145,10 @@ async function deleteItem(id: number) {
 
 <template>
   <section>
-    <h1 class="font-semibold text-2xl">Quản lý danh sách phòng</h1>
+    <h1 class="font-semibold text-2xl">Quản lý danh sách Menu</h1>
 
     <DataTable
-      :data="provinces"
+      :data="faqs"
       :columns="columns"
       :sorting="sorting"
       :column-filters="columnFilters"
@@ -157,7 +157,6 @@ async function deleteItem(id: number) {
       :expanded="expanded"
       :search-value="search"
       :loading="pending"
-      :show-selection-info="false"
       search-placeholder="Tìm kiếm theo tiêu đề..."
       @update:sorting="sorting = $event"
       @update:column-filters="columnFilters = $event"
@@ -186,11 +185,11 @@ async function deleteItem(id: number) {
       <!-- Empty State Slot -->
       <template #empty>
         <div class="text-center py-12">
-          <div class="text-muted-foreground mb-2">Không có bài viết nào</div>
-          <NuxtLink to="/admin/quan-ly-bai-viet/them-moi">
+          <div class="text-muted-foreground mb-2">Không có Menu nào</div>
+          <NuxtLink to="/admin/quan-ly-tinh-thanh/them-moi">
             <Button variant="outline">
               <PlusSquareIcon class="h-4 w-4" />
-              Tạo bài viết đầu tiên
+              Tạo Menu đầu tiên
             </Button>
           </NuxtLink>
         </div>

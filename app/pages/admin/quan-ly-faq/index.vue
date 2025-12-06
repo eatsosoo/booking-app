@@ -158,11 +158,11 @@ async function deleteItem(id: number) {
       <!-- Empty State Slot -->
       <template #empty>
         <div class="text-center py-12">
-          <div class="text-muted-foreground mb-2">Không có bài viết nào</div>
+          <div class="text-muted-foreground mb-2">Không có FAQ nào</div>
           <NuxtLink to="/admin/quan-ly-faq/them-moi">
             <Button variant="outline">
               <PlusSquareIcon class="h-4 w-4" />
-              Tạo bài viết đầu tiên
+              Tạo FAQ đầu tiên
             </Button>
           </NuxtLink>
         </div>

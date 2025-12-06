@@ -212,11 +212,11 @@ watch(
       <!-- Empty State Slot -->
       <template #empty>
         <div class="text-center py-12">
-          <div class="text-muted-foreground mb-2">Không có bài viết nào</div>
+          <div class="text-muted-foreground mb-2">Không có dịch vụ nào</div>
           <NuxtLink to="/admin/quan-ly-dich-vu/them-moi">
             <Button variant="outline">
               <PlusSquareIcon class="h-4 w-4" />
-              Tạo bài viết đầu tiên
+              Tạo dịch vụ đầu tiên
             </Button>
           </NuxtLink>
         </div>

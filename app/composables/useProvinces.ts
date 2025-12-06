@@ -2,7 +2,7 @@ import type { Province, Response } from "~/types"
 
 export const useProvinces = () => {
   const config = useRuntimeConfig();
-  const { data: provinces, pending, refresh, error } = useFetch<Response<Province[]>>(`${config.public.apiBase}/home/provinces`, {
+  const { data: provinces, pending, refresh, error } = useFetch<Response<Province[]>>(`${config.public.apiBase}/home/provinces?per_page=100`, {
     server: true,
     lazy: true,
   })

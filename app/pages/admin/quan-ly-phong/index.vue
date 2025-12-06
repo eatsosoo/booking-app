@@ -277,11 +277,11 @@ async function duplicateItem() {
       <!-- Empty State Slot -->
       <template #empty>
         <div class="text-center py-12">
-          <div class="text-muted-foreground mb-2">Không có bài viết nào</div>
+          <div class="text-muted-foreground mb-2">Không có phòng nào</div>
           <NuxtLink to="/admin/quan-ly-bai-viet/them-moi">
             <Button variant="outline">
               <PlusSquareIcon class="h-4 w-4" />
-              Tạo bài viết đầu tiên
+              Tạo phòng đầu tiên
             </Button>
           </NuxtLink>
         </div>
