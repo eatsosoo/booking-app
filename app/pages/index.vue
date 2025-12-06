@@ -1,5 +1,37 @@
 <template>
-  <div class="overflow-x-hidden">
+  <div class="overflow-x-hidden relative">
+    <div
+      v-if="token && showActions"
+      class="fixed bottom-0 p-4 flex justify-center shadow-md bg-blue-950 w-full z-50 space-x-2 transition-all duration-300 ease-in-out"
+      :class="{
+        'transform translate-y-0 opacity-100': showActions,
+        'transform translate-y-full opacity-0': !showActions,
+      }"
+    >
+      <Button
+        v-if="!enableEditor"
+        :loading="updating"
+        @click="enableEditor = true"
+        >Chỉnh sửa</Button
+      >
+      <Button
+        v-if="enableEditor"
+        variant="secondary"
+        :loading="updating"
+        @click="updateHomePage()"
+        >Cập nhật</Button
+      >
+      <Button
+        variant="outline"
+        @click="
+          showActions = false;
+          enableEditor = false;
+        "
+      >
+        <XIcon />
+      </Button>
+    </div>
+
     <section class="bg-[url('/google1.jpg')] h-160 bg-cover bg-center relative">
       <div
         class="absolute top-0 bottom-0 right-0 left-0 bg-black opacity-60"
@@ -36,10 +68,9 @@
       </div>
     </section>
 
-    <section class="">
-      <div class="cus-container">
+    <section ref="editorDiv">
+      <div v-if="!enableEditor" class="cus-container">
         <div v-html="settings.home_page"></div>
-
         <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
           <div class="bg-white cus-shadow-1 p-8 rounded-tl-4xl rounded-br-4xl">
             <NuxtImg src="/svg/gt_dv_2.svg" class="h-24 mx-auto mb-6" />
@@ -140,6 +171,13 @@
           </div>
         </div> -->
       </div>
+      <div v-else>
+        <CommonEditorCustom
+          :model-value="homePageHtml"
+          :menu-bar="false"
+          @update:model-value="homePageHtml = $event"
+        />
+      </div>
     </section>
 
     <!-- Dự án hiện tại -->
@@ -188,11 +226,12 @@
 </template>
 
 <script setup lang="ts">
-import { PhoneCall } from "lucide-vue-next";
+import { PhoneCall, XIcon } from "lucide-vue-next";
 import { formatTelNumber, genSlug } from "~/utils/string-helper";
 import Button from "~/components/ui/button/Button.vue";
 import { PROPERTY_TYPES } from "~/constants";
 import type { Response, SystemSetting } from "~/types";
+import { toast } from "vue-sonner";
 
 useSeoMeta({
   // --- BASIC ---
@@ -218,13 +257,23 @@ useSeoMeta({
 
 const { provinces } = useProvinces();
 // const { settings } = useSystemSetting();
+const token = useCookie("token");
+const { request } = useApi();
 
 const config = useRuntimeConfig();
 const { data, pending, refresh, error } = await useFetch<
   Response<SystemSetting>
 >(`${config.public.apiBase}/home/settings`);
 
-const settings = data.value?.data.items ?? ({} as SystemSetting);
+const editorDiv = ref(null);
+
+const settings = reactive(data.value?.data.items ?? ({} as SystemSetting));
+const homePageHtml = ref<string>(settings.home_page || "");
+const enableEditor = ref<boolean>(false);
+const btnText = ref<string>("Chỉnh sửa");
+const updating = ref<boolean>(false);
+const showActions = ref<boolean>(true);
+
 const result = provinces.value?.data.items ?? [];
 const groupOptions: any = {};
 
@@ -235,4 +284,36 @@ result.forEach((element) => {
     groupOptions[`${element.region}`] = [element.name];
   }
 });
+
+const updateHomePage = async () => {
+  updating.value = true;
+  try {
+    await request<SystemSetting>(`/settings/update`, {
+      method: "PUT",
+      body: {
+        ...settings,
+        home_page: homePageHtml.value,
+      },
+    });
+
+    toast.success("Cập nhật trang chủ", {
+      description: "Trang chủ đã được cập nhật thành công!",
+    });
+    enableEditor.value = false;
+    settings.home_page = homePageHtml.value;
+  } catch (err: any) {
+    toast.error("Cập nhật trang chủ", {
+      description: err?.message || "Có lỗi xảy và vui lòng thử lại sau!",
+    });
+  } finally {
+    updating.value = false;
+  }
+};
+
+watch(
+  () => enableEditor.value,
+  (newVal) => {
+    btnText.value = newVal ? "Lưu thay đổi" : "Chỉnh sửa";
+  }
+);
 </script>

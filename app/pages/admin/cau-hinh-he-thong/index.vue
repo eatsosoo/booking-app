@@ -1,48 +1,50 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useForm } from 'vee-validate';
+import { useForm } from "vee-validate";
 import { z } from "zod";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
 import type { SystemSetting } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
-import { toTypedSchema } from '@vee-validate/zod';
+import { toTypedSchema } from "@vee-validate/zod";
 
 definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
 
-const config = useRuntimeConfig()
-const route = useRoute();
 const { request } = useApi();
-const id = route.params.id;
 
 // 1. Define validation schema
 const validationSchema = z.object({
-  phone_number: z.string()
+  phone_number: z
+    .string()
     .regex(/^(0|\+84)(3[2-9]|5[2689]|7[0-9]|8[1-9]|9[0-9])[0-9]{7}$/, {
-      message: "Số điện thoại không hợp lệ"
+      message: "Số điện thoại không hợp lệ",
     })
     .optional(),
 
-  email: z.string()
+  email: z
+    .string()
     .email("Email không hợp lệ")
     .max(100, "Email quá dài")
     .optional(),
 
-  facebook_url: z.string()
+  facebook_url: z
+    .string()
     .url("URL Facebook không hợp lệ")
     .max(500, "URL quá dài")
     .optional(),
 
-  tiktok_url: z.string()
+  tiktok_url: z
+    .string()
     .url("URL Tiktok không hợp lệ")
     .max(500, "URL quá dài")
     .optional(),
 
-  zalo_url: z.string()
+  zalo_url: z
+    .string()
     .url("URL Zalo không hợp lệ")
     .max(500, "URL quá dài")
     .optional(),
@@ -50,42 +52,45 @@ const validationSchema = z.object({
   home_page: z.string().optional(),
 });
 
-
 // 2. Setup form with vee-validate
-const { handleSubmit, errors, resetForm, meta, setFieldValue, values } = useForm({
+const { handleSubmit, errors, resetForm, meta } = useForm({
   validationSchema: toTypedSchema(validationSchema),
   initialValues: {
-    phone_number: '',
-    email: '',
-    facebook_url: '',
-    tiktok_url: '',
-    zalo_url: '',
-    home_page: ''
-  }
+    phone_number: "",
+    email: "",
+    facebook_url: "",
+    tiktok_url: "",
+    zalo_url: "",
+    home_page: "",
+  },
 });
 
 /* -----------------------
    GET DATA
 ------------------------- */
-const { data } = await useAsyncData(`faq-${id}`, () =>
+const { data } = await useAsyncData(`system-settings`, () =>
   request<SystemSetting>(`/settings`)
 );
 
 // 3. Set initial values when data loads
-watch(() => data.value, (newData) => {
-  if (newData?.data?.items) {
-    resetForm({
-      values: {
-        phone_number: newData.data.items.phone_number || '',
-        email: newData.data.items.email || '',
-        facebook_url: newData.data.items.facebook_url || '',
-        tiktok_url: newData.data.items.tiktok_url || '',
-        zalo_url: newData.data.items.zalo_url || '',
-        home_page: newData.data.items.home_page || ''
-      }
-    });
-  }
-}, { immediate: true });
+watch(
+  () => data.value,
+  (newData) => {
+    if (newData?.data?.items) {
+      resetForm({
+        values: {
+          phone_number: newData.data.items.phone_number || "",
+          email: newData.data.items.email || "",
+          facebook_url: newData.data.items.facebook_url || "",
+          tiktok_url: newData.data.items.tiktok_url || "",
+          zalo_url: newData.data.items.zalo_url || "",
+          home_page: newData.data.items.home_page || "",
+        },
+      });
+    }
+  },
+  { immediate: true }
+);
 
 const loading = ref<boolean>(false);
 
@@ -104,7 +109,7 @@ const saveSettings = handleSubmit(async (values) => {
         facebook_url: values.facebook_url,
         tiktok_url: values.tiktok_url,
         zalo_url: values.zalo_url,
-        home_page: values.home_page
+        home_page: values.home_page,
       },
     });
 
@@ -144,8 +149,8 @@ const saveSettings = handleSubmit(async (values) => {
               :class="{ 'border-red-500 focus:ring-red-500': errorMessage }"
               @update:model-value="field.onChange"
             />
-            <span 
-              v-if="errorMessage" 
+            <span
+              v-if="errorMessage"
               class="text-red-500 text-xs mt-1 ml-1 block"
             >
               {{ errorMessage }}
@@ -171,8 +176,8 @@ const saveSettings = handleSubmit(async (values) => {
               :class="{ 'border-red-500 focus:ring-red-500': errorMessage }"
               @update:model-value="field.onChange"
             />
-            <span 
-              v-if="errorMessage" 
+            <span
+              v-if="errorMessage"
               class="text-red-500 text-xs mt-1 ml-1 block"
             >
               {{ errorMessage }}
@@ -198,8 +203,8 @@ const saveSettings = handleSubmit(async (values) => {
               :class="{ 'border-red-500 focus:ring-red-500': errorMessage }"
               @update:model-value="field.onChange"
             />
-            <span 
-              v-if="errorMessage" 
+            <span
+              v-if="errorMessage"
               class="text-red-500 text-xs mt-1 ml-1 block"
             >
               {{ errorMessage }}
@@ -225,8 +230,8 @@ const saveSettings = handleSubmit(async (values) => {
               :class="{ 'border-red-500 focus:ring-red-500': errorMessage }"
               @update:model-value="field.onChange"
             />
-            <span 
-              v-if="errorMessage" 
+            <span
+              v-if="errorMessage"
               class="text-red-500 text-xs mt-1 ml-1 block"
             >
               {{ errorMessage }}
@@ -253,8 +258,8 @@ const saveSettings = handleSubmit(async (values) => {
               :class="{ 'border-red-500 focus:ring-red-500': errorMessage }"
               @update:model-value="field.onChange"
             />
-            <span 
-              v-if="errorMessage" 
+            <span
+              v-if="errorMessage"
               class="text-red-500 text-xs mt-1 ml-1 block"
             >
               {{ errorMessage }}
@@ -266,16 +271,16 @@ const saveSettings = handleSubmit(async (values) => {
       <!-- Home Page Content -->
       <div class="col-span-2">
         <Label for="home_page" class="mb-2 ml-1">Nội dung trang chủ</Label>
-        <VeeField
-          v-slot="{ field }"
-          name="home_page"
-        >
+        <VeeField v-slot="{ field }" name="home_page">
           <ClientOnly>
-            <CommonEditorCustom :model-value="field.value" @update:model-value="field.onChange"/>
+            <CommonEditorCustom
+              :model-value="field.value"
+              @update:model-value="field.onChange"
+            />
           </ClientOnly>
         </VeeField>
-        <span 
-          v-if="errors.home_page" 
+        <span
+          v-if="errors.home_page"
           class="text-red-500 text-xs mt-1 ml-1 block"
         >
           {{ errors.home_page }}
@@ -288,26 +293,24 @@ const saveSettings = handleSubmit(async (values) => {
       <p v-if="meta.dirty" class="text-amber-600">
         ⚠️ Có thay đổi chưa được lưu
       </p>
-      <p v-else class="text-green-600">
-        ✓ Tất cả thay đổi đã được lưu
-      </p>
+      <p v-else class="text-green-600">✓ Tất cả thay đổi đã được lưu</p>
     </div>
 
     <!-- Save button -->
     <div class="mt-6 flex items-center gap-4">
-      <Button 
-        variant="default" 
+      <Button
+        variant="default"
         :disabled="loading || !meta.dirty"
         :class="{ 'opacity-50 cursor-not-allowed': !meta.dirty }"
         @click="saveSettings"
       >
         <span v-if="loading" class="animate-spin mr-2">↻</span>
-        {{ loading ? 'Đang lưu...' : 'Lưu thay đổi' }}
+        {{ loading ? "Đang lưu..." : "Lưu thay đổi" }}
       </Button>
 
-      <Button 
-        v-if="meta.dirty" 
-        variant="outline" 
+      <Button
+        v-if="meta.dirty"
+        variant="outline"
         :disabled="loading"
         @click="resetForm()"
       >
@@ -319,7 +322,7 @@ const saveSettings = handleSubmit(async (values) => {
 
 <style scoped>
 /* Optional: Add custom styles for validation */
-input:invalid, 
+input:invalid,
 input.border-red-500 {
   border-color: #ef4444;
 }

@@ -5,7 +5,7 @@
     </AppHeader>
 
     <main>
-        <slot />
+      <slot />
     </main>
 
     <ClientOnly>
@@ -16,6 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import 'vue-sonner/style.css'
-import { Toaster } from '@/components/ui/sonner'
+import "vue-sonner/style.css";
+import { Toaster } from "@/components/ui/sonner";
 </script>

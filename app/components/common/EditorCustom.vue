@@ -62,7 +62,6 @@ const editorConfig = ref({
     "anchor",
     "searchreplace",
     "visualblocks",
-    "code",
     "fullscreen",
     "insertdatetime",
     "media",
@@ -81,7 +80,7 @@ const editorConfig = ref({
     "undo redo | formatselect | fontsize fontfamily | blocks",
     "bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | lineheight",
     "bullist numlist outdent indent | link image media table | blockquote codesample",
-    "subscript superscript | hr pagebreak | removeformat | help",
+    "subscript superscript | hr pagebreak | removeformat | help | code",
   ].join(" | "),
   // Formatselect options (headings)
   formats: {
@@ -130,6 +129,7 @@ const editorConfig = ref({
     "FFFACD",
     "Lemon Chiffon",
   ],
+  content_css: ["~/assets/css/tailwind.css"],
   content_style: CONTENT_STYLE,
   branding: false, // Ẩn branding
   promotion: false, // Ẩn quảng cáo nâng cấp
