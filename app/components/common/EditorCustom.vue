@@ -20,6 +20,8 @@ interface Props {
   height?: number;
   placeholder?: string;
   disabled?: boolean;
+  menuBar?: boolean;
+  toolbarMode?: "wrap" | "scrolling" | "floating";
 }
 
 const config = useRuntimeConfig();
@@ -30,6 +32,8 @@ const props = withDefaults(defineProps<Props>(), {
   height: 720,
   placeholder: "Nhập nội dung...",
   disabled: false,
+  menuBar: true,
+  toolbarMode: "wrap",
 });
 
 const emit = defineEmits<{
@@ -41,9 +45,11 @@ const isMounted = ref(false);
 // Config editor
 const editorConfig = ref({
   height: props.height,
-  menubar: false,
+  menubar: props.menuBar,
   placeholder: props.placeholder,
   readonly: props.disabled,
+  toolbar_mode: props.toolbarMode,
+  toolbar_sticky: true,
   // Cập nhật plugins - thêm pagebreak
   plugins: [
     "advlist",

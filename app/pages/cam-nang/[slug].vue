@@ -22,7 +22,7 @@
         <!-- Date -->
         <div class="flex items-center gap-2">
           <Calendar class="w-4 h-4" />
-          <span>{{ formatDate(post.created_at) }}</span>
+          <span>{{ convertUTC(post.created_at) }}</span>
         </div>
 
         <!-- Share -->
@@ -38,8 +38,8 @@
           </button>
 
           <button
-            @click="shareTwitter"
             class="flex items-center gap-1 hover:underline"
+            @click="shareTwitter"
           >
             <Twitter class="w-4 h-4" />
             Twitter
@@ -52,10 +52,7 @@
         class="rounded-xl w-full max-h-[400px] object-cover mb-8 shadow"
       />
 
-      <article
-        class="prose prose-lg max-w-none format format-sm sm:format-base lg:format-lg format-blue"
-        v-html="post.content"
-      ></article>
+      <article v-html="post.content"></article>
     </div>
   </div>
 </template>
@@ -65,6 +62,7 @@ import { useRoute } from "vue-router";
 import { useFetch } from "#app";
 import { Calendar, Facebook, Twitter } from "lucide-vue-next";
 import type { Post, Response } from "~/types";
+import { convertUTC } from "~/utils/string-helper";
 
 const route = useRoute();
 const config = useRuntimeConfig();
@@ -78,12 +76,6 @@ const { data, pending, error } = await useFetch<Response<Post>>(apiUrl);
 
 // Extract data (chuẩn API của cậu: data.data)
 const post = ref<Post>(data.value?.data.items || ({} as Post));
-
-// Format date
-const formatDate = (dateStr: string) => {
-  if (!dateStr) return "";
-  return new Date(dateStr).toLocaleDateString("vi-VN");
-};
 
 // SEO meta
 useSeoMeta({

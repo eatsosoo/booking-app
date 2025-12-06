@@ -2,7 +2,14 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Category, Option2, Properties, Response, Service } from "~/types";
+import type {
+  Category,
+  Option2,
+  Option3,
+  Properties,
+  Response,
+  Service,
+} from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import { PROPERTY_TYPES } from "~/constants";
@@ -29,7 +36,7 @@ const multiSelected = reactive({
   property_types: [] as (string | number)[],
   services: [] as (string | number)[],
 });
-const serviceOptions = ref<Option2[]>([]);
+const serviceOptions = ref<Option3[]>([]);
 const categoryOptions = ref<Option2[]>([]);
 
 /* -----------------------
@@ -82,7 +89,7 @@ multiSelected.services = home.value.services.map((item) => item.id);
 serviceOptions.value =
   servicesData.value?.data.items.map((service) => ({
     label: service.title,
-    value: service.id.toString(),
+    value: service.id,
   })) || [];
 categoryOptions.value =
   categoriesData.value?.data.items.map((service) => ({
@@ -242,7 +249,7 @@ categoryOptions.value =
         />
       </div>
 
-            <!-- Dịch vụ đi kèm -->
+      <!-- Dịch vụ đi kèm -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Dịch vụ đi kèm</Label>
         <MultiSelect

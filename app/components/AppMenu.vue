@@ -10,47 +10,9 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { PROPERTY_TYPES } from "~/constants";
-import type { Province, Response } from "~/types";
 
-// Fetch provinces from API
-const config = useRuntimeConfig();
-const { data: provinces } = await useFetch<Response<Province[]>>(
-  `${config.public.apiBase}/home/provinces`,
-  {
-    lazy: true,
-    server: true, // SSR for SEO
-  }
-);
-
-const northernProvinces = computed(() => {
-  return (
-    provinces.value?.data.items.filter(
-      (p) =>
-        p.region.includes("Bắc") ||
-        ["Miền Bắc", "Bắc", "Bắc Bộ"].includes(p.region)
-    ) || []
-  );
-});
-
-const centralProvinces = computed(() => {
-  return (
-    provinces.value?.data.items.filter(
-      (p) =>
-        p.region.includes("Trung") ||
-        ["Miền Trung", "Trung", "Trung Bộ"].includes(p.region)
-    ) || []
-  );
-});
-
-const southernProvinces = computed(() => {
-  return (
-    provinces.value?.data.items.filter(
-      (p) =>
-        p.region.includes("Nam") ||
-        ["Miền Nam", "Nam", "Nam Bộ"].includes(p.region)
-    ) || []
-  );
-});
+const { northernProvinces, centralProvinces, southernProvinces } =
+  useProvinces();
 </script>
 
 <template>
@@ -69,8 +31,13 @@ const southernProvinces = computed(() => {
         <MenubarSub>
           <MenubarSubTrigger>Miền Bắc</MenubarSubTrigger>
           <MenubarSubContent>
-            <MenubarItem v-for="province in northernProvinces" :key="province.id">
-              <NuxtLink :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`">
+            <MenubarItem
+              v-for="province in northernProvinces"
+              :key="province.id"
+            >
+              <NuxtLink
+                :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`"
+              >
                 {{ province.name }}
               </NuxtLink>
             </MenubarItem>
@@ -79,8 +46,13 @@ const southernProvinces = computed(() => {
         <MenubarSub>
           <MenubarSubTrigger>Miền Trung</MenubarSubTrigger>
           <MenubarSubContent>
-            <MenubarItem v-for="province in centralProvinces" :key="province.id">
-              <NuxtLink :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`">
+            <MenubarItem
+              v-for="province in centralProvinces"
+              :key="province.id"
+            >
+              <NuxtLink
+                :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`"
+              >
                 {{ province.name }}
               </NuxtLink>
             </MenubarItem>
@@ -89,8 +61,13 @@ const southernProvinces = computed(() => {
         <MenubarSub>
           <MenubarSubTrigger>Miền Nam</MenubarSubTrigger>
           <MenubarSubContent>
-            <MenubarItem v-for="province in southernProvinces" :key="province.id">
-              <NuxtLink :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`">
+            <MenubarItem
+              v-for="province in southernProvinces"
+              :key="province.id"
+            >
+              <NuxtLink
+                :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`"
+              >
                 {{ province.name }}
               </NuxtLink>
             </MenubarItem>

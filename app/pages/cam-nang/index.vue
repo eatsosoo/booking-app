@@ -26,7 +26,7 @@
             class="flex flex-col md:flex-row border-b border-gray-300 py-6 gap-4"
           >
             <NuxtImg
-              :src="`${config.public.mediaUrl}/${item.image}`"
+              :src="`${item.image}`"
               :alt="item.title"
               class="w-full md:w-72 h-48 object-cover rounded-md transition-transform duration-300 hover:scale-105 shadow-sm"
             />
@@ -65,7 +65,7 @@
             <h2 class="text-2xl font-semibold">Tìm kiếm</h2>
 
             <InputGroup class="bg-white mt-4 h-12">
-              <InputGroupInput v-model="search" placeholder="Nhập từ khoá..."  />
+              <InputGroupInput v-model="search" placeholder="Nhập từ khoá..." />
               <InputGroupAddon>
                 <ClientOnly>
                   <FontAwesomeIcon :icon="['fas', 'magnifying-glass']" />
@@ -117,7 +117,7 @@ useSeoMeta({
 const config = useRuntimeConfig();
 const page = ref(1);
 const search = ref("");
-let debounce: string | number | NodeJS.Timeout | undefined = undefined
+let debounce: string | number | NodeJS.Timeout | undefined = undefined;
 
 // =========================
 // FETCH API

@@ -39,3 +39,17 @@ export function convertUTC(utcString: string): string {
     hour12: false,
   });
 }
+
+export function formatTelNumber(tel: string): string {
+  // Xóa tất cả ký tự không phải số
+  const cleaned = ('' + tel).replace(/\D/g, '');
+  // Kiểm tra nếu số điện thoại có đúng 10 chữ số
+  if (cleaned.length === 10) {
+    const part1 = cleaned.slice(0, 3);
+    const part2 = cleaned.slice(3, 6);
+    const part3 = cleaned.slice(6);
+    return `(${part1}) ${part2}-${part3}`;
+  }
+  // Trả về chuỗi gốc nếu không đúng định dạng
+  return tel;
+}

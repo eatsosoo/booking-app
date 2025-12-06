@@ -15,6 +15,7 @@
         />
       </label>
       <span>Tải ảnh</span>
+      <Spinner v-if="loading" class="size-3 ml-2" />
     </div>
 
     <!-- Preview ảnh -->
@@ -46,6 +47,7 @@ import { ref } from "vue";
 import { useRuntimeConfig } from "#app";
 import { toast } from "vue-sonner";
 import { ImagesIcon } from "lucide-vue-next";
+import Spinner from "~/components/ui/spinner/Spinner.vue";
 
 const props = defineProps({
   urls: { type: Array as PropType<string[]>, default: () => [] },
@@ -58,11 +60,14 @@ const emit = defineEmits<{
 const images = ref<string[]>(props.urls);
 const config = useRuntimeConfig();
 const toastTitle = "Upload ảnh";
+const loading = ref<boolean>(false);
 
 const handleFiles = async (e: Event) => {
   const target = e.target as HTMLInputElement;
   const files = target.files;
   if (!files || files.length === 0) return;
+
+  loading.value = true;
 
   try {
     const formData = new FormData();
@@ -70,7 +75,7 @@ const handleFiles = async (e: Event) => {
       formData.append("media[]", files[i] as File); // nhiều file cùng key "media"
     }
 
-    const { data, error } = await useFetch<{ data: { items: string[] } }>(
+    const data = await $fetch<{ data: { items: string[] } }>(
       `${config.public.apiBase}/home/upload`,
       {
         method: "POST",
@@ -78,15 +83,7 @@ const handleFiles = async (e: Event) => {
       }
     );
 
-    if (error.value) {
-      toast.error(toastTitle, {
-        description:
-          error.value?.data?.message || "Có lỗi xảy ra khi tải ảnh lên!",
-      });
-      return;
-    }
-
-    const urls = data.value?.data.items || [];
+    const urls = data.data.items || [];
     urls.forEach((url) => images.value.push(url));
 
     toast.success(toastTitle, {
@@ -94,12 +91,14 @@ const handleFiles = async (e: Event) => {
     });
 
     emit("uploaded", images.value);
-  } catch (err) {
+  } catch (err: any) {
     toast.error(toastTitle, {
-      description: "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
+      description:
+        err?.data.message ?? "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
     });
   } finally {
     target.value = "";
+    loading.value = false;
   }
 };
 

@@ -7,6 +7,7 @@ import type { Post } from "~/types";
 import { toast } from "vue-sonner";
 import { useApi } from "~/composables/useApi";
 import EditorCustom from "~/components/common/EditorCustom.vue";
+import UploadImage from "~/components/common/UploadImage.vue";
 
 definePageMeta({
   layout: "admin",
@@ -33,14 +34,14 @@ const savePost = async () => {
   try {
     await request(`/posts/${id}`, {
       method: "PUT",
-      body: post.value
+      body: post.value,
     });
 
     toast.success("Cập nhật bài viết thành công!");
     navigateTo("/admin/quan-ly-bai-viet");
   } catch (err: any) {
     toast.error("Cập nhật thất bại", {
-      description: err?.data?.message || "Vui lòng thử lại."
+      description: err?.data?.message || "Vui lòng thử lại.",
     });
   } finally {
     loading.value = false;
@@ -85,11 +86,20 @@ const savePost = async () => {
         />
       </div>
 
+      <!-- Image -->
+      <div class="sol-span-2">
+        <Label for="image" class="mb ml-1">Thumbnail</Label>
+        <UploadImage v-model="post.image" @uploaded="post.image = $event" />
+      </div>
+
       <!-- Content -->
       <div class="col-span-1 md:col-span-2">
         <Label for="content" class="mb-2 ml-1">Nội dung bài viết</Label>
         <ClientOnly>
-          <EditorCustom :model-value="post.content" @update:model-value="post.content = $event" />
+          <EditorCustom
+            :model-value="post.content"
+            @update:model-value="post.content = $event"
+          />
         </ClientOnly>
       </div>
     </div>

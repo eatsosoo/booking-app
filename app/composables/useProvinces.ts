@@ -1,29 +1,30 @@
 import type { Province, Response } from "~/types"
 
 export const useProvinces = () => {
-  const { data: provinces, pending, refresh, error } = useFetch<Response<Province[]>>('/api/provinces', {
+  const config = useRuntimeConfig();
+  const { data: provinces, pending, refresh, error } = useFetch<Response<Province[]>>(`${config.public.apiBase}/home/provinces`, {
     server: true,
     lazy: true,
   })
 
   // Memoized computed properties for performance
-  const northernProvinces = computed(() => 
-    provinces.value?.data.items.filter(p => 
-      p.region.includes('Bắc') || 
+  const northernProvinces = computed(() =>
+    provinces.value?.data.items.filter(p =>
+      p.region.includes('Bắc') ||
       ['Miền Bắc', 'Bắc', 'Bắc Bộ'].includes(p.region)
     ) || []
   )
 
-  const centralProvinces = computed(() => 
-    provinces.value?.data.items.filter(p => 
-      p.region.includes('Trung') || 
+  const centralProvinces = computed(() =>
+    provinces.value?.data.items.filter(p =>
+      p.region.includes('Trung') ||
       ['Miền Trung', 'Trung', 'Trung Bộ'].includes(p.region)
     ) || []
   )
 
-  const southernProvinces = computed(() => 
-    provinces.value?.data.items.filter(p => 
-      p.region.includes('Nam') || 
+  const southernProvinces = computed(() =>
+    provinces.value?.data.items.filter(p =>
+      p.region.includes('Nam') ||
       ['Miền Nam', 'Nam', 'Nam Bộ'].includes(p.region)
     ) || []
   )

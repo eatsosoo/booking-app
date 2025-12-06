@@ -1,7 +1,7 @@
 export interface Faq {
-    id: number
-    question: string
-    answer: string
+  id: number
+  question: string
+  answer: string
 }
 
 export interface Post {
@@ -35,7 +35,7 @@ export interface Properties {
   thumbnail: string
   gallery: string[]
   services: { id: number, title: string }[]
-  property_types: { id: number, name: string }[] 
+  property_types: { id: number, name: string }[]
 }
 
 export interface Service {
@@ -96,6 +96,11 @@ export interface Option2 {
   value: string;
 }
 
+export interface Option3 {
+  label: string;
+  value: number;
+}
+
 interface Pagination {
   current_page: number
   last_page: number
@@ -109,14 +114,14 @@ interface ResultWrapper<T> {
 }
 
 export interface Response<T> {
-    statusCode: number
-    message: string
-    data: {
-      items: T,
-    },
-    result?: {
-      pagination: Pagination
-    }
+  statusCode: number
+  message: string
+  data: {
+    items: T,
+  },
+  result?: {
+    pagination: Pagination
+  }
 }
 
 export interface Auth {

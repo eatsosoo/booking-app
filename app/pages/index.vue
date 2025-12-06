@@ -19,24 +19,28 @@
           </p>
 
           <button
-            class="text-3xl p-4 bg-primary rounded-full font-bold text-white"
+            class="text-3xl p-4 bg-primary rounded-full font-bold text-white flex items-center gap-4"
           >
-            <ClientOnly>
-              <FontAwesomeIcon :icon="['fas', 'phone']" class="mr-1" />
-            </ClientOnly>
-            093 666 8888
+            <PhoneCall :size="34" />
+            {{ formatTelNumber(settings.phone_number) }}
           </button>
         </div>
       </div>
     </section>
 
-    <section class="bg-primary cus-background">
+    <section class="bg-section">
       <div class="cus-container">
-        <div class="md:flex md:justify-center w-full mb-12">
+        <div class="md:flex md:justify-center w-full">
           <SearchForm :groups="groupOptions" />
         </div>
+      </div>
+    </section>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
+    <section class="">
+      <div class="cus-container">
+        <div v-html="settings.home_page"></div>
+
+        <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
           <div class="bg-white cus-shadow-1 p-8 rounded-tl-4xl rounded-br-4xl">
             <NuxtImg src="/svg/gt_dv_2.svg" class="h-24 mx-auto mb-6" />
             <h2 class="font-bold text-2xl mb-6 uppercase">LO TỪ A-Z</h2>
@@ -61,9 +65,9 @@
               hành trình.
             </p>
           </div>
-        </div>
+        </div> -->
 
-        <div
+        <!-- <div
           class="grid grid-cols-1 md:grid-cols-2 gap-20 lg:px-24 mt-20 text-white"
         >
           <div class="flex flex-col justify-around">
@@ -95,9 +99,9 @@
               />
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div
+        <!-- <div
           class="grid grid-cols-1 md:grid-cols-3 md:gap-12 lg:mx-24 mt-20 bg-white p-8 rounded-xl"
         >
           <div class="flex flex-col justify-center">
@@ -134,45 +138,47 @@
             </p>
             <Button class="mt-8">Đặt ngay</Button>
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
 
     <!-- Dự án hiện tại -->
-    <section class="bg-secondary cus-container">
-      <div
-        v-for="(property, index) in PROPERTY_TYPES"
-        :key="property.value"
-        class="space-y-10 mb-12"
-      >
-        <h2 class="text-3xl font-semibold text-center">
-          Tìm kiếm loại phòng {{ property.label }}
-        </h2>
+    <section class="bg-section py-10">
+      <div class="cus-container">
+        <div
+          v-for="(property, index) in PROPERTY_TYPES"
+          :key="property.value"
+          class="space-y-10 mb-12"
+        >
+          <h2 class="text-3xl font-semibold text-center">
+            Tìm kiếm loại phòng {{ property.label }}
+          </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
-          <!-- Project item -->
-          <div
-            v-for="(project, i) in ['Miền Bắc', 'Miền Trung', 'Miền Nam']"
-            :key="i"
-            class="relative bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col"
-          >
-            <!-- Image -->
-            <NuxtImg
-              :src="`/rooms/room-${(index + 1) * (i + 1)}.jpg`"
-              class="h-58 w-full object-cover transition-transform duration-300 hover:scale-105 shadow-sm"
-              :alt="`Tìm kiếm phong loại ${property.label} khu vực ${project}`"
-            ></NuxtImg>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
+            <!-- Project item -->
+            <div
+              v-for="(project, i) in ['Miền Bắc', 'Miền Trung', 'Miền Nam']"
+              :key="i"
+              class="relative bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col"
+            >
+              <!-- Image -->
+              <NuxtImg
+                :src="`/rooms/${genSlug(project)}-${index + 1}.jpg`"
+                class="h-58 w-full object-cover transition-transform duration-300 hover:scale-105 shadow-sm"
+                :alt="`Tìm kiếm phong loại ${property.label} khu vực ${project}`"
+              ></NuxtImg>
 
-            <!-- Content -->
-            <div class="text-center">
-              <h3 class="mt-4 font-semibold italic">{{ project }}</h3>
-              <NuxtLink
+              <!-- Content -->
+              <div class="text-center">
+                <h3 class="mt-4 font-semibold italic">{{ project }}</h3>
+                <NuxtLink
                   :to="`/du-an/tim-kiem?page=1&per_page=12&property_types=${property.value}`"
                 >
                   <Button class="w-fit underline" variant="link">
                     Xem thêm
                   </Button>
                 </NuxtLink>
+              </div>
             </div>
           </div>
         </div>
@@ -182,33 +188,43 @@
 </template>
 
 <script setup lang="ts">
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { PhoneCall } from "lucide-vue-next";
+import { formatTelNumber, genSlug } from "~/utils/string-helper";
 import Button from "~/components/ui/button/Button.vue";
 import { PROPERTY_TYPES } from "~/constants";
-import type { Category, Region, Response } from "~/types";
+import type { Response, SystemSetting } from "~/types";
 
 useSeoMeta({
-  title: "Trang chủ",
+  // --- BASIC ---
+  title: "Trang chủ | Booking Now - Đặt phòng khách sạn, resort giá tốt",
   description:
-    "Trang đặt phòng khách sạn, resort, homestay dễ sử dụng và tối ưu SEO.",
+    "Nền tảng đặt phòng khách sạn, resort, homestay dễ sử dụng. So sánh giá tốt nhất, đặt phòng nhanh chóng, thanh toán an toàn.",
+
+  // --- OPEN GRAPH (Facebook, Zalo, LinkedIn) ---
+  ogTitle: "Booking - Đặt phòng khách sạn, resort, homestay giá tốt",
+  ogDescription:
+    "Tìm kiếm và đặt phòng khách sạn, resort, homestay với giá ưu đãi. Nhiều lựa chọn, hỗ trợ 24/7.",
+  ogImage: "https://dyhome.com/og-image.png",
+  ogUrl: "https://dyhome.com",
+  ogType: "website",
+
+  // --- TWITTER CARD ---
+  twitterCard: "summary_large_image",
+  twitterTitle: "Booking - Đặt phòng khách sạn & resort",
+  twitterDescription:
+    "Đặt phòng khách sạn, resort, homestay nhanh chóng – giá tốt nhất thị trường.",
+  twitterImage: "https://dyhome.com/og-image.png",
 });
 
+const { provinces } = useProvinces();
+// const { settings } = useSystemSetting();
+
 const config = useRuntimeConfig();
-// =========================
-// FETCH API
-// =========================
-const apiUrl = computed(() => `${config.public.apiBase}/home`);
+const { data, pending, refresh, error } = await useFetch<
+  Response<SystemSetting>
+>(`${config.public.apiBase}/home/settings`);
 
-const { data: provinces } = await useFetch<Response<Region[]>>(
-  `${apiUrl.value}/provinces`,
-  {
-    server: true,
-    lazy: false,
-    immediate: true,
-  }
-);
-
-
+const settings = data.value?.data.items ?? ({} as SystemSetting);
 const result = provinces.value?.data.items ?? [];
 const groupOptions: any = {};
 

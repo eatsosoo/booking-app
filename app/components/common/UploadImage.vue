@@ -1,24 +1,29 @@
 <template>
   <div class="p-2 rounded-md shadow-xs border border-dashed">
-    <input
-      ref="imageInput"
-      type="file"
-      accept="image/*"
-      class="hidden"
-      @change="handleImageUpload"
-    />
-    <Button size="icon" variant="secondary" @click="imageInput?.click()">
-      <ImageIcon class="w-4 h-4" />
-    </Button>
-    <span class="text-md ml-2">{{
-      imageUrl ? "Thay đổi ảnh" : "Tải ảnh lên"
-    }}</span>
-    <NuxtImg
-      v-if="imageUrl"
-      :src="imageUrl"
-      alt="Ảnh phòng"
-      class="w-72 h-48 mt-2"
-    />
+    <div class="flex items-center">
+      <input
+        ref="imageInput"
+        type="file"
+        accept="image/*"
+        class="hidden"
+        @change="handleImageUpload"
+      />
+      <Button size="icon" @click="imageInput?.click()">
+        <ImageIcon class="w-4 h-4" />
+      </Button>
+      <span class="text-md ml-2">{{
+        imageUrl ? "Thay đổi ảnh" : "Tải ảnh lên"
+      }}</span>
+      <Spinner v-if="loading" class="size-4 ml-2" />
+    </div>
+    <div>
+      <NuxtImg
+        v-if="imageUrl"
+        :src="imageUrl"
+        alt="Ảnh phòng"
+        class="w-72 h-48 mt-2"
+      />
+    </div>
   </div>
 </template>
 
@@ -27,6 +32,7 @@ import { ImageIcon } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import type { Response } from "~/types";
 import Button from "~/components/ui/button/Button.vue";
+import Spinner from "~/components/ui/spinner/Spinner.vue";
 
 const props = defineProps({
   url: { type: String, default: "" },
@@ -38,11 +44,14 @@ const toastTitle = "Tải ảnh lên";
 
 const imageInput = ref<HTMLInputElement | null>(null);
 const imageUrl = ref<string>(props.url);
+const loading = ref<boolean>(false);
 
 const handleImageUpload = async (e: Event) => {
   const target = e.target as HTMLInputElement;
   const file = target.files?.[0];
   if (!file) return;
+
+  loading.value = true;
 
   try {
     const formData = new FormData();
@@ -63,17 +72,17 @@ const handleImageUpload = async (e: Event) => {
     });
   } catch (error: any) {
     toast.error(toastTitle, {
-      description: error?.data.message ?? "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
+      description:
+        error?.data.message ??
+        "Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!",
     });
   } finally {
     target.value = "";
+    loading.value = false;
   }
 };
 
-watch(
-  props,
-  () => {
-    imageUrl.value = props.url;
-  }
-)
+watch(props, () => {
+  imageUrl.value = props.url;
+});
 </script>
