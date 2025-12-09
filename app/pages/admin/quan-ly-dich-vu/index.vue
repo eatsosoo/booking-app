@@ -39,9 +39,7 @@ const expanded = ref<ExpandedState>({});
 const { data, refresh, pending } = await useAsyncData(
   "services-list",
   () =>
-    request<Service[]>(
-      `/services?page=${page.value}&search=${search.value}`
-    ),
+    request<Service[]>(`/services?page=${page.value}&search=${search.value}`),
   {
     watch: [page, search],
   }
@@ -140,7 +138,7 @@ const columns: ColumnDef<Service>[] = [
         },
       });
     },
-  }
+  },
 ];
 
 async function deleteItem(id: number) {
@@ -151,7 +149,7 @@ async function deleteItem(id: number) {
     });
 
     await refresh();
-    
+
     toast.success("Thành công", {
       description: "Dịch vụ đã được xoá thành công!",
     });
@@ -172,7 +170,7 @@ watch(
 
 <template>
   <section>
-    <h1 class="font-semibold text-2xl">Quản lý danh sách dịch vụ</h1>
+    <h1 class="font-semibold text-2xl">Danh sách dịch vụ</h1>
 
     <DataTable
       :data="categories"

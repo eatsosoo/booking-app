@@ -9,7 +9,7 @@ import type {
 import { PlusSquareIcon } from "lucide-vue-next";
 import { h, ref } from "vue";
 import { Button } from "@/components/ui/button";
-import type { Faq } from "~/types";
+import type { Province } from "~/types";
 import { toast } from "vue-sonner";
 import DataTable from "~/components/common/data-table/DataTable.vue";
 import ActionDropdown from "~/components/common/data-table/ActionDropdown.vue";
@@ -35,9 +35,7 @@ const expanded = ref<ExpandedState>({});
 const { data, refresh, pending } = await useAsyncData(
   "menu-list",
   () =>
-    request<Faq[]>(
-      `/provinces?page=${page.value}&search=${search.value}`
-    ),
+    request<Province[]>(`/provinces?page=${page.value}&search=${search.value}`),
   {
     watch: [page, search],
   }
@@ -50,7 +48,7 @@ const pagination = computed(
 );
 
 // COLUMNS DEFINITION
-const columns: ColumnDef<Faq>[] = [
+const columns: ColumnDef<Province>[] = [
   // {
   //   id: "select",
   //   header: ({ table }) =>
@@ -74,15 +72,13 @@ const columns: ColumnDef<Faq>[] = [
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("id")),
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
     enableSorting: false,
   },
   {
     accessorKey: "name",
     header: "Tên",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("name")),
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("name")),
     enableSorting: false,
   },
   {
@@ -93,19 +89,32 @@ const columns: ColumnDef<Faq>[] = [
     enableSorting: false,
   },
   {
-    accessorKey: "created_at",
-    header: "Ngày tạo",
+    accessorKey: "property_types",
+    header: "Loại hình",
     cell: ({ row }) =>
-      h("div", { class: "capitalize" }, convertUTC(row.getValue("created_at"))),
+      h(
+        "div",
+        { class: "capitalize" },
+        (row.getValue("property_types") as Array<{ id: number; name: string }>)
+          .map((type) => type.name)
+          .join(" | ")
+      ),
     enableSorting: false,
   },
-  {
-    accessorKey: "updated_at",
-    header: "Ngày cập nhật",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, convertUTC(row.getValue("updated_at"))),
-    enableSorting: false,
-  },
+  // {
+  //   accessorKey: "created_at",
+  //   header: "Ngày tạo",
+  //   cell: ({ row }) =>
+  //     h("div", { class: "capitalize" }, convertUTC(row.getValue("created_at"))),
+  //   enableSorting: false,
+  // },
+  // {
+  //   accessorKey: "updated_at",
+  //   header: "Ngày cập nhật",
+  //   cell: ({ row }) =>
+  //     h("div", { class: "capitalize" }, convertUTC(row.getValue("updated_at"))),
+  //   enableSorting: false,
+  // },
   {
     id: "actions",
     enableHiding: false,
@@ -131,7 +140,7 @@ async function deleteItem(id: number) {
     });
 
     await refresh();
-    
+
     toast.success("Thành công", {
       description: "Menu đã được xoá thành công!",
     });
@@ -145,7 +154,7 @@ async function deleteItem(id: number) {
 
 <template>
   <section>
-    <h1 class="font-semibold text-2xl">Quản lý danh sách Menu</h1>
+    <h1 class="font-semibold text-2xl">Danh sách Menu</h1>
 
     <DataTable
       :data="faqs"

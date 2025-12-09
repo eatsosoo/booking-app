@@ -217,14 +217,16 @@ const CODES: Record<number | string, string> = {
   503: "Service Unavailable",
   504: "Gateway Timeout",
   default: "An unexpected error occurred.",
-}
+};
 
-const errorCode = props.error?.statusCode?.toString() || 'default'
-const errorMessage = CODES[errorCode] || CODES.default
+const errorCode = props.error?.statusCode?.toString() || "default";
+const errorMessage = CODES[errorCode] || CODES.default;
 
 // Set page metadata
 useHead({
-  title: `${errorCode === 'default' ? 'Error' : errorCode} - ${errorMessage} | Booking Now`,
+  title: `${
+    errorCode === "default" ? "Error" : errorCode
+  } - ${errorMessage} | DYHOME`,
   meta: [
     {
       name: "description",

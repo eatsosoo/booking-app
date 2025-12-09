@@ -11,8 +11,7 @@ import {
 } from "@/components/ui/menubar";
 import { PROPERTY_TYPES } from "~/constants";
 
-const { northernProvinces, centralProvinces, southernProvinces } =
-  useProvinces();
+const { getProvinceByPropertyIdAndRegion } = useProvinces();
 </script>
 
 <template>
@@ -28,41 +27,17 @@ const { northernProvinces, centralProvinces, southernProvinces } =
         {{ property.label }}
       </MenubarTrigger>
       <MenubarContent>
-        <MenubarSub>
-          <MenubarSubTrigger>Miền Bắc</MenubarSubTrigger>
+        <MenubarSub
+          v-for="region in ['Miền Bắc', 'Miền Trung', 'Miền Nam']"
+          :key="region"
+        >
+          <MenubarSubTrigger>{{ region }}</MenubarSubTrigger>
           <MenubarSubContent>
             <MenubarItem
-              v-for="province in northernProvinces"
-              :key="province.id"
-            >
-              <NuxtLink
-                :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`"
-              >
-                {{ province.name }}
-              </NuxtLink>
-            </MenubarItem>
-          </MenubarSubContent>
-        </MenubarSub>
-        <MenubarSub>
-          <MenubarSubTrigger>Miền Trung</MenubarSubTrigger>
-          <MenubarSubContent>
-            <MenubarItem
-              v-for="province in centralProvinces"
-              :key="province.id"
-            >
-              <NuxtLink
-                :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`"
-              >
-                {{ province.name }}
-              </NuxtLink>
-            </MenubarItem>
-          </MenubarSubContent>
-        </MenubarSub>
-        <MenubarSub>
-          <MenubarSubTrigger>Miền Nam</MenubarSubTrigger>
-          <MenubarSubContent>
-            <MenubarItem
-              v-for="province in southernProvinces"
+              v-for="province in getProvinceByPropertyIdAndRegion(
+                property.value,
+                region
+              )"
               :key="province.id"
             >
               <NuxtLink

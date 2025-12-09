@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Province } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import {
   Select,
@@ -14,6 +13,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "vue-sonner";
+import { PROPERTY_TYPES } from "~/constants";
+import MultiSelect from "~/components/common/MultiSelect.vue";
+import type { ProvinceForm } from "~/types/booking";
 
 definePageMeta({
   layout: "admin",
@@ -21,11 +23,12 @@ definePageMeta({
 });
 
 // form
-const province = ref<Province>({
+const province = ref<ProvinceForm>({
   name: "",
   region: "",
-} as Province);
-
+  property_types: [],
+  slug: "",
+});
 
 const { request } = useApi();
 const pending = ref(false);
@@ -38,7 +41,7 @@ const saveProvince = async () => {
       method: "POST",
       body: {
         ...province.value,
-        slug: genSlug(province.value.name)
+        slug: genSlug(province.value.name),
       },
     });
 
@@ -58,7 +61,6 @@ const saveProvince = async () => {
     pending.value = false;
   }
 };
-
 </script>
 
 <template>
@@ -69,10 +71,17 @@ const saveProvince = async () => {
       <!-- Question -->
       <div>
         <Label for="title" class="mb-2 ml-1">Tên</Label>
-        <Input
-          id="title"
-          v-model="province.name"
-          placeholder="Nhập tên..."
+        <Input id="title" v-model="province.name" placeholder="Nhập tên..." />
+      </div>
+
+      <!-- Loại hình -->
+      <div>
+        <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
+        <MultiSelect
+          v-model="province.property_types"
+          :options="PROPERTY_TYPES"
+          placeholder="Chọn loại hình..."
+          class="w-64"
         />
       </div>
 

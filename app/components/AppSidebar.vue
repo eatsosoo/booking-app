@@ -8,6 +8,7 @@ import {
   MenuIcon,
   MonitorCloud,
   FolderKanban,
+  ChartNoAxesCombinedIcon,
 } from "lucide-vue-next";
 import {
   Sidebar,
@@ -29,7 +30,12 @@ const items = [
     icon: Home,
   },
   {
-    title: "Bài viết",
+    title: "Bảng điều khiển",
+    url: "/admin",
+    icon: ChartNoAxesCombinedIcon,
+  },
+  {
+    title: "Cẩm nang",
     url: "/admin/quan-ly-bai-viet",
     icon: Inbox,
   },
@@ -64,14 +70,19 @@ const items = [
     icon: Settings,
   },
 ];
+
+const router = useRouter();
+const currentRoute = router.currentRoute;
+console.log(currentRoute.value.path);
 </script>
 
 <template>
   <Sidebar>
     <SidebarHeader>
       <SidebarMenu>
-        <SidebarMenuItem>
-          <span class="px-2">Booking Now</span>
+        <SidebarMenuItem class="flex items-center justify-center space-x-2">
+          <NuxtImg src="/logo.png" alt="Logo" width="120" height="40" />
+          <span class="px-2 text-primary font-bold">ADMIN</span>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarHeader>
@@ -85,7 +96,13 @@ const items = [
               :key="item.title"
               class="py-1"
             >
-              <SidebarMenuButton as-child>
+              <SidebarMenuButton
+                as-child
+                class="hover:bg-gray-200"
+                :class="{
+                  'bg-primary text-white': currentRoute.path === item.url,
+                }"
+              >
                 <a :href="item.url">
                   <component :is="item.icon" />
                   <span>{{ item.title }}</span>

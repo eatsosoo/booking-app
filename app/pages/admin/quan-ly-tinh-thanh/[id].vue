@@ -14,6 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "vue-sonner";
+import { PROPERTY_TYPES } from "~/constants";
+import MultiSelect from "~/components/common/MultiSelect.vue";
 
 definePageMeta({
   layout: "admin",
@@ -68,14 +70,21 @@ const saveProvince = async () => {
       <!-- Question -->
       <div>
         <Label for="title" class="mb-2 ml-1">Tên</Label>
-        <Input
-          id="title"
-          v-model="province.name"
-          placeholder="Nhập tên..."
+        <Input id="title" v-model="province.name" placeholder="Nhập tên..." />
+      </div>
+
+      <!-- Loại hình -->
+      <div>
+        <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
+        <MultiSelect
+          v-model="province.property_types"
+          :options="PROPERTY_TYPES"
+          placeholder="Chọn loại hình..."
+          class="w-64"
         />
       </div>
 
-      <!-- Answer -->
+      <!-- Region -->
       <div>
         <Label for="answer" class="mb-2 ml-1">Khu vực</Label>
         <Select v-model="province.region">
@@ -96,7 +105,9 @@ const saveProvince = async () => {
 
     <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" :loading="loading" @click="saveProvince"> Lưu thay đổi </Button>
+      <Button variant="default" :loading="loading" @click="saveProvince">
+        Lưu thay đổi
+      </Button>
     </div>
   </section>
 </template>

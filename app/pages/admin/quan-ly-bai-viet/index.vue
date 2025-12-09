@@ -6,7 +6,6 @@ import type {
   SortingState,
   VisibilityState,
 } from "@tanstack/vue-table";
-import { createReusableTemplate } from "@vueuse/core";
 import { PlusSquareIcon } from "lucide-vue-next";
 import { h, ref } from "vue";
 
@@ -66,7 +65,9 @@ async function deleteItem(itemId: number) {
 
     refresh();
   } catch (err: any) {
-    toast.error(titleNotify, { description: err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!" });
+    toast.error(titleNotify, {
+      description: err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!",
+    });
   }
 }
 
@@ -101,14 +102,19 @@ const columns: ColumnDef<Post>[] = [
   {
     accessorKey: "title",
     header: "Tiêu đề",
-    cell: ({ row }) => h("div", { class: "capitalize w-50 text-wrap" }, row.getValue("title")),
+    cell: ({ row }) =>
+      h("div", { class: "capitalize w-50 text-wrap" }, row.getValue("title")),
     enableSorting: false,
   },
   {
     accessorKey: "keywords",
     header: "Từ khoá",
     cell: ({ row }) =>
-      h("div", { class: "capitalize w-100 text-wrap" }, row.getValue("keywords")),
+      h(
+        "div",
+        { class: "capitalize w-100 text-wrap" },
+        row.getValue("keywords")
+      ),
   },
   {
     accessorKey: "is_published",
@@ -160,7 +166,7 @@ watch(
 
 <template>
   <section>
-    <h1 class="font-semibold text-2xl mb-6">Quản lý danh sách bài viết</h1>
+    <h1 class="font-semibold text-2xl mb-6">Danh sách bài viết</h1>
 
     <DataTable
       :data="posts"

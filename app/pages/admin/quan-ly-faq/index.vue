@@ -35,10 +35,7 @@ const expanded = ref<ExpandedState>({});
 // --- GET LIST CATEGORY ---
 const { data, refresh, pending } = await useAsyncData(
   "faqs-list",
-  () =>
-    request<Faq[]>(
-      `/faqs?page=${page.value}&search=${search.value}`
-    ),
+  () => request<Faq[]>(`/faqs?page=${page.value}&search=${search.value}`),
   {
     watch: [page, search],
   }
@@ -104,7 +101,7 @@ async function deleteItem(id: number) {
     });
 
     await refresh();
-    
+
     toast.success("Thành công", {
       description: "FAQ đã được xoá thành công!",
     });
@@ -118,7 +115,7 @@ async function deleteItem(id: number) {
 
 <template>
   <section>
-    <h1 class="font-semibold text-2xl">Quản lý danh sách phòng</h1>
+    <h1 class="font-semibold text-2xl">Danh sách phòng</h1>
 
     <DataTable
       :data="faqs"

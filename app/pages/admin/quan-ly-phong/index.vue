@@ -6,9 +6,7 @@ import type {
   SortingState,
   VisibilityState,
 } from "@tanstack/vue-table";
-import {
-  PlusSquareIcon,
-} from "lucide-vue-next";
+import { PlusSquareIcon } from "lucide-vue-next";
 import { h, ref } from "vue";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -85,14 +83,23 @@ const columns: ColumnDef<Properties>[] = [
   {
     accessorKey: "name",
     header: "Tên",
-    cell: ({ row }) => h("div", { class: "capitalize max-w-50 text-wrap" }, row.getValue("name")),
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize max-w-50 text-wrap" },
+        row.getValue("name")
+      ),
     enableSorting: false,
   },
   {
     accessorKey: "address",
     header: "Địa chỉ",
     cell: ({ row }) =>
-      h("div", { class: "capitalize max-w-50 text-wrap" }, row.getValue("address")),
+      h(
+        "div",
+        { class: "capitalize max-w-50 text-wrap" },
+        row.getValue("address")
+      ),
   },
   {
     accessorKey: "property_types",
@@ -187,7 +194,7 @@ async function deleteItem(id: number) {
     });
 
     await refresh();
-    
+
     toast.success("Thành công", {
       description: "Sao chép phòng thành công!",
     });
@@ -210,20 +217,20 @@ async function duplicateItem() {
   const ids: number[] = [];
   rooms.value.forEach((item, index) => {
     if (indexSelected.includes(index.toString())) {
-      ids.push(item.id)
+      ids.push(item.id);
     }
-  })
+  });
 
   try {
     await request(`/properties/copy`, {
       method: "POST",
       body: {
-        id: ids
-      }
+        id: ids,
+      },
     });
 
     await refresh();
-    
+
     toast.success("Thành công", {
       description: "Phòng đã được sao chép thành công!",
     });
@@ -237,7 +244,7 @@ async function duplicateItem() {
 
 <template>
   <section>
-    <h1 class="font-semibold text-2xl">Quản lý danh sách phòng</h1>
+    <h1 class="font-semibold text-2xl">Danh sách phòng</h1>
 
     <DataTable
       :data="rooms"
@@ -253,7 +260,10 @@ async function duplicateItem() {
       @update:sorting="sorting = $event"
       @update:column-filters="columnFilters = $event"
       @update:column-visibility="columnVisibility = $event"
-      @update:row-selection="rowSelection = $event; console.log($event)"
+      @update:row-selection="
+        rowSelection = $event;
+        console.log($event);
+      "
       @update:expanded="expanded = $event"
       @update:search="search = $event"
     >

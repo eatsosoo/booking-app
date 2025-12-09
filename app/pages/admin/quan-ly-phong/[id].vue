@@ -20,6 +20,15 @@ import SearchSelect from "~/components/common/SearchSelect.vue";
 import UploadImage from "~/components/common/UploadImage.vue";
 import UploadMultiImage from "~/components/common/UploadMultiImage.vue";
 import EditorCustom from "~/components/common/EditorCustom.vue";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 definePageMeta({
   layout: "admin",
@@ -109,13 +118,13 @@ categoryOptions.value =
         <Input id="title" v-model="home.name" placeholder="Nhập tiêu đề..." />
       </div>
 
-      <!-- Hạng mục -->
+      <!-- Loại hình -->
       <div>
-        <Label for="property_types" class="mb-2 ml-1">Hạng mục</Label>
+        <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
         <MultiSelect
           v-model="multiSelected.property_types"
           :options="PROPERTY_TYPES"
-          placeholder="Chọn hạng mục..."
+          placeholder="Chọn loại hình..."
           class="w-64"
         />
       </div>
@@ -149,6 +158,24 @@ categoryOptions.value =
           type="number"
           placeholder="Nhập diện tích..."
         />
+      </div>
+
+      <!-- Region -->
+      <div>
+        <Label for="answer" class="mb-2 ml-1">Khu vực</Label>
+        <Select v-model="home.region">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn khu vực..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem value="Miền Bắc"> Miền Bắc </SelectItem>
+              <SelectItem value="Miền Trung"> Miền Trung </SelectItem>
+              <SelectItem value="Miền Nam"> Miền Nam </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
     </div>
 

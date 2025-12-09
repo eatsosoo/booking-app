@@ -39,6 +39,15 @@ export const useProvinces = () => {
     return provinces.value?.data.items.find(p => p.name === name)
   }
 
+  // Get province by property id and region
+  const getProvinceByPropertyIdAndRegion = (propertyId: number, region: string) => {
+    return provinces.value?.data.items.filter(p =>
+      p.property_types.map((item) => item.id).includes(propertyId) &&
+      (p.region.includes(region) ||
+        [region, `${region} Bộ`].includes(p.region))
+    )
+  }
+
   return {
     provinces,
     northernProvinces,
@@ -48,6 +57,7 @@ export const useProvinces = () => {
     error,
     refresh,
     getProvinceBySlug,
-    getProvinceByName
+    getProvinceByName,
+    getProvinceByPropertyIdAndRegion
   }
 }

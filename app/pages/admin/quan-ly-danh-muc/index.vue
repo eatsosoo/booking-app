@@ -143,7 +143,7 @@ watch(
 
 <template>
   <section>
-    <h1 class="font-semibold text-2xl">Quản lý danh sách phòng</h1>
+    <h1 class="font-semibold text-2xl">Danh sách phòng</h1>
 
     <DataTable
       :data="categories"

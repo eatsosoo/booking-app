@@ -7,10 +7,10 @@
       <div>
         <NuxtLink to="/" class="flex items-center space-x-2 mb-4">
           <!-- <img src="/logo.png" alt="Logo" class="h-8 w-8 object-contain" /> -->
-          <span class="text-xl font-semibold text-white">BookingNow</span>
+          <span class="text-xl font-semibold text-white">DYHOME</span>
         </NuxtLink>
         <p class="text-sm leading-relaxed">
-          BookingNow giúp bạn dễ dàng đặt phòng khách sạn, vé du lịch, tour trọn
+          DYHOME giúp bạn dễ dàng đặt phòng khách sạn, vé du lịch, tour trọn
           gói, và nhiều dịch vụ khác trên toàn thế giới với giá tốt nhất.
         </p>
         <div class="flex space-x-4 mt-4">
@@ -138,8 +138,7 @@
     <div
       class="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-500"
     >
-      © {{ new Date().getFullYear() }} BookingNow. Tất cả các quyền được bảo
-      lưu.
+      © {{ new Date().getFullYear() }} DYHOME. Tất cả các quyền được bảo lưu.
     </div>
   </footer>
 </template>

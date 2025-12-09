@@ -47,6 +47,13 @@ export type CategoryForm = {
   description: string
 }
 
+export type ProvinceForm = {
+  name: string
+  slug: string
+  region: string
+  property_types: string[];
+}
+
 export type SelectOption = {
   id: number
   name: string

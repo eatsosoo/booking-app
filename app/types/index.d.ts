@@ -21,6 +21,7 @@ export interface Properties {
   name: string
   description: string
   address: string
+  region: string
   type: string
   area: number
   guest: number
@@ -73,8 +74,7 @@ export interface Province {
   name: string;
   slug: string;
   region: string;
-  created_at: string;
-  updated_at: string;
+  property_types: { id: number, name: string }[];
 }
 
 export interface SystemSetting {

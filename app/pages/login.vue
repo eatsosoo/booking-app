@@ -2,7 +2,7 @@
   <div class="flex items-center justify-center min-h-screen bg-gray-50">
     <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
       <h1 class="text-2xl font-semibold text-center text-primary mb-6">
-        Booking Now
+        DYHOME
       </h1>
 
       <form class="space-y-5" @submit.prevent="handleLogin">
@@ -44,7 +44,9 @@
           </NuxtLink>
         </div>
 
-        <Button type="submit" :loading="loading" class="w-full"> Đăng nhập </Button>
+        <Button type="submit" :loading="loading" class="w-full">
+          Đăng nhập
+        </Button>
       </form>
     </div>
 
@@ -60,7 +62,7 @@ import Button from "~/components/ui/button/Button.vue";
 import Checkbox from "~/components/ui/checkbox/Checkbox.vue";
 import Input from "~/components/ui/input/Input.vue";
 import { Toaster } from "~/components/ui/sonner";
-import 'vue-sonner/style.css'
+import "vue-sonner/style.css";
 
 useSeoMeta({
   title: "Đăng nhập",
@@ -93,8 +95,7 @@ const handleLogin = async () => {
     if (result.statusCode !== 200) {
       toast.error("Đăng nhập thất bại *", {
         description:
-        result.message ||
-          "Sai email hoặc mật khẩu, vui lòng kiểm tra lại.",
+          result.message || "Sai email hoặc mật khẩu, vui lòng kiểm tra lại.",
       });
       return;
     }
@@ -112,7 +113,7 @@ const handleLogin = async () => {
       description: "Có lỗi xảy ra, vui lòng thử lại!",
     });
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 };
 </script>
