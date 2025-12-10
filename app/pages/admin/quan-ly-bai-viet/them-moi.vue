@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Post, Response } from "~/types";
+import type { Category, Option3, Post, Response } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
@@ -10,6 +10,17 @@ import type { PostForm } from "~/types/booking";
 import { genSlug } from "~/utils/string-helper";
 import UploadImage from "~/components/common/UploadImage.vue";
 import EditorCustom from "~/components/common/EditorCustom.vue";
+import { PROPERTY_TYPES } from "~/constants";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import SearchSelect from "~/components/common/SearchSelect.vue";
 
 definePageMeta({
   layout: "admin",
@@ -22,10 +33,18 @@ const post = ref<PostForm>({
   image: "",
   description: "",
   keywords: "",
+  property_types: [],
+  category_id: null,
+  region: "Miền bắc",
   content: "Nội dung bài viết...",
 });
+const categoryOptions = ref<Option3[]>([]);
 
+const config = useRuntimeConfig();
 const { request } = useApi();
+const { data: categoriesData } = await useFetch<Response<Category[]>>(
+  `${config.public.apiBase}/home/categories`
+);
 
 const savePost = async () => {
   const titleNotify = "Tạo bài viết mới";
@@ -52,6 +71,12 @@ const savePost = async () => {
 const handleContentChange = (val: string) => {
   post.value.content = val;
 };
+
+categoryOptions.value =
+  categoriesData.value?.data.items.map((service) => ({
+    label: service.name,
+    value: service.id,
+  })) || [];
 </script>
 
 <template>
@@ -76,14 +101,43 @@ const handleContentChange = (val: string) => {
         <Input id="slug" v-model="post.slug" readonly />
       </div>
 
-      <!-- Description -->
+      <!-- Loại hình -->
       <div>
-        <Label for="description" class="mb-2 ml-1">Mô tả</Label>
-        <Textarea
-          id="description"
-          v-model="post.description"
-          placeholder="Nhập mô tả..."
+        <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
+        <CommonMultiSelect
+          v-model="post.property_types"
+          :options="PROPERTY_TYPES"
+          placeholder="Chọn loại hình..."
+          class="w-64"
         />
+      </div>
+
+      <!-- Loại -->
+      <div>
+        <Label for="type" class="mb-2 ml-1">Loại dự án</Label>
+        <SearchSelect
+          :model-value="post.category_id"
+          :frameworks="categoryOptions"
+          @update:model-value="post.category_id = $event"
+        />
+      </div>
+
+      <!-- Region -->
+      <div>
+        <Label for="answer" class="mb-2 ml-1">Khu vực</Label>
+        <Select v-model="post.region">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn khu vực..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem value="Miền Bắc"> Miền Bắc </SelectItem>
+              <SelectItem value="Miền Trung"> Miền Trung </SelectItem>
+              <SelectItem value="Miền Nam"> Miền Nam </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       <!-- Keywords -->
@@ -96,13 +150,20 @@ const handleContentChange = (val: string) => {
         />
       </div>
 
+      <!-- Description -->
+      <div>
+        <Label for="description" class="mb-2 ml-1">Mô tả</Label>
+        <Textarea
+          id="description"
+          v-model="post.description"
+          placeholder="Nhập mô tả..."
+        />
+      </div>
+
       <!-- Image -->
       <div>
         <Label for="image" class="mb-2 ml-1">Hình ảnh</Label>
-        <UploadImage
-          :url="post.image"
-          @uploaded="post.image = $event"
-        />
+        <UploadImage :url="post.image" @uploaded="post.image = $event" />
       </div>
 
       <!-- Content -->
@@ -119,9 +180,7 @@ const handleContentChange = (val: string) => {
 
     <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" @click="savePost"
-        >Tạo mới</Button
-      >
+      <Button variant="default" @click="savePost">Tạo mới</Button>
     </div>
   </section>
 </template>

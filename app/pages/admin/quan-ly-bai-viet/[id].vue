@@ -8,6 +8,8 @@ import { toast } from "vue-sonner";
 import { useApi } from "~/composables/useApi";
 import EditorCustom from "~/components/common/EditorCustom.vue";
 import UploadImage from "~/components/common/UploadImage.vue";
+import { PROPERTY_TYPES } from "~/constants";
+import MultiSelect from "~/components/common/MultiSelect.vue";
 
 definePageMeta({
   layout: "admin",

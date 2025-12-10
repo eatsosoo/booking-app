@@ -30,6 +30,9 @@ export type PostForm = {
   description: string
   keywords: string
   content: string
+  category_id: string | null
+  property_types: number[]
+  region: string
 }
 
 export type ServiceForm = {
