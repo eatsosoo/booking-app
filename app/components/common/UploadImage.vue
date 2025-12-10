@@ -1,5 +1,5 @@
 <template>
-  <div class="p-2 rounded-md shadow-xs border border-dashed">
+  <div class="p-2 rounded-md shadow-xs border border-dashed bg-gray-50">
     <div class="flex items-center">
       <input
         ref="imageInput"
@@ -11,7 +11,7 @@
       <Button size="icon" @click="imageInput?.click()">
         <ImageIcon class="w-4 h-4" />
       </Button>
-      <span class="text-md ml-2">{{
+      <span class="text-[14px] ml-2">{{
         imageUrl ? "Thay đổi ảnh" : "Tải ảnh lên"
       }}</span>
       <Spinner v-if="loading" class="size-4 ml-2" />

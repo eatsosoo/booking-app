@@ -12,6 +12,7 @@ export type PropertiesForm = {
   extra_hour: number
   per_day: number
   per_night: number
+  per_month: number
   content: string
   thumbnail: string
   gallery: string[]
@@ -19,6 +20,7 @@ export type PropertiesForm = {
   property_types: number[]
   category_id: number
   slug: string
+  region: string
 }
 
 export type PostForm = {

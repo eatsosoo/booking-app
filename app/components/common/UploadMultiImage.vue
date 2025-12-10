@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-4 border border-dashed p-2 rounded-md">
+  <div class="space-y-4 border border-dashed p-2 rounded-md bg-gray-50">
     <!-- Nút upload -->
     <div class="flex items-center space-x-2">
       <label

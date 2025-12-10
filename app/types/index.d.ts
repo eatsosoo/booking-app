@@ -32,6 +32,7 @@ export interface Properties {
   extra_hour: number
   per_day: number
   per_night: number
+  per_month: number
   content: string
   thumbnail: string
   gallery: string[]

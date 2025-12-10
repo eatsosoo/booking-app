@@ -2,7 +2,14 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Category, Option, Option2, Response, Service } from "~/types";
+import type {
+  Category,
+  Option,
+  Option2,
+  Option3,
+  Response,
+  Service,
+} from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
@@ -15,6 +22,15 @@ import { genSlug } from "~/utils/string-helper";
 import UploadImage from "~/components/common/UploadImage.vue";
 import UploadMultiImage from "~/components/common/UploadMultiImage.vue";
 import EditorCustom from "~/components/common/EditorCustom.vue";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 definePageMeta({
   layout: "admin",
@@ -23,7 +39,7 @@ definePageMeta({
 
 const config = useRuntimeConfig();
 const serviceOptions = ref<Option[]>([]);
-const categoryOptions = ref<Option2[]>([]);
+const categoryOptions = ref<Option3[]>([]);
 const post = ref<PropertiesForm>({
   name: "",
   description: "",
@@ -34,10 +50,11 @@ const post = ref<PropertiesForm>({
   bedrooms: 1,
   bathrooms: 1,
   bed: 1,
-  base_hours: 50000,
-  extra_hour: 50000,
-  per_day: 50000,
-  per_night: 50000,
+  base_hours: 0,
+  extra_hour: 0,
+  per_day: 0,
+  per_night: 0,
+  per_month: 0,
   content: "<p>Nội dung giới thiệu...</p>",
   thumbnail: "",
   gallery: [],
@@ -45,6 +62,7 @@ const post = ref<PropertiesForm>({
   property_types: [],
   category_id: 1,
   slug: "",
+  region: "Miền Bắc",
 });
 
 const { data: servicesData } = await useFetch<Response<Service[]>>(
@@ -98,10 +116,10 @@ serviceOptions.value =
 categoryOptions.value =
   categoriesData.value?.data.items.map((service) => ({
     label: service.name,
-    value: service.id.toString(),
+    value: service.id,
   })) || [];
 
-post.value.category_id = categoryOptions.value[0]?.value || 1;
+post.value.category_id = categoryOptions.value[0]?.value;
 </script>
 
 <template>
@@ -120,13 +138,13 @@ post.value.category_id = categoryOptions.value[0]?.value || 1;
         />
       </div>
 
-      <!-- Hạng mục -->
+      <!-- Loại hình -->
       <div>
-        <Label for="property_types" class="mb-2 ml-1">Hạng mục</Label>
+        <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
         <MultiSelect
           v-model="post.property_types"
           :options="PROPERTY_TYPES"
-          placeholder="Chọn hạng mục..."
+          placeholder="Chọn loại hình..."
           class="w-64"
         />
       </div>
@@ -160,6 +178,24 @@ post.value.category_id = categoryOptions.value[0]?.value || 1;
           type="number"
           placeholder="Nhập diện tích..."
         />
+      </div>
+
+      <!-- Region -->
+      <div>
+        <Label for="answer" class="mb-2 ml-1">Khu vực</Label>
+        <Select v-model="post.region">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn khu vực..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem value="Miền Bắc"> Miền Bắc </SelectItem>
+              <SelectItem value="Miền Trung"> Miền Trung </SelectItem>
+              <SelectItem value="Miền Nam"> Miền Nam </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
     </div>
 
@@ -254,6 +290,17 @@ post.value.category_id = categoryOptions.value[0]?.value || 1;
         <Input
           id="per_night"
           v-model="post.per_night"
+          type="number"
+          placeholder="Nhập số tiền..."
+        />
+      </div>
+
+      <!-- Per month -->
+      <div>
+        <Label for="per_month" class="mb-2 ml-1">Thuê theo tháng (VND)</Label>
+        <Input
+          id="per_month"
+          v-model="post.per_month"
           type="number"
           placeholder="Nhập số tiền..."
         />

@@ -60,7 +60,7 @@ function removeValue(val: string | number) {
   <Popover v-model:open="open">
     <PopoverTrigger as-child>
       <button
-        class="w-full flex items-center justify-between rounded-md border px-3 py-2 text-sm h-10"
+        class="w-full flex items-center justify-between rounded-md border px-3 py-2 text-sm h-9 bg-gray-50"
         :class="props.class"
       >
         <div class="flex gap-1 flex-wrap text-left">
@@ -88,9 +88,9 @@ function removeValue(val: string | number) {
 
     <PopoverContent class="p-0 w-[260px]">
       <Command>
-        <CommandInput v-model="search" placeholder="Search..." />
+        <CommandInput v-model="search" placeholder="Tìm kiếm..." />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandEmpty>Không tìm thấy kết quả.</CommandEmpty>
           <CommandGroup>
             <CommandItem
               v-for="opt in filteredOptions"

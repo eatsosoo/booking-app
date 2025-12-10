@@ -276,6 +276,17 @@ categoryOptions.value =
         />
       </div>
 
+      <!-- Thuê theo tháng -->
+      <div>
+        <Label for="per_month" class="mb-2 ml-1">Thuê theo tháng (VND)</Label>
+        <Input
+          id="per_month"
+          v-model="home.per_month"
+          type="number"
+          placeholder="Nhập số tiền..."
+        />
+      </div>
+
       <!-- Dịch vụ đi kèm -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Dịch vụ đi kèm</Label>
