@@ -23,12 +23,12 @@
             <CardTitle>Thông tin liên hệ</CardTitle>
           </CardHeader>
           <CardContent class="space-y-4">
-            <Input placeholder="Họ và tên*" class="h-12" />
+            <Input v-model="guestInfo.name" placeholder="Họ và tên*" class="h-12" />
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input placeholder="Số điện thoại*" class="h-12" />
-              <Input placeholder="Email*" class="h-12" />
+              <Input v-model="guestInfo.phone" placeholder="Số điện thoại*" class="h-12" />
+              <Input v-model="guestInfo.email" placeholder="Email*" class="h-12" />
             </div>
-            <Textarea placeholder="Ghi chú" />
+            <Textarea v-model="guestInfo.note" placeholder="Ghi chú" />
             <p class="text-xs text-red-400">
               Xin lưu ý yêu cầu đặc biệt không được bảo đảm trước và có thể bị
               thu phí.
@@ -114,14 +114,14 @@
             </div>
             <div class="flex justify-between">
               <div>
-                <p>Thứ 6</p>
-                <p>2025/11/14</p>
-                <p>Nhận phòng: 14:00</p>
+                <!-- <p>Thứ 6</p> -->
+                <p>{{ orderData.times.start_date }}</p>
+                <p>Nhận phòng: {{ orderData.times.start_time }}</p>
               </div>
               <div class="text-right">
-                <p>Thứ 7</p>
-                <p>2025/11/15</p>
-                <p>Trả phòng: 12:00</p>
+                <!-- <p>Thứ 7</p> -->
+                <p>{{ orderData.times.end_date }}</p>
+                <p>Trả phòng: {{ orderData.times.end_time }}</p>
               </div>
             </div>
 
@@ -131,16 +131,16 @@
               <span class="font-semibold">Số lượng khách (1 khách)</span>
               <a class="text-blue-600 underline">Thay đổi</a>
             </div>
-            <p class="text-gray-700">1 người lớn</p>
+            <p class="text-gray-700">{{ orderData.amount_guest }} người lớn</p>
 
             <Separator />
 
             <div class="flex justify-between font-semibold">
-              <span>Tổng giá phòng</span>
-              <span>1.199.000 đ</span>
+              <span>Giá tiền dự kiến</span>
+              <span>{{ formatCurrency(orderData.total) }}</span>
             </div>
 
-            <Button class="w-full h-12 mt-4">Đặt chỗ</Button>
+            <Button class="w-full h-12 mt-4" :loading="loading" @click="submitOrder">Đặt chỗ</Button>
           </CardContent>
         </Card>
       </div>
@@ -156,4 +156,56 @@ import Separator from "~/components/ui/separator/Separator.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Button from "~/components/ui/button/Button.vue";
+import { toast } from "vue-sonner";
+
+const storageData = sessionStorage.getItem("order");
+const router = useRouter();
+const config = useRuntimeConfig();
+
+if (!storageData) {
+  router.back();
+}
+const orderData = ref(JSON.parse(storageData))
+const loading = ref<boolean>(false)
+const guestInfo = reactive({
+  name: "",
+  phone: "",
+  email: "",
+  note: ""
+})
+
+const submitOrder = async () => {
+  const toastTitle = "Xác nhận đặt phòng"
+  const { name, phone, email } = guestInfo
+  if (!name || !phone || !email) {
+    toast.warning(toastTitle, { description: "Vui lòng điền đủ thông tin liên hệ" });
+    return;
+  }
+
+  try {
+    const data = await $fetch<{ data: { items: string[] } }>(
+      `${config.public.apiBase}/booking`,
+      {
+        method: "POST",
+        body: {
+          ...guestInfo,
+          bookingInfo: orderData.value
+        },
+      }
+    );
+
+    toast.success(toastTitle, {
+      description: "Ảnh đã được tải lên thành công!",
+    });
+    // navigateTo("/cam-on?code=1")
+  } catch (err: any) {
+    console.log(err)
+    toast.error(toastTitle, {
+      description:
+        err?.data?.message ?? "Có lỗi xảy ra khi đặt chỗ, vui lòng thử lại!",
+    });
+  } finally {
+    loading.value = false;
+  }
+}
 </script>

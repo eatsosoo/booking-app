@@ -83,9 +83,10 @@ const saveProperties = async () => {
     toast.success("Cập nhật phòng", {
       description: "Phòng đã được cập nhật thành công!",
     });
+    navigateTo("/admin/quan-ly-phong")
   } catch (err: any) {
     toast.error("Cập nhật phòng", {
-      description: err?.message || "Không thể kết nối đến máy chủ!",
+      description: err.data.message || "Không thể kết nối đến máy chủ!",
     });
   } finally {
     loading.value = false;

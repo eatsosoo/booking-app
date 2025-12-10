@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Category, Option3, Post, Response } from "~/types";
+import type { Category, Option2, Option3, Post, Response } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
@@ -38,7 +38,7 @@ const post = ref<PostForm>({
   region: "Miền bắc",
   content: "Nội dung bài viết...",
 });
-const categoryOptions = ref<Option3[]>([]);
+const categoryOptions = ref<Option2[]>([]);
 
 const config = useRuntimeConfig();
 const { request } = useApi();
@@ -61,7 +61,7 @@ const savePost = async () => {
     });
 
     // Redirect về trang quản lý bài viết
-    // return navigateTo("/admin/quan-ly-bai-viet");
+    return navigateTo("/admin/quan-ly-bai-viet");
   } catch (err: any) {
     const msg = err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
     toast.error(titleNotify, { description: msg });
@@ -75,8 +75,10 @@ const handleContentChange = (val: string) => {
 categoryOptions.value =
   categoriesData.value?.data.items.map((service) => ({
     label: service.name,
-    value: service.id,
+    value: service.id.toString(),
   })) || [];
+
+post.value.category_id = categoryOptions.value[0]?.value;
 </script>
 
 <template>

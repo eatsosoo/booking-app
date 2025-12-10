@@ -129,10 +129,16 @@ const columns: ColumnDef<Post>[] = [
       ),
   },
   {
-    accessorKey: "created_at",
-    header: "Ngày tạo",
+    accessorKey: "property_types",
+    header: "Loại hình",
     cell: ({ row }) =>
-      h("div", { class: "capitalize" }, convertUTC(row.getValue("created_at"))),
+      h("div", { class: "capitalize" }, row.getValue("property_types").map((item) => item.name).join(' | ')),
+  },
+  {
+    accessorKey: "region",
+    header: "Khu vực",
+    cell: ({ row }) =>
+      h("div", { class: "capitalize" }, row.getValue("region")),
   },
   {
     id: "actions",

@@ -20,14 +20,14 @@ export const useApi = () => {
       }
 
       if (err?.status === 422) {
-        err.data.message = "Dữ liệu không hợp lệ!";
+        err.data.message = err.data.message || "Dữ liệu không hợp lệ!";
       }
 
       if (err?.status === 500) {
         err.data.message = "Lỗi máy chủ, vui lòng thử lại!";
       }
 
-      console.error("API Error:", err);
+      // console.error("API Error:", err);
       throw err;
     }
   };

@@ -153,7 +153,7 @@ post.value.category_id = categoryOptions.value[0]?.value;
       <div>
         <Label for="type" class="mb-2 ml-1">Loại dự án</Label>
         <SearchSelect
-          :model-value="post.category_id.toString()"
+          :model-value="post.category_id"
           :frameworks="categoryOptions"
           @update:model-value="post.category_id = $event"
         />

@@ -39,12 +39,10 @@ const { getProvinceByPropertyIdAndRegion } = useProvinces();
                 region
               )"
               :key="province.id"
+              @click="navigateTo(`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`)"
             >
-              <NuxtLink
-                :to="`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`"
-              >
+          
                 {{ province.name }}
-              </NuxtLink>
             </MenubarItem>
           </MenubarSubContent>
         </MenubarSub>

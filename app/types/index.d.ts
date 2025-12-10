@@ -4,6 +4,14 @@ export interface Faq {
   answer: string
 }
 
+export interface Booking {
+  id: number
+  name: string
+  phone: string
+  email: string
+  booking_info: any
+}
+
 export interface Post {
   id: number
   title: string
@@ -13,6 +21,9 @@ export interface Post {
   description: string
   content: string
   created_at: string
+  region: string
+  property_types: { id: number, name: string }[]
+  cateogrory_id: number
 }
 
 export interface Properties {

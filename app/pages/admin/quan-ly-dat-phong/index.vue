@@ -6,11 +6,8 @@ import type {
   SortingState,
   VisibilityState,
 } from "@tanstack/vue-table";
-import { PlusSquareIcon } from "lucide-vue-next";
 import { h, ref } from "vue";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import type { Faq } from "~/types";
+import type { Booking } from "~/types";
 import { toast } from "vue-sonner";
 import DataTable from "~/components/common/data-table/DataTable.vue";
 import ActionDropdown from "~/components/common/data-table/ActionDropdown.vue";
@@ -34,8 +31,8 @@ const expanded = ref<ExpandedState>({});
 
 // --- GET LIST CATEGORY ---
 const { data, refresh, pending } = await useAsyncData(
-  "faqs-list",
-  () => request<Faq[]>(`/faqs?page=${page.value}&search=${search.value}`),
+  "bookings-list",
+  () => request<Booking[]>(`/booking?page=${page.value}&search=${search.value}`),
   {
     watch: [page, search],
   }
@@ -48,47 +45,36 @@ const pagination = computed(
 );
 
 // COLUMNS DEFINITION
-const columns: ColumnDef<Faq>[] = [
+const columns: ColumnDef<Booking>[] = [
   {
-    id: "select",
-    header: ({ table }) =>
-      h(Checkbox, {
-        modelValue:
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate"),
-        "onUpdate:modelValue": (value) =>
-          table.toggleAllPageRowsSelected(!!value),
-        ariaLabel: "Select all",
-      }),
+    accessorKey: "name",
+    header: "Khách hàng",
     cell: ({ row }) =>
-      h(Checkbox, {
-        modelValue: row.getIsSelected(),
-        "onUpdate:modelValue": (value) => row.toggleSelected(!!value),
-        ariaLabel: "Select row",
-      }),
+      h("div", { class: "capitalize" }, row.getValue("name")),
     enableSorting: false,
-    enableHiding: false,
   },
   {
-    accessorKey: "question",
-    header: "Câu hỏi",
+    accessorKey: "phone",
+    header: "Số điện thoại",
     cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("question")),
+      h("div", { class: "capitalize" }, row.getValue("phone")),
+    enableSorting: false,
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+    cell: ({ row }) =>
+      h("div", { class: "capitalize" }, row.getValue("email")),
     enableSorting: false,
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const post = row.original;
+      const booking = row.original;
       return h(ActionDropdown, {
-        itemId: post.id,
-        editLink: `/admin/quan-ly-faq/${post.id}`,
-        onDelete: () => deleteItem(post.id),
-        onCopy: () => {
-          navigator.clipboard.writeText(post.id.toString());
-          toast.success("Đã sao chép ID");
-        },
+        itemId: booking.id,
+        onDelete: () => deleteItem(booking.id),
       });
     },
   },
@@ -96,14 +82,14 @@ const columns: ColumnDef<Faq>[] = [
 
 async function deleteItem(id: number) {
   try {
-    await request(`/faqs/${id}`, {
+    await request(`/booking/${id}`, {
       method: "DELETE",
     });
 
     await refresh();
 
     toast.success("Thành công", {
-      description: "FAQ đã được xoá thành công!",
+      description: "Booking đã được xoá thành công!",
     });
   } catch (error) {
     toast.error("Lỗi!", {
@@ -115,7 +101,7 @@ async function deleteItem(id: number) {
 
 <template>
   <section>
-    <h1 class="font-semibold text-2xl">Danh sách FAQs</h1>
+    <h1 class="font-semibold text-2xl">Danh sách đặt phòng</h1>
 
     <DataTable
       :data="faqs"
@@ -135,16 +121,6 @@ async function deleteItem(id: number) {
       @update:expanded="expanded = $event"
       @update:search="search = $event"
     >
-      <!-- Left Actions Slot -->
-      <template #left-actions>
-        <NuxtLink to="/admin/quan-ly-faq/them-moi">
-          <Button>
-            <PlusSquareIcon class="h-4 w-4" />
-            Tạo mới
-          </Button>
-        </NuxtLink>
-      </template>
-
       <!-- Expanded Content Slot -->
       <template #expanded="{ original }">
         <div class="p-4 bg-gray-50 rounded">
@@ -155,13 +131,7 @@ async function deleteItem(id: number) {
       <!-- Empty State Slot -->
       <template #empty>
         <div class="text-center py-12">
-          <div class="text-muted-foreground mb-2">Không có FAQ nào</div>
-          <NuxtLink to="/admin/quan-ly-faq/them-moi">
-            <Button variant="outline">
-              <PlusSquareIcon class="h-4 w-4" />
-              Tạo FAQ đầu tiên
-            </Button>
-          </NuxtLink>
+          <div class="text-muted-foreground mb-2">Không có phòng được đặt</div>
         </div>
       </template>
 

@@ -10,6 +10,7 @@ export const useBreadcrumbs = () => {
     "quan-ly-danh-muc": "Quản lý dự án",
     "quan-ly-tinh-thanh": "Quản lý tỉnh thành",
     "cau-hinh-he-thong": "Cấu hình hệ thống",
+    "quan-ly-dat-phong": "Quản lý đặt phòng",
     "them-moi": "Tạo mới",
   };
 

@@ -168,6 +168,16 @@ const columns: ColumnDef<Properties>[] = [
       ),
   },
   {
+    accessorKey: "region",
+    header: "Khu vực",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        h("div", { class: "captilize" }, row.getValue("region"))
+      ),
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {

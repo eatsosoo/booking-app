@@ -1,31 +1,58 @@
 <template>
   <div>
     <section class="p-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-2 cursor-pointer">
-        <div
-          class="h-70 md:h-[390px] lg:h-[390px] xl:h-[500px] bg-cover bg-center"
-          :class="`bg-[url(${home.thumbnail})]`"
-        ></div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <NuxtImg :src="home.gallery[0]" class="object-cover h-full w-full" />
+      <div
+        class="flex gap-2 cursor-pointer h-[390px] lg:h-[390px] xl:h-[500px]"
+      >
+        <!-- Thumbnail bên trái -->
+        <div class="h-full flex-1">
+          <NuxtImg
+            :src="home.thumbnail"
+            :alt="`Thumbnail ${home.name}`"
+            class="w-full h-full object-cover rounded"
+          />
+        </div>
+
+        <!-- 4 ảnh nhỏ bên phải -->
+        <div class="flex-1 grid grid-cols-2 grid-rows-2 gap-2 h-full">
+          <div class="w-full h-full">
+            <NuxtImg
+              :src="home.gallery[0] ?? '/no-image.jpg'"
+              :alt="`Bộ ảnh ${home.name} 1`"
+              class="w-full h-full object-cover rounded"
+            />
           </div>
-          <div>
-            <NuxtImg :src="home.gallery[1]" class="object-cover h-full w-full" />
+
+          <div class="w-full h-full">
+            <NuxtImg
+              :src="home.gallery[1] ?? '/no-image.jpg'"
+              :alt="`Bộ ảnh ${home.name} 2`"
+              class="w-full h-full object-cover rounded"
+            />
           </div>
-          <div>
-            <NuxtImg :src="home.gallery[2]" class="object-cover h-full w-full" />
+
+          <div class="w-full h-full">
+            <NuxtImg
+              :src="home.gallery[2] ?? '/no-image.jpg'"
+              :alt="`Bộ ảnh ${home.name} 3`"
+              class="w-full h-full object-cover rounded"
+            />
           </div>
-          <div class="relative">
-            <NuxtImg :src="home.gallery[3]" class="object-cover h-full w-full" />
+
+          <!-- Ảnh có overlay -->
+          <div class="relative w-full h-full group">
+            <NuxtImg
+              :src="home.gallery[3] ?? '/no-image.jpg'"
+              :alt="`Bộ ảnh ${home.name} 4`"
+              class="w-full h-full object-cover rounded"
+            />
+
+            <!-- Overlay -->
             <div
-              class="absolute top-0 bottom-0 right-0 left-0 bg-black text-white opacity-50"
-            ></div>
-            <div
-              class="transition-all duration-200 hover:scale-150 absolute top-0 bottom-0 right-0 left-0 text-white font-semibold flex justify-center items-center text-center "
+              class="absolute inset-0 bg-black/50 rounded flex justify-center items-center text-white font-semibold text-center transition-all duration-200 group-hover:scale-110"
             >
               Xem tất cả <br />
-              11 Ảnh
+              {{ home.gallery.length }} ảnh
             </div>
           </div>
         </div>
@@ -134,7 +161,12 @@
           <!-- Date & Time selection -->
           <div class="p-4 border rounded-2xl shadow-sm bg-white mb-4">
             <h3 class="font-semibold mb-3">
-              <DatePicker placeholder="Chọn ngày nhận phòng" />
+              <DatePicker
+                :model-value="times.start_date"
+                :max="times.end_date"
+                placeholder="Chọn ngày nhận phòng"
+                @update:model-value="times.start_date = $event"
+              />
             </h3>
 
             <Tabs default-value="morning">
@@ -149,7 +181,8 @@
                   <Button
                     v-for="time in MORNING_TIMES"
                     :key="time"
-                    variant="outline"
+                    :variant="time === times.start_time ? 'default' : 'outline'"
+                    @click="times.start_time = time"
                   >
                     {{ time }}
                   </Button>
@@ -162,7 +195,8 @@
                   <Button
                     v-for="time in AFTERNOON_TIMES"
                     :key="time"
-                    variant="outline"
+                    :variant="time === times.start_time ? 'default' : 'outline'"
+                    @click="times.start_time = time"
                   >
                     {{ time }}
                   </Button>
@@ -173,7 +207,12 @@
             <Separator class="my-4" />
 
             <h3 class="font-semibold mb-3">
-              <DatePicker placeholder="Chọn ngày trả phòng" />
+              <DatePicker
+                :model-value="times.end_date"
+                :min="times.start_date"
+                placeholder="Chọn ngày trả phòng"
+                @update:model-value="times.end_date = $event"
+              />
             </h3>
 
             <Tabs default-value="morning">
@@ -188,7 +227,8 @@
                   <Button
                     v-for="time in MORNING_TIMES"
                     :key="time"
-                    variant="outline"
+                    :variant="time === times.end_time ? 'default' : 'outline'"
+                    @click="times.end_time = time"
                   >
                     {{ time }}
                   </Button>
@@ -201,7 +241,8 @@
                   <Button
                     v-for="time in AFTERNOON_TIMES"
                     :key="time"
-                    variant="outline"
+                    :variant="time === times.end_time ? 'default' : 'outline'"
+                    @click="times.end_time = time"
                   >
                     {{ time }}
                   </Button>
@@ -214,16 +255,22 @@
           <div class="p-4 border rounded-2xl shadow-sm bg-white">
             <p class="font-medium mb-3">Số lượng người</p>
             <div class="flex items-center gap-3">
-              <Button variant="outline" class="w-12">-</Button>
-              <span class="font-semibold text-lg px-4">2</span>
-              <Button variant="outline" class="w-12">+</Button>
+              <Button
+                variant="outline"
+                class="w-12"
+                :disabled="amountGuest === 1"
+                @click="amountGuest--"
+                >-</Button
+              >
+              <span class="font-semibold text-lg px-4">{{ amountGuest }}</span>
+              <Button variant="outline" class="w-12" @click="amountGuest++"
+                >+</Button
+              >
             </div>
           </div>
 
           <!-- Button -->
-          <NuxtLink to="/xac-nhan">
-            <Button class="w-full" size="lg"> Đặt phòng ngay </Button>
-          </NuxtLink>
+          <Button class="w-full" size="lg" @click="confirmOrder"> Đặt phòng ngay </Button>
         </div>
       </div>
     </section>
@@ -238,6 +285,7 @@ import DatePicker from "~/components/DatePicker.vue";
 import { AFTERNOON_TIMES, MORNING_TIMES } from "~/constants";
 import type { Properties, Response } from "~/types";
 import { formatCurrency } from "~/utils/string-helper";
+import { toast } from "vue-sonner";
 
 const route = useRoute();
 const id = route.params.slug;
@@ -245,11 +293,52 @@ const id = route.params.slug;
 const config = useRuntimeConfig();
 
 const home = ref<Properties>({} as Properties);
+const times = reactive({
+  start_date: "",
+  start_time: "",
+  end_date: "",
+  end_time: "",
+});
+const amountGuest = ref<number>(2);
 
 const apiUrl = `${config.public.apiBase}/home/properties/${id}`;
 const { data } = await useFetch<Response<Properties>>(apiUrl);
 
 home.value = data.value?.data.items || ({} as Properties);
-</script>
 
-<style scoped></style>
+const confirmOrder = () => {
+  const { start_date, start_time, end_date, end_time } = times;
+  if (!start_date) {
+    toast.warning("Đặt phòng", {
+      description: "Vui lòng chọn ngày nhận phòng",
+    });
+    return;
+  }
+  if (!start_time) {
+    toast.warning("Đặt phòng", {
+      description: "Vui lòng chọn thời gian nhận phòng",
+    });
+    return;
+  }
+  if (!end_date) {
+    toast.warning("Đặt phòng", { description: "Vui lòng chọn ngày trả phòng" });
+    return;
+  }
+  if (!end_time) {
+    toast.warning("Đặt phòng", {
+      description: "Vui lòng chọn thời gian trả phòng",
+    });
+    return;
+  }
+
+  const orderDataa = {
+    room_id: id,
+    amount_guest: amountGuest.value,
+    times,
+    total: 2000000
+  };
+  sessionStorage.setItem("order", JSON.stringify(orderDataa));
+
+  navigateTo("/xac-nhan")
+};
+</script>
