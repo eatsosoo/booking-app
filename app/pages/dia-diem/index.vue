@@ -81,22 +81,22 @@
                 {{ room.description }}
               </p>
               <ClientOnly>
-                <p class="text-gray-600 mb-2 line-clamp-2 text-[14px]">
+                <p class="text-gray-600 mb-1 line-clamp-2 text-[14px]">
                   <FontAwesomeIcon
                     :icon="['fas', 'location-dot']"
                     class="mr-2"
                   />
                   {{ room.address }}
                 </p>
-                <p class="text-gray-600 mb-2 text-[14px]">
+                <p class="text-gray-600 mb-1 text-[14px]">
                   <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
                   {{ room.bedrooms }} phòng ngủ
                 </p>
-                <p class="text-gray-600 mb-2 text-[14px]">
+                <p class="text-gray-600 mb-1 text-[14px]">
                   <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
                   {{ room.bathrooms }} phòng tắm
                 </p>
-                <p class="text-gray-600 mb-2 text-[14px]">
+                <p class="text-gray-600 mb-1 text-[14px]">
                   <FontAwesomeIcon
                     :icon="['fas', 'people-group']"
                     class="mr-2"
@@ -104,9 +104,32 @@
                   {{ room.guest }} người
                 </p>
               </ClientOnly>
-              <p class="text-lg font-bold text-blue-900">
-                {{ formatCurrency(room.per_night) }} / đêm
-              </p>
+              <div class="mt-2 space-x-2 space-y-2 flex flex-wrap">
+                <p v-if="room.base_hours" :class="tagStyle" class="bg-primary">
+                  {{ formatCurrency(room.base_hours) }} / 2 giờ đầu
+                </p>
+                <p v-if="room.extra_hour" :class="tagStyle" class="bg-red-300">
+                  {{ formatCurrency(room.extra_hour) }} / giờ tiếp theo
+                </p>
+
+                <p
+                  v-if="room.per_night"
+                  :class="tagStyle"
+                  class="bg-orange-300"
+                >
+                  {{ formatCurrency(room.per_night) }} / đêm
+                </p>
+                <p v-if="room.per_day" :class="tagStyle" class="bg-blue-300">
+                  {{ formatCurrency(room.per_day) }} / ngày
+                </p>
+                <p
+                  v-if="room.per_month"
+                  :class="tagStyle"
+                  class="bg-indigo-300"
+                >
+                  {{ formatCurrency(room.per_month) }} / tháng
+                </p>
+              </div>
             </div>
           </div>
 
@@ -137,7 +160,7 @@ import PopoverContent from "~/components/ui/popover/PopoverContent.vue";
 import PopoverTrigger from "~/components/ui/popover/PopoverTrigger.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
 import type { Pagination, Properties, Response } from "~/types";
-import { formatCurrency } from '~/utils/string-helper';
+import { formatCurrency } from "~/utils/string-helper";
 
 useSeoMeta({
   title: "Danh sách phòng",
@@ -211,4 +234,7 @@ const handleSubmit = (formData: any) => {
     },
   });
 };
+
+const tagStyle =
+  "text-white py-1 px-2 text-[14px] rounded-full font-semibold h-8";
 </script>
