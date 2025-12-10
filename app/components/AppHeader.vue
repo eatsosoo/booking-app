@@ -16,8 +16,31 @@
       </div>
 
       <!-- Action buttons -->
-      <div v-if="token" class="hidden md:flex items-center space-x-4">
-        <Button variant="outline" @click="logout"> Đăng xuất </Button>
+      <div v-if="token" class="hidden md:flex items-center space-x-1">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger as-child>
+              <Button variant="outline" @click="navigateTo('/admin')">
+                <UserCogIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Đi đến Trang Quản trị</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger as-child>
+              <Button variant="outline" @click="logout">
+                <LogOutIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Đăng xuất</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       <!-- Mobile menu button -->
@@ -92,7 +115,14 @@
 
 <script setup>
 import { ref } from "vue";
-import Button from "./ui/button/Button.vue";
+import Button from "~/components/ui/button/Button.vue";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { LogOutIcon, UserCogIcon } from "lucide-vue-next";
 
 const token = useCookie("token");
 const isOpen = ref(false);

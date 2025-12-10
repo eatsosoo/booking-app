@@ -104,7 +104,7 @@
                   {{ room.guest }} người
                 </p>
               </ClientOnly>
-              <div class="mt-2 space-x-2 space-y-2 flex flex-wrap">
+              <div class="mt-4 space-x-2 space-y-2 flex flex-wrap">
                 <p v-if="room.base_hours" :class="tagStyle" class="bg-primary">
                   {{ formatCurrency(room.base_hours) }} / 2 giờ đầu
                 </p>

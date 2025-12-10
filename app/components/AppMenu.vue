@@ -15,7 +15,7 @@ const { getProvinceByPropertyIdAndRegion } = useProvinces();
 </script>
 
 <template>
-  <Menubar class="border-none shadow-none space-x-4">
+  <Menubar class="border-none shadow-none space-x-1">
     <MenubarMenu>
       <MenubarTrigger>
         <NuxtLink to="/">Trang chủ</NuxtLink>
