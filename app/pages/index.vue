@@ -102,7 +102,9 @@
             >
               <!-- Image -->
               <NuxtImg
-                :src="`/rooms/${genSlug(project)}-${index + 1}.jpg`"
+                :src="`/rooms/${genSlug(property.label)}-${genSlug(project)}-${
+                  randomImages[i]
+                }.jpg`"
                 class="h-58 w-full object-cover transition-transform duration-300 hover:scale-105 shadow-sm"
                 :alt="`Tìm kiếm phong loại ${property.label} khu vực ${project}`"
               ></NuxtImg>
@@ -215,4 +217,26 @@ watch(
     btnText.value = newVal ? "Lưu thay đổi" : "Chỉnh sửa";
   }
 );
+
+const randomImages = ref<number[]>([]);
+
+// tạo mảng 13 phần tử random cho mỗi project
+onMounted(() => {
+  randomImages.value = Array.from(
+    { length: PROPERTY_TYPES.length },
+    () => Math.floor(Math.random() * 2) + 1
+  );
+
+  setInterval(() => {
+    randomImages.value = randomImages.value.map(
+      () => Math.floor(Math.random() * 2) + 1
+    );
+  }, 2000);
+});
 </script>
+
+<style lang="css">
+.fade-img {
+  transition: opacity 0.5s ease-in-out;
+}
+</style>
