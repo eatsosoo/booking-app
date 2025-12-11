@@ -139,6 +139,7 @@
         <Swiper
           :modules="[Pagination, Autoplay, Grid]"
           :pagination="{ clickable: true }"
+          :autoplay="{ delay: 2500 }"
           :loop="true"
           :grid="{ rows: 2 }"
           :slides-per-view="2"
