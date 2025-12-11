@@ -96,6 +96,7 @@ export interface SystemSetting {
   tiktok_url: string,
   zalo_url: string,
   email: string
+  posts?: any
 }
 
 export interface Option {

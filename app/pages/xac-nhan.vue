@@ -23,10 +23,22 @@
             <CardTitle>Thông tin liên hệ</CardTitle>
           </CardHeader>
           <CardContent class="space-y-4">
-            <Input v-model="guestInfo.name" placeholder="Họ và tên*" class="h-12" />
+            <Input
+              v-model="guestInfo.name"
+              placeholder="Họ và tên*"
+              class="h-12"
+            />
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input v-model="guestInfo.phone" placeholder="Số điện thoại*" class="h-12" />
-              <Input v-model="guestInfo.email" placeholder="Email*" class="h-12" />
+              <Input
+                v-model="guestInfo.phone"
+                placeholder="Số điện thoại*"
+                class="h-12"
+              />
+              <Input
+                v-model="guestInfo.email"
+                placeholder="Email*"
+                class="h-12"
+              />
             </div>
             <Textarea v-model="guestInfo.note" placeholder="Ghi chú" />
             <p class="text-xs text-red-400">
@@ -110,7 +122,11 @@
 
             <div class="flex justify-between">
               <span class="font-semibold">Thời gian lưu trú</span>
-              <a class="text-blue-600 underline">Thay đổi</a>
+              <a
+                class="text-blue-600 underline cursor-pointer"
+                @click="router.back()"
+                >Thay đổi</a
+              >
             </div>
             <div class="flex justify-between">
               <div>
@@ -129,7 +145,11 @@
 
             <div class="flex justify-between">
               <span class="font-semibold">Số lượng khách (1 khách)</span>
-              <a class="text-blue-600 underline">Thay đổi</a>
+              <a
+                class="text-blue-600 underline cursor-pointer"
+                @click="router.back()"
+                >Thay đổi</a
+              >
             </div>
             <p class="text-gray-700">{{ orderData.amount_guest }} người lớn</p>
 
@@ -140,7 +160,12 @@
               <span>{{ formatCurrency(orderData.total) }}</span>
             </div>
 
-            <Button class="w-full h-12 mt-4" :loading="loading" @click="submitOrder">Đặt chỗ</Button>
+            <Button
+              class="w-full h-12 mt-4"
+              :loading="loading"
+              @click="submitOrder"
+              >Đặt chỗ</Button
+            >
           </CardContent>
         </Card>
       </div>
@@ -157,6 +182,8 @@ import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Button from "~/components/ui/button/Button.vue";
 import { toast } from "vue-sonner";
+import { formatCurrency } from "~/utils/string-helper";
+import type { Booking, Response } from "~/types";
 
 const storageData = sessionStorage.getItem("order");
 const router = useRouter();
@@ -165,41 +192,43 @@ const config = useRuntimeConfig();
 if (!storageData) {
   router.back();
 }
-const orderData = ref(JSON.parse(storageData))
-const loading = ref<boolean>(false)
+const orderData = ref(JSON.parse(storageData ?? ""));
+const loading = ref<boolean>(false);
 const guestInfo = reactive({
   name: "",
   phone: "",
   email: "",
-  note: ""
-})
+  note: "",
+});
 
 const submitOrder = async () => {
-  const toastTitle = "Xác nhận đặt phòng"
-  const { name, phone, email } = guestInfo
+  const toastTitle = "Xác nhận đặt phòng";
+  const { name, phone, email } = guestInfo;
   if (!name || !phone || !email) {
-    toast.warning(toastTitle, { description: "Vui lòng điền đủ thông tin liên hệ" });
+    toast.warning(toastTitle, {
+      description: "Vui lòng điền đủ thông tin liên hệ",
+    });
     return;
   }
 
   try {
-    const data = await $fetch<{ data: { items: string[] } }>(
-      `${config.public.apiBase}/booking`,
+    const data = await $fetch<Response<Booking>>(
+      `${config.public.apiBase}/home/booking`,
       {
         method: "POST",
         body: {
           ...guestInfo,
-          bookingInfo: orderData.value
+          property_id: orderData.value.room_id,
+          booking_info: orderData.value,
         },
       }
     );
 
     toast.success(toastTitle, {
-      description: "Ảnh đã được tải lên thành công!",
+      description: "Đặt phòng thành công!",
     });
-    // navigateTo("/cam-on?code=1")
+    navigateTo(`/cam-on?code=${data.data.items.id}`);
   } catch (err: any) {
-    console.log(err)
     toast.error(toastTitle, {
       description:
         err?.data?.message ?? "Có lỗi xảy ra khi đặt chỗ, vui lòng thử lại!",
@@ -207,5 +236,5 @@ const submitOrder = async () => {
   } finally {
     loading.value = false;
   }
-}
+};
 </script>

@@ -129,7 +129,7 @@
             <Separator class="mb-4" />
             <p class="font-medium">
               <span class="text-orange-600">+ 200,000đ</span> / người (tính từ
-              người thứ 3)
+              người thứ {{ home.guest + 1 }})
             </p>
           </div>
 
@@ -163,6 +163,7 @@
             <h3 class="font-semibold mb-3">
               <DatePicker
                 :model-value="times.start_date"
+                :min="minDate"
                 :max="times.end_date"
                 placeholder="Chọn ngày nhận phòng"
                 @update:model-value="times.start_date = $event"
@@ -269,8 +270,20 @@
             </div>
           </div>
 
+          <!-- Số lượng người -->
+          <div class="p-4 border rounded-2xl shadow-sm bg-white">
+            <p class="font-medium mb-3">Chi phí dự kiến</p>
+            <div class="flex items-center gap-3">
+              <span class="font-semibold text-lg px-4">{{
+                formatCurrency(totalPrice)
+              }}</span>
+            </div>
+          </div>
+
           <!-- Button -->
-          <Button class="w-full" size="lg" @click="confirmOrder"> Đặt phòng ngay </Button>
+          <Button class="w-full" size="lg" @click="confirmOrder">
+            Đặt phòng ngay
+          </Button>
         </div>
       </div>
     </section>
@@ -289,22 +302,39 @@ import { toast } from "vue-sonner";
 
 const route = useRoute();
 const id = route.params.slug;
-
 const config = useRuntimeConfig();
+const minDate = nowDate();
 
 const home = ref<Properties>({} as Properties);
 const times = reactive({
-  start_date: "",
+  start_date: minDate,
   start_time: "",
   end_date: "",
   end_time: "",
 });
-const amountGuest = ref<number>(2);
 
 const apiUrl = `${config.public.apiBase}/home/properties/${id}`;
 const { data } = await useFetch<Response<Properties>>(apiUrl);
 
 home.value = data.value?.data.items || ({} as Properties);
+
+const amountGuest = ref<number>(home.value.guest);
+const totalPrice = computed(() => {
+  const { start_date, start_time, end_date, end_time } = times;
+  if (!start_date || !start_time || !end_date || !end_time) return 0;
+  const info = {
+    start_date: `${start_date} ${start_time}`,
+    end_date: `${end_date} ${end_time}`,
+    base_hours: home.value.base_hours,
+    extra_hour: home.value.extra_hour,
+    per_day: home.value.per_day,
+    per_night: home.value.per_night,
+    per_month: home.value.per_month,
+    guest: home.value.guest,
+    actual_guest: amountGuest.value,
+  };
+  return calculateRoomPrice(info).total;
+});
 
 const confirmOrder = () => {
   const { start_date, start_time, end_date, end_time } = times;
@@ -335,10 +365,10 @@ const confirmOrder = () => {
     room_id: id,
     amount_guest: amountGuest.value,
     times,
-    total: 2000000
+    total: totalPrice.value,
   };
   sessionStorage.setItem("order", JSON.stringify(orderDataa));
 
-  navigateTo("/xac-nhan")
+  navigateTo("/xac-nhan");
 };
 </script>

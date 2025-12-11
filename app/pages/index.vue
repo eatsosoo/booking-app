@@ -102,9 +102,13 @@
             >
               <!-- Image -->
               <NuxtImg
-                :src="`/rooms/${genSlug(property.label)}-${genSlug(project)}-${
+                :src="
                   randomImages[i]
-                }.jpg`"
+                    ? `/rooms/${genSlug(property.label)}-${genSlug(project)}-${
+                        randomImages[i]
+                      }.jpg`
+                    : '/no-image.jpg'
+                "
                 class="h-58 w-full object-cover transition-transform duration-300 hover:scale-105 shadow-sm"
                 :alt="`Tìm kiếm phong loại ${property.label} khu vực ${project}`"
               ></NuxtImg>
@@ -125,16 +129,94 @@
         </div>
       </div>
     </section>
+
+    <!-- Cẩm nang -->
+    <section>
+      <div class="cus-container">
+        <Swiper
+          :modules="[Pagination, Autoplay, Grid]"
+          :pagination="{ clickable: true }"
+          :loop="true"
+          :grid="{ rows: 2 }"
+          :slides-per-view="2"
+          :space-between="20"
+          class="mySwiper"
+        >
+          <!-- <SwiperSlide v-for="index in 12" :key="index" class="m-4">
+            <NuxtImg :src="settings.posts[0].image" />
+            <p>{{ settings.posts[0].title }}</p>
+          </SwiperSlide> -->
+          <SwiperSlide v-for="index in 12" :key="index">
+            <div class="border border-gray-300 rounded-md shadow-md flex">
+              <div class="h-[200px] w-[200px]">
+                <NuxtImg
+                  :src="
+                    settings.posts[index]
+                      ? settings.posts[index].image
+                      : settings.posts[0].image
+                  "
+                  class="h-full w-full object-cover rounded-l-md"
+                />
+              </div>
+              <div class="p-2">
+                <p class="text-2xl font-semibold line-clamp-1">
+                  {{
+                    settings.posts[index]
+                      ? settings.posts[index].title
+                      : settings.posts[0].title
+                  }}
+                </p>
+                <p class="flex text-gray-500 text-[14px] my-2">
+                  <TimerIcon :size="20" />2025/12/11
+                </p>
+                <p class="text-[14px] line-clamp-4">
+                  {{
+                    settings.posts[index]
+                      ? settings.posts[index].description
+                      : settings.posts[0].description
+                  }}
+                </p>
+                <p class="mt-4">
+                  <NuxtLink
+                    :to="`/cam-nang/${
+                      settings.posts[index]
+                        ? settings.posts[index].slug
+                        : settings.posts[0].slug
+                    }`"
+                    class="underline text-primary"
+                    >Xem thêm</NuxtLink
+                  >
+                </p>
+              </div>
+            </div>
+          </SwiperSlide>
+          <!-- <SwiperSlide>Slide 2</SwiperSlide>
+          <SwiperSlide>Slide 3</SwiperSlide>
+          <SwiperSlide>Slide 4</SwiperSlide>
+          <SwiperSlide>Slide 5</SwiperSlide>
+          <SwiperSlide>Slide 6</SwiperSlide>
+          <SwiperSlide>Slide 7</SwiperSlide>
+          <SwiperSlide>Slide 8</SwiperSlide>
+          <SwiperSlide>Slide 9</SwiperSlide> -->
+        </Swiper>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { PhoneCall, XIcon } from "lucide-vue-next";
+import { PhoneCall, TimerIcon, XIcon } from "lucide-vue-next";
 import { formatTelNumber, genSlug } from "~/utils/string-helper";
 import Button from "~/components/ui/button/Button.vue";
 import { PROPERTY_TYPES } from "~/constants";
 import type { Response, SystemSetting } from "~/types";
 import { toast } from "vue-sonner";
+
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/grid";
+import { Pagination, Autoplay, Grid } from "swiper/modules";
 
 useSeoMeta({
   // --- BASIC ---
@@ -235,8 +317,9 @@ onMounted(() => {
 });
 </script>
 
-<style lang="css">
-.fade-img {
-  transition: opacity 0.5s ease-in-out;
+<style>
+.mySwiper {
+  width: 100%;
+  height: 440px;
 }
 </style>

@@ -32,7 +32,8 @@ const expanded = ref<ExpandedState>({});
 // --- GET LIST CATEGORY ---
 const { data, refresh, pending } = await useAsyncData(
   "bookings-list",
-  () => request<Booking[]>(`/booking?page=${page.value}&search=${search.value}`),
+  () =>
+    request<Booking[]>(`/booking?page=${page.value}&search=${search.value}`),
   {
     watch: [page, search],
   }
@@ -47,25 +48,63 @@ const pagination = computed(
 // COLUMNS DEFINITION
 const columns: ColumnDef<Booking>[] = [
   {
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
+    enableSorting: false,
+  },
+  {
     accessorKey: "name",
     header: "Khách hàng",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("name")),
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("name")),
     enableSorting: false,
   },
   {
     accessorKey: "phone",
     header: "Số điện thoại",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("phone")),
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("phone")),
     enableSorting: false,
   },
   {
     accessorKey: "email",
     header: "Email",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("email")),
+    cell: ({ row }) => h("div", { class: "normal" }, row.getValue("email")),
     enableSorting: false,
+  },
+  {
+    accessorKey: "amount_guest",
+    header: "Số khách",
+    cell: ({ row }) => {
+      const booking = row.original;
+      const info = booking.booking_info;
+      return h("div", { class: "text-center" }, info.amount_guest);
+    },
+  },
+  {
+    accessorKey: "start_date",
+    header: "Ngày nhận",
+    cell: ({ row }) => {
+      const booking = row.original;
+      const info = booking.booking_info;
+      return h(
+        "div",
+        { class: "text-center" },
+        `${info.times.start_date} ${info.times.start_time}`
+      );
+    },
+  },
+  {
+    accessorKey: "end_date",
+    header: "Ngày trả",
+    cell: ({ row }) => {
+      const booking = row.original;
+      const info = booking.booking_info;
+      return h(
+        "div",
+        { class: "text-center" },
+        `${info.times.end_date} ${info.times.end_time}`
+      );
+    },
   },
   {
     id: "actions",
@@ -74,6 +113,7 @@ const columns: ColumnDef<Booking>[] = [
       const booking = row.original;
       return h(ActionDropdown, {
         itemId: booking.id,
+        showEdit: false,
         onDelete: () => deleteItem(booking.id),
       });
     },
