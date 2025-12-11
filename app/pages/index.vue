@@ -133,6 +133,9 @@
     <!-- Cẩm nang -->
     <section>
       <div class="cus-container">
+        <h2 class="text-3xl font-semibold text-center capitalize mb-5">
+          Tin tức & Sự kiện
+        </h2>
         <Swiper
           :modules="[Pagination, Autoplay, Grid]"
           :pagination="{ clickable: true }"
@@ -142,23 +145,19 @@
           :space-between="20"
           class="mySwiper"
         >
-          <!-- <SwiperSlide v-for="index in 12" :key="index" class="m-4">
-            <NuxtImg :src="settings.posts[0].image" />
-            <p>{{ settings.posts[0].title }}</p>
-          </SwiperSlide> -->
           <SwiperSlide v-for="index in 12" :key="index">
-            <div class="border border-gray-300 rounded-md shadow-md flex">
-              <div class="h-[200px] w-[200px]">
-                <NuxtImg
+            <div class="rounded-md shadow-md flex h-[200px] border">
+              <div class="h-[200px] w-[200px] shrink-0">
+                <img
                   :src="
                     settings.posts[index]
                       ? settings.posts[index].image
                       : settings.posts[0].image
                   "
-                  class="h-full w-full object-cover rounded-l-md"
+                  class="h-full w-[200px] object-cover rounded-l-md"
                 />
               </div>
-              <div class="p-2">
+              <div class="p-2 flex-1">
                 <p class="text-2xl font-semibold line-clamp-1">
                   {{
                     settings.posts[index]
@@ -176,7 +175,7 @@
                       : settings.posts[0].description
                   }}
                 </p>
-                <p class="mt-4">
+                <p class="">
                   <NuxtLink
                     :to="`/cam-nang/${
                       settings.posts[index]
@@ -190,14 +189,6 @@
               </div>
             </div>
           </SwiperSlide>
-          <!-- <SwiperSlide>Slide 2</SwiperSlide>
-          <SwiperSlide>Slide 3</SwiperSlide>
-          <SwiperSlide>Slide 4</SwiperSlide>
-          <SwiperSlide>Slide 5</SwiperSlide>
-          <SwiperSlide>Slide 6</SwiperSlide>
-          <SwiperSlide>Slide 7</SwiperSlide>
-          <SwiperSlide>Slide 8</SwiperSlide>
-          <SwiperSlide>Slide 9</SwiperSlide> -->
         </Swiper>
       </div>
     </section>
