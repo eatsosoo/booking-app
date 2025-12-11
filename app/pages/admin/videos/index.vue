@@ -10,16 +10,15 @@ import { PlusSquareIcon } from "lucide-vue-next";
 import { h, ref } from "vue";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { Category } from "~/types";
+import type { Video } from "~/types";
 import { toast } from "vue-sonner";
-import ActionDropdown from "~/components/common/data-table/ActionDropdown.vue";
 import DataTable from "~/components/common/data-table/DataTable.vue";
+import ActionDropdown from "~/components/common/data-table/ActionDropdown.vue";
 
 definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
-
 const { request } = useApi();
 
 // STATE
@@ -33,70 +32,42 @@ const columnVisibility = ref<VisibilityState>({});
 const rowSelection = ref({});
 const expanded = ref<ExpandedState>({});
 
-// --- GET LIST CATEGORY ---
+// --- GET LIST VIDEOS ---
 const { data, refresh, pending } = await useAsyncData(
-  "categories-list",
-  () =>
-    request<Category[]>(
-      `/categories?page=${page.value}&search=${search.value}`
-    ),
+  "videos-list",
+  () => request<Video[]>(`/videos?page=${page.value}&search=${search.value}`),
   {
     watch: [page, search],
   }
 );
 
 // computed
-const categories = computed(() => data.value?.data.items ?? []);
+const videos = computed(() => data.value?.data.items ?? []);
 const pagination = computed(
   () => data.value?.result?.pagination ?? { current_page: 1, last_page: 1 }
 );
 
 // COLUMNS DEFINITION
-const columns: ColumnDef<Category>[] = [
-  {
-    id: "select",
-    header: ({ table }) =>
-      h(Checkbox, {
-        modelValue:
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate"),
-        "onUpdate:modelValue": (value) =>
-          table.toggleAllPageRowsSelected(!!value),
-        ariaLabel: "Select all",
-      }),
-    cell: ({ row }) =>
-      h(Checkbox, {
-        modelValue: row.getIsSelected(),
-        "onUpdate:modelValue": (value) => row.toggleSelected(!!value),
-        ariaLabel: "Select row",
-      }),
-    enableSorting: false,
-    enableHiding: false,
-  },
+const columns: ColumnDef<Video>[] = [
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
+    cell: ({ row }) =>
+      h("div", { class: "capitalize" }, row.getValue("id")),
     enableSorting: false,
   },
   {
     accessorKey: "name",
-    header: "Tên dự án",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("name")),
+    header: "Tiêu đề",
+    cell: ({ row }) =>
+      h("div", { class: "capitalize" }, row.getValue("name")),
     enableSorting: false,
   },
   {
-    accessorKey: "created_at",
-    header: "Ngày tạo",
+    accessorKey: "url",
+    header: "URL",
     cell: ({ row }) =>
-      h("div", { class: "capitalize" }, convertUTC(row.getValue("created_at"))),
-    enableSorting: false,
-  },
-  {
-    accessorKey: "updated_at",
-    header: "Ngày cập nhật",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, convertUTC(row.getValue("updated_at"))),
+      h("div", { class: "capitalize" }, row.getValue("url")),
     enableSorting: false,
   },
   {
@@ -106,7 +77,7 @@ const columns: ColumnDef<Category>[] = [
       const post = row.original;
       return h(ActionDropdown, {
         itemId: post.id,
-        editLink: `/admin/quan-ly-danh-muc/${post.id}`,
+        editLink: `/admin/videos/${post.id}`,
         onDelete: () => deleteItem(post.id),
         onCopy: () => {
           navigator.clipboard.writeText(post.id.toString());
@@ -119,34 +90,29 @@ const columns: ColumnDef<Category>[] = [
 
 async function deleteItem(id: number) {
   try {
-    await request(`/categories/${id}`, {
+    await request(`/videos/${id}`, {
       method: "DELETE",
     });
+
     await refresh();
-    toast.success("Xoá dự án", {
-      description: "Dự án đã được xoá thành công!",
+
+    toast.success("Thành công", {
+      description: "Video đã được xoá thành công!",
     });
   } catch (error) {
-    toast.error("Xoá dự án", {
+    toast.error("Lỗi!", {
       description: `Có lỗi xảy ra, vui lòng thử lại sau: ${error} !`,
     });
   }
 }
-
-watch(
-  () => search.value,
-  () => {
-    page.value = 1;
-  }
-);
 </script>
 
 <template>
   <section>
-    <h1 class="font-semibold text-2xl">Danh sách dự án</h1>
+    <h1 class="font-semibold text-2xl">Danh sách video</h1>
 
     <DataTable
-      :data="categories"
+      :data="videos"
       :columns="columns"
       :sorting="sorting"
       :column-filters="columnFilters"
@@ -165,7 +131,7 @@ watch(
     >
       <!-- Left Actions Slot -->
       <template #left-actions>
-        <NuxtLink to="/admin/quan-ly-danh-muc/them-moi">
+        <NuxtLink to="/admin/videos/them-moi">
           <Button>
             <PlusSquareIcon class="h-4 w-4" />
             Tạo mới
@@ -183,11 +149,11 @@ watch(
       <!-- Empty State Slot -->
       <template #empty>
         <div class="text-center py-12">
-          <div class="text-muted-foreground mb-2">Không có dự án nào</div>
-          <NuxtLink to="/admin/quan-ly-danh-muc/them-moi">
+          <div class="text-muted-foreground mb-2">Không có Video nào</div>
+          <NuxtLink to="/admin/quan-ly-faq/them-moi">
             <Button variant="outline">
               <PlusSquareIcon class="h-4 w-4" />
-              Tạo dự án đầu tiên
+              Tạo Video đầu tiên
             </Button>
           </NuxtLink>
         </div>

@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Faq } from "~/types";
+import type { Video } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
@@ -13,31 +13,31 @@ definePageMeta({
 });
 
 // form
-const faq = ref<Faq>({
-  question: "",
-  answer: "",
-} as Faq);
+const video = ref<Video>({
+  name: "",
+  url: "",
+} as Video);
 
 
 const { request } = useApi();
 const pending = ref(false);
 
-const saveFaq = async () => {
+const saveVideo = async () => {
   pending.value = true;
 
   try {
-    // POST FAQ mới
-    await request("/faqs", {
+    // POST VIDEO mới
+    await request("/videos", {
       method: "POST",
-      body: faq.value,
+      body: video.value,
     });
 
-    toast.success("Tạo FAQ thành công!", {
-      description: "FAQ mới đã được thêm.",
+    toast.success("Tạo VIDEO thành công!", {
+      description: "VIDEO mới đã được thêm.",
     });
 
-    // Chuyển hướng về danh sách FAQ
-    navigateTo("/admin/quan-ly-faq");
+    // Chuyển hướng về danh sách VIDEO
+    navigateTo("/admin/videos");
   } catch (err: any) {
     toast.error("Lỗi!", {
       description:
@@ -54,32 +54,32 @@ const saveFaq = async () => {
 
 <template>
   <section>
-    <h1 class="text-2xl font-semibold mb-8">Tạo FAQ mới</h1>
+    <h1 class="text-2xl font-semibold mb-8">Tạo Video mới</h1>
 
     <div class="grid grid-cols-1 gap-6">
       <!-- Question -->
       <div>
-        <Label for="title" class="mb-2 ml-1">Câu hỏi</Label>
+        <Label for="title" class="mb-2 ml-1">Tiêu đề</Label>
         <Input
           id="title"
-          v-model="faq.question"
-          placeholder="Nhập câu hỏi..."
+          v-model="video.name"
+          placeholder="Nhập tiêu đề..."
         />
       </div>
 
       <!-- Answer -->
       <div>
-        <Label for="answer" class="mb-2 ml-1">Câu trả lời</Label>
+        <Label for="url" class="mb-2 ml-1">URL</Label>
         <Textarea
-          id="answer"
-          v-model="faq.answer"
-          placeholder="Nhập câu trả lời..."
+          id="url"
+          v-model="video.url"
+          placeholder="Nhập url..."
         />
       </div>
     </div>
 
     <div class="mt-6">
-      <Button variant="default" :loading="pending" @click="saveFaq">
+      <Button variant="default" :loading="pending" @click="saveVideo">
         Tạo mới
       </Button>
     </div>

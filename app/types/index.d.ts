@@ -99,6 +99,12 @@ export interface SystemSetting {
   posts?: any
 }
 
+export interface Video {
+  id: number
+  name: string
+  url: string
+}
+
 export interface Option {
   label: string;
   value: string | number;

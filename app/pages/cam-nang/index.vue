@@ -75,7 +75,7 @@
           </div>
 
           <div class="p-4 bg-white">
-            <h2 class="text-2xl font-semibold">Danh mục cẩm nang</h2>
+            <h2 class="text-2xl font-semibold">Danh mục dự án</h2>
 
             <ul class="mt-4 space-y-2">
               <li
@@ -83,12 +83,11 @@
                 :key="idx"
                 class="border-b border-gray-200 pb-2"
               >
-                <NuxtLink
-                  :to="`/cam-nang/${cat.slug}`"
+                <span
                   class="font-semibold inline-block hover:text-primary hover:underline transition-all hover:-translate-y-1 text-gray-600"
                 >
-                  {{ cat.title }}
-                </NuxtLink>
+                  {{ cat.name }}
+                </span>
               </li>
             </ul>
           </div>
@@ -107,7 +106,7 @@ import {
   InputGroupInput,
   InputGroupAddon,
 } from "~/components/ui/input-group";
-import type { Post, Response } from "~/types";
+import type { Category, Post, Response } from "~/types";
 
 useSeoMeta({
   title: "Cẩm nang căn hộ",
@@ -134,10 +133,16 @@ const { data } = await useFetch<Response<Post[]>>(apiUrl, {
 });
 
 const posts = computed(() => data.value?.data.items ?? []);
-
 const pagination = computed(
   () => data.value?.result?.pagination ?? { current_page: 1, last_page: 1 }
 );
+
+const { data: projectData } = await useFetch<Response<Category[]>>(`${config.public.apiBase}/home/categories?page=1&per_page=12`, {
+  server: true,
+  lazy: false,
+  immediate: true,
+});
+const categories = ref<Category[]>(projectData.value?.data.items ?? [])
 
 // Format date
 const formatDate = (dateStr: string) => {
@@ -162,24 +167,4 @@ const goToPage = (p: number) => {
   page.value = p;
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
-
-// Sidebar categories
-const categories = [
-  {
-    slug: "homestay-vinhomes-smart-city-nam-tu-liem",
-    title: "Homestay Vinhomes Smart City - Nam Từ Liêm",
-  },
-  {
-    slug: "homestay-vinhomes-ocean-park-1-gia-lam",
-    title: "Homestay Vinhomes Ocean Park 1 - Gia Lâm",
-  },
-  {
-    slug: "homestay-vinhomes-skalake-my-dinh",
-    title: "Homestay Vinhomes SkyLake - Mỹ Đình",
-  },
-  {
-    slug: "homestay-vinhomes-ocean-park-23",
-    title: "Homestay Vinhomes Ocean Park 2,3",
-  },
-];
 </script>
