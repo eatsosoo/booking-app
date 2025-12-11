@@ -65,12 +65,12 @@ const saveProvince = async () => {
 
 <template>
   <section>
-    <h1 class="text-2xl font-semibold mb-8">Tạo tỉnh thành mới</h1>
+    <h1 class="text-2xl font-semibold mb-8">Tạo địa danh mới</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Question -->
       <div>
-        <Label for="title" class="mb-2 ml-1">Tên</Label>
+        <Label for="title" class="mb-2 ml-1">Địa danh</Label>
         <Input id="title" v-model="province.name" placeholder="Nhập tên..." />
       </div>
 

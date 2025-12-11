@@ -60,16 +60,20 @@ const saveProvince = async () => {
     loading.value = false;
   }
 };
+
+province.value.property_types = province.value.property_types.map(
+  (item) => item.id
+);
 </script>
 
 <template>
   <section>
-    <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa tỉnh thành</h1>
+    <h1 class="text-2xl font-semibold mb-8">Địa điểm & Loại hình</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Question -->
       <div>
-        <Label for="title" class="mb-2 ml-1">Tên</Label>
+        <Label for="title" class="mb-2 ml-1">Địa danh</Label>
         <Input id="title" v-model="province.name" placeholder="Nhập tên..." />
       </div>
 
