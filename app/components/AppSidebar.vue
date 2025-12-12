@@ -10,6 +10,7 @@ import {
   FolderKanban,
   ChartNoAxesCombinedIcon,
   LandmarkIcon,
+  VideoIcon,
 } from "lucide-vue-next";
 import {
   Sidebar,
@@ -59,6 +60,11 @@ const items = [
     title: "Dịch vụ",
     url: "/admin/quan-ly-dich-vu",
     icon: MonitorCloud,
+  },
+  {
+    title: "Videos",
+    url: "/admin/videos",
+    icon: VideoIcon,
   },
   {
     title: "Các lựa chọn của Menu",

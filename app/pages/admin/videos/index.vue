@@ -150,7 +150,7 @@ async function deleteItem(id: number) {
       <template #empty>
         <div class="text-center py-12">
           <div class="text-muted-foreground mb-2">Không có Video nào</div>
-          <NuxtLink to="/admin/quan-ly-faq/them-moi">
+          <NuxtLink to="/admin/videos/them-moi">
             <Button variant="outline">
               <PlusSquareIcon class="h-4 w-4" />
               Tạo Video đầu tiên

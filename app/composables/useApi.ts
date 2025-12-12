@@ -22,9 +22,9 @@ export const useApi = () => {
       if (err?.status === 422) {
         err.data.message = err.data.message || "Dữ liệu không hợp lệ!";
       }
-
+      console.log(err)
       if (err?.status === 500) {
-        err.data.message = "Lỗi máy chủ, vui lòng thử lại!";
+        err.data.message = err.data.message || "Lỗi máy chủ, vui lòng thử lại!";
       }
 
       // console.error("API Error:", err);

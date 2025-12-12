@@ -38,6 +38,7 @@ definePageMeta({
 const { request } = useApi();
 const route = useRoute();
 const config = useRuntimeConfig();
+const { getProvinces, getDistricts } = useProvinces();
 const id = route.params.id;
 
 const loading = ref<boolean>(false);
@@ -45,6 +46,7 @@ const multiSelected = reactive({
   property_types: [] as (string | number)[],
   services: [] as (string | number)[],
 });
+const roomTypeSelect = ref<number>(1);
 const serviceOptions = ref<Option3[]>([]);
 const categoryOptions = ref<Option2[]>([]);
 
@@ -73,20 +75,19 @@ const saveProperties = async () => {
       method: "PUT",
       body: {
         ...home.value,
-        property_types: multiSelected.property_types,
+        property_types: [roomTypeSelect.value],
         services: multiSelected.services,
         slug: genSlug(home.value.name),
-        category_id: Number(home.value.category_id),
       },
     });
 
     toast.success("Cập nhật phòng", {
       description: "Phòng đã được cập nhật thành công!",
     });
-    navigateTo("/admin/quan-ly-phong")
+    navigateTo("/admin/quan-ly-phong");
   } catch (err: any) {
     toast.error("Cập nhật phòng", {
-      description: err.data.message || "Không thể kết nối đến máy chủ!",
+      description: err.data?.message || "Không thể kết nối đến máy chủ!",
     });
   } finally {
     loading.value = false;
@@ -95,6 +96,7 @@ const saveProperties = async () => {
 
 multiSelected.property_types = home.value.property_types.map((item) => item.id);
 multiSelected.services = home.value.services.map((item) => item.id);
+roomTypeSelect.value = home.value.property_types.map((item) => item.id)[0] as number;
 
 serviceOptions.value =
   servicesData.value?.data.items.map((service) => ({
@@ -106,6 +108,17 @@ categoryOptions.value =
     label: service.name,
     value: service.id.toString(),
   })) || [];
+
+const provinceOptions = computed(() => {
+  return getProvinces(roomTypeSelect.value, home.value.region);
+});
+const districtOptions = computed(() => {
+  return getDistricts(
+    roomTypeSelect.value,
+    home.value.region,
+    home.value.province
+  );
+});
 </script>
 
 <template>
@@ -122,22 +135,29 @@ categoryOptions.value =
       <!-- Loại hình -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
-        <MultiSelect
+        <!-- <MultiSelect
           v-model="multiSelected.property_types"
           :options="PROPERTY_TYPES"
           placeholder="Chọn loại hình..."
           class="w-64"
-        />
-      </div>
-
-      <!-- Dự án -->
-      <div>
-        <Label for="type" class="mb-2 ml-1">Loại dự án</Label>
-        <SearchSelect
-          :model-value="home.category_id.toString()"
-          :frameworks="categoryOptions"
-          @update:model-value="home.category_id = $event"
-        />
+        /> -->
+        <Select v-model="roomTypeSelect">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn loại hình..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem
+                v-for="type in PROPERTY_TYPES"
+                :key="type.value"
+                :value="type.value"
+              >
+                {{ type.label }}
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       <!-- Address -->
@@ -147,17 +167,6 @@ categoryOptions.value =
           id="address"
           v-model="home.address"
           placeholder="Nhập địa chỉ..."
-        />
-      </div>
-
-      <!-- Area -->
-      <div>
-        <Label for="area" class="mb-2 ml-1">Diện tích</Label>
-        <Input
-          id="area"
-          v-model="home.area"
-          type="number"
-          placeholder="Nhập diện tích..."
         />
       </div>
 
@@ -174,6 +183,63 @@ categoryOptions.value =
               <SelectItem value="Miền Bắc"> Miền Bắc </SelectItem>
               <SelectItem value="Miền Trung"> Miền Trung </SelectItem>
               <SelectItem value="Miền Nam"> Miền Nam </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <!-- Area -->
+      <div>
+        <Label for="area" class="mb-2 ml-1">Diện tích</Label>
+        <Input
+          id="area"
+          v-model="home.area"
+          type="number"
+          placeholder="Nhập diện tích..."
+        />
+      </div>
+
+      <!-- Province -->
+      <div>
+        <Label for="answer" class="mb-2 ml-1">Địa danh</Label>
+        <Select v-model="home.province">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn địa danh..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem
+                v-for="province in provinceOptions"
+                :key="province.name"
+                :value="province.name"
+              >
+                {{ province.name }}
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div></div>
+
+      <!-- District -->
+      <div>
+        <Label for="answer" class="mb-2 ml-1">Quận/Huyện</Label>
+        <Select v-model="home.district">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn quận/huyện..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem
+                v-for="district in districtOptions"
+                :key="district.district"
+                :value="district.district"
+              >
+                {{ district.district }}
+              </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

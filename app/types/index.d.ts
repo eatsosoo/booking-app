@@ -49,6 +49,8 @@ export interface Properties {
   gallery: string[]
   services: { id: number, title: string }[]
   property_types: { id: number, name: string }[]
+  province: string
+  district: string
 }
 
 export interface Service {

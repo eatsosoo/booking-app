@@ -133,7 +133,7 @@
     <!-- Cẩm nang -->
     <section>
       <div class="cus-container">
-        <h2 class="text-3xl font-semibold text-center capitalize mb-5">
+        <h2 class="text-3xl font-semibold text-center capitalize mb-10">
           Tin tức & Sự kiện
         </h2>
         <Swiper
@@ -193,6 +193,17 @@
         </Swiper>
       </div>
     </section>
+
+    <section>
+      <div class="cus-container">
+        <h2 class="text-3xl font-semibold text-center capitalize mb-10">
+          Video
+        </h2>
+        <div>
+          <TiktokEmbed url="https://www.tiktok.com/@gc.ng.yu2/video/7580250980445441288" />
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -209,6 +220,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/grid";
 import { Pagination, Autoplay, Grid } from "swiper/modules";
+import TiktokEmbed from "~/components/common/TiktokEmbed.vue";
 
 useSeoMeta({
   // --- BASIC ---

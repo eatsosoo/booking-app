@@ -36,11 +36,11 @@ const saveVideo = async () => {
       body: video.value,
     });
 
-    toast.success("Tạo FAQ mới", {
-      description: "FAQ đã được cập nhật.",
+    toast.success("Tạo Video mới", {
+      description: "Video đã được cập nhật.",
     });
 
-    navigateTo("/admin/quan-ly-video");
+    navigateTo("/admin/videos");
   } catch (err: any) {
     toast.error("Lỗi!", {
       description: err?.data?.message ?? err?.message ?? "Có lỗi xảy ra!",
@@ -53,13 +53,13 @@ const saveVideo = async () => {
 
 <template>
   <section>
-    <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa FAQ</h1>
+    <h1 class="text-2xl font-semibold mb-8">Chi tiết & Chỉnh sửa Video</h1>
 
     <div class="grid grid-cols-1 gap-6">
       <!-- Question -->
       <div>
         <Label for="title" class="mb-2 ml-1">Tiêu đề</Label>
-        <Input id="title" v-model="video.name" placeholder="Nhập câu hỏi..." />
+        <Input id="title" v-model="video.name" placeholder="Nhập tiêu đề..." />
       </div>
 
       <!-- Answer -->
