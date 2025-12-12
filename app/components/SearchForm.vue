@@ -154,6 +154,6 @@ const handleChange = (value: { start: string, end: string} | null) => {
 
 const submit = () => {
   const { start, end } = range.value || { start: null, end: null };
-  router.push(`/du-an/tim-kiem?place=${selectedLocation.value}&from_date=${start}&start_date=${end}&guest=${roomTypes.value.adults + roomTypes.value.children}`);
+  router.push(`/tim-kiem?place=${selectedLocation.value}&from_date=${start}&start_date=${end}&guest=${roomTypes.value.adults + roomTypes.value.children}`);
 }
 </script>

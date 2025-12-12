@@ -117,7 +117,7 @@
               <div class="text-center">
                 <h3 class="mt-4 font-semibold italic">{{ project }}</h3>
                 <NuxtLink
-                  :to="`/du-an/tim-kiem?page=1&per_page=12&property_types=${property.value}`"
+                  :to="`/tim-kiem?page=1&per_page=12&property_types=${property.value}`"
                 >
                   <Button class="w-fit underline" variant="link">
                     Xem thêm

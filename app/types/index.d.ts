@@ -87,6 +87,7 @@ export interface Province {
   slug: string;
   region: string;
   property_types: { id: number, name: string }[];
+  district: string;
 }
 
 export interface SystemSetting {

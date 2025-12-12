@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/menubar";
 import { PROPERTY_TYPES } from "~/constants";
 
-const { getProvinceByPropertyIdAndRegion } = useProvinces();
+const { getProvinces, getDistricts } = useProvinces();
 </script>
 
 <template>
@@ -31,19 +31,34 @@ const { getProvinceByPropertyIdAndRegion } = useProvinces();
           v-for="region in ['Miền Bắc', 'Miền Trung', 'Miền Nam']"
           :key="region"
         >
-          <MenubarSubTrigger>{{ region }}</MenubarSubTrigger>
+          <MenubarSubTrigger
+            v-if="getProvinces(property.value, region).length > 0"
+            >{{ region }}</MenubarSubTrigger
+          >
           <MenubarSubContent>
-            <MenubarItem
-              v-for="province in getProvinceByPropertyIdAndRegion(
-                property.value,
-                region
-              )"
+            <MenubarSub
+              v-for="province in getProvinces(property.value, region)"
               :key="province.id"
-              @click="navigateTo(`/dia-diem?page=1&per_page=12&property_types=${property.value}&place=${province.slug}`)"
             >
-          
-                {{ province.name }}
-            </MenubarItem>
+              <MenubarSubTrigger>{{ province.name }}</MenubarSubTrigger>
+              <MenubarSubContent
+                v-for="district in getDistricts(
+                  property.value,
+                  region,
+                  province.name
+                )"
+                :key="district.district"
+              >
+                <MenubarItem
+                  @click="
+                    navigateTo(
+                      `/tim-kiem?page=1&per_page=12&property_types=${property.value}&region=${region}&province=${province.name}&district=${district.district}`
+                    )
+                  "
+                  >{{ district.district }}</MenubarItem
+                >
+              </MenubarSubContent>
+            </MenubarSub>
           </MenubarSubContent>
         </MenubarSub>
       </MenubarContent>

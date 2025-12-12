@@ -9,8 +9,8 @@
       <div
         class="absolute -bottom-4 bg-primary z-10 py-6 px-10 top rounded-tl-4xl rounded-br-4xl shadow-xl max-w-7xl w-full"
       >
-        <h1 class="uppercase text-white text-2xl semibold">
-          Các căn hộ dự án
+        <h1>
+          <ClientBreadcrumb />
           <!-- "
           <span class="text-blue-900 font-bold"
             >Khu đô thị Vinhomes Smart City</span
@@ -23,20 +23,9 @@
       <!-- Header -->
       <h1 class="text-4xl font-bold text-gray-900">DANH SÁCH PHÒNG</h1>
       <p class="text-gray-600 mt-1">
-        Kết quả hiển thị cho <span class="font-semibold">{{ paginate.total }} phòng</span>
+        Kết quả hiển thị cho
+        <span class="font-semibold">{{ paginate.total }} phòng</span>
       </p>
-
-      <!-- Filter Buttons -->
-      <div class="flex flex-wrap gap-2 mt-6">
-        <Button
-          v-for="item in filterOptions"
-          :key="item.value"
-          :variant="item.value.toString() === filterVal ? 'default' : 'outline'"
-          @click="filterPage(item.value as number)"
-        >
-          {{ item.label }}
-        </Button>
-      </div>
 
       <!-- Room List -->
       <div class="mt-10 space-y-8">
@@ -73,51 +62,83 @@
           <div>
             <!-- Title -->
             <h2
-              class="text-xl font-bold text-gray-800 hover:text-yellow-500 transition cursor-pointer"
+              class="text-xl font-bold text-gray-800 hover:text-yellow-500 transition cursor-pointer line-clamp-1"
             >
               {{ room.name }}
             </h2>
-
-            <!-- Location -->
-            <p class="flex items-center gap-2 text-gray-600 mt-1">
-              <ClientOnly>
-                <FontAwesomeIcon
-                  :icon="['fas', 'location-dot']"
-                  class="text-primary"
-                />
-              </ClientOnly>
-              {{ room.address }}
+            <p class="text-gray-600 mb-2 line-clamp-3">
+              {{ room.description }}
             </p>
 
-            <!-- Type + Guest -->
-            <div class="flex items-center gap-5 mt-2 text-gray-700">
-              <p class="flex items-center gap-2">
-                <ClientOnly>
-                  <FontAwesomeIcon :icon="['fas', 'bed']" />
-                </ClientOnly>
-                {{ room.property_types.map((item) => item.name).join(' | ') }}
+            <!-- Location -->
+            <ClientOnly>
+              <p class="text-gray-600 mb-1 line-clamp-2 text-[14px]">
+                <FontAwesomeIcon :icon="['fas', 'location-dot']" class="mr-2" />
+                {{ room.address }}
               </p>
-              <p class="flex items-center gap-2">
-                <ClientOnly>
-                  <FontAwesomeIcon :icon="['fas', 'people-group']" />
-                </ClientOnly>
-                {{ room.guest }}
+              <p class="text-gray-600 mb-1 text-[14px]">
+                <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
+                {{ room.bedrooms }} phòng ngủ
               </p>
-            </div>
+              <p class="text-gray-600 mb-1 text-[14px]">
+                <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
+                {{ room.bathrooms }} phòng tắm
+              </p>
+              <p class="text-gray-600 mb-1 text-[14px]">
+                <FontAwesomeIcon :icon="['fas', 'people-group']" class="mr-2" />
+                {{ room.guest }} người
+              </p>
+            </ClientOnly>
 
-            <Separator class="my-6" />
+            <Separator class="my-4" />
 
             <!-- Prices -->
-            <div class="mt-4">
-              <p class="text-orange-500 font-semibold text-lg">
+            <div class="space-x-2 space-y-2 flex flex-wrap">
+              <p
+                v-if="Number(room.base_hours)"
+                :class="tagStyle"
+                class="bg-primary"
+              >
                 {{ formatCurrency(room.base_hours) }} / 2 giờ đầu
               </p>
-              <p class="text-yellow-500 font-semibold text-lg">
+              <p
+                v-if="Number(room.extra_hour)"
+                :class="tagStyle"
+                class="bg-red-300"
+              >
+                {{ formatCurrency(room.extra_hour) }} / giờ tiếp theo
+              </p>
+
+              <p
+                v-if="Number(room.per_night)"
+                :class="tagStyle"
+                class="bg-orange-300"
+              >
                 {{ formatCurrency(room.per_night) }} / đêm
               </p>
-              <p class="text-gray-500 font-semibold text-lg mt-1">
-                {{ formatCurrency(room.extra_hour) }} / 1 giờ tiếp theo
+              <p
+                v-if="Number(room.per_day)"
+                :class="tagStyle"
+                class="bg-blue-300"
+              >
+                {{ formatCurrency(room.per_day) }} / ngày
               </p>
+              <p
+                v-if="Number(room.per_month)"
+                :class="tagStyle"
+                class="bg-indigo-300"
+              >
+                {{ formatCurrency(room.per_month) }} / tháng
+              </p>
+            </div>
+            <div class="mt-2">
+              <Button
+                variant="outline"
+                @click="navigateTo(`/dia-diem/${room.id}`)"
+              >
+                Xem thêm
+                <LogOutIcon />
+              </Button>
             </div>
           </div>
         </div>
@@ -141,11 +162,13 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import PaginationPage from "~/components/PaginationPage.vue";
 import Button from "~/components/ui/button/Button.vue";
-// import Button from "~/components/ui/button/Button.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
-import { PROPERTY_TYPES } from "~/constants";
 import type { Pagination, Properties, Response } from "~/types";
 import { formatCurrency } from "~/utils/string-helper";
+import { LogOutIcon } from "lucide-vue-next";
+
+const tagStyle =
+  "text-white py-1 px-2 text-[14px] rounded-full font-semibold h-8";
 
 const config = useRuntimeConfig();
 const route = useRoute();
@@ -170,13 +193,11 @@ const filterVal = ref<string>("");
 
 /** ------------------------------------------------
  * API URL
- */ 
+ */
 const apiUrl = computed(
   () =>
     `${config.public.apiBase}/home/properties?page=${page.value}&per_page=${perPage.value}&region=${region.value}&property_types=${filterVal.value}`
 );
-
-const filterOptions = ref([{ label: "Tất cả", value: ""}, ...PROPERTY_TYPES])
 
 const { data } = await useAsyncData(
   () => `places-list-${apiUrl.value}`,
@@ -201,7 +222,7 @@ const filterPage = (value: number) => {
       property_types: value,
     },
   });
-}
+};
 
 watchEffect(() => {
   if (data.value) {

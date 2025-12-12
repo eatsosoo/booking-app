@@ -28,6 +28,7 @@ const province = ref<ProvinceForm>({
   region: "",
   property_types: [],
   slug: "",
+  district: ""
 });
 
 const { request } = useApi();
@@ -45,8 +46,8 @@ const saveProvince = async () => {
       },
     });
 
-    toast.success("Tạo tỉnh thành thành công!", {
-      description: "Tỉnh thành mới đã được thêm.",
+    toast.success("Tạo địa danh thành công!", {
+      description: "Địa danh mới đã được thêm.",
     });
 
     navigateTo("/admin/quan-ly-tinh-thanh");
@@ -67,13 +68,7 @@ const saveProvince = async () => {
   <section>
     <h1 class="text-2xl font-semibold mb-8">Tạo địa danh mới</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Question -->
-      <div>
-        <Label for="title" class="mb-2 ml-1">Địa danh</Label>
-        <Input id="title" v-model="province.name" placeholder="Nhập tên..." />
-      </div>
-
+    <div class="grid grid-cols-1 gap-6">
       <!-- Loại hình -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
@@ -101,6 +96,22 @@ const saveProvince = async () => {
             </SelectGroup>
           </SelectContent>
         </Select>
+      </div>
+
+      <!-- Question -->
+      <div>
+        <Label for="title" class="mb-2 ml-1">Địa danh</Label>
+        <Input id="title" v-model="province.name" placeholder="Nhập tên..." />
+      </div>
+
+      <!-- Quận/Huyện -->
+      <div>
+        <Label for="title" class="mb-2 ml-1">Quận/Huyện</Label>
+        <Input
+          id="title"
+          v-model="province.district"
+          placeholder="Nhập tên..."
+        />
       </div>
     </div>
 

@@ -57,6 +57,7 @@ export type ProvinceForm = {
   slug: string
   region: string
   property_types: string[];
+  district: string
 }
 
 export type SelectOption = {

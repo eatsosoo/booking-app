@@ -63,6 +63,15 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
         <!-- Left column -->
         <div class="col-span-2 space-y-6">
+          <!-- Giới thiệu -->
+          <div
+            class="p-4 border rounded-2xl shadow-sm bg-white leading-relaxed text-sm"
+          >
+            <h2 class="font-semibold text-lg mb-3">Giới thiệu căn hộ</h2>
+            <Separator class="mb-4" />
+            <p v-html="home.content"></p>
+          </div>
+
           <!-- Thông tin chung -->
           <div class="p-4 border rounded-2xl shadow-sm bg-white mb-4">
             <h2 class="font-semibold text-lg mb-4">Thông tin chung</h2>
@@ -96,41 +105,51 @@
 
           <!-- Thuê theo giờ -->
           <div class="p-4 border rounded-2xl shadow-sm bg-white space-y-4 mb-4">
-            <h2 class="font-semibold text-lg">Thuê theo giờ (Tối đa 10 giờ)</h2>
+            <h2 class="font-semibold text-lg">Giá phòng</h2>
             <Separator class="mb-4" />
-            <div>
-              <p class="font-medium">2 giờ đầu</p>
-              <p class="text-orange-600 font-semibold">
-                {{ formatCurrency(home.base_hours) }}
-              </p>
-              <p class="text-sm text-gray-600">
-                1 giờ tiếp theo + {{ formatCurrency(home.extra_hour) }}
-              </p>
-            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2">
+              <div>
+                <div>
+                  <p class="font-medium">2 giờ đầu</p>
+                  <p class="text-orange-600 font-semibold">
+                    {{ formatCurrency(home.base_hours) }}
+                  </p>
+                  <p class="text-sm text-gray-600">
+                    1 giờ tiếp theo + {{ formatCurrency(home.extra_hour) }}
+                  </p>
+                </div>
 
-            <div>
-              <p class="font-medium">Qua đêm (20:00 - 12:00)</p>
-              <p class="text-orange-600 font-semibold">
-                {{ formatCurrency(home.per_night) }}
-              </p>
-            </div>
+                <div>
+                  <p class="font-medium">Nghỉ qua đêm (20:00 - 12:00)</p>
+                  <p class="text-orange-600 font-semibold">
+                    {{ formatCurrency(home.per_night) }}
+                  </p>
+                </div>
 
-            <div>
-              <p class="font-medium">Thuê trong ngày (10:00 - 18:00)</p>
-              <p class="text-orange-600 font-semibold">
-                {{ formatCurrency(home.per_day) }}
-              </p>
+                <div>
+                  <p class="font-medium">Thuê trong ngày (10:00 - 18:00)</p>
+                  <p class="text-orange-600 font-semibold">
+                    {{ formatCurrency(home.per_day) }}
+                  </p>
+                </div>
+              </div>
+              <!-- Phụ phí thêm người -->
+              <div class="border-l px-2">
+                <div>
+                  <p class="font-medium">Thuê theo tháng</p>
+                  <p class="text-orange-600 font-semibold">
+                    {{ formatCurrency(home.per_month) }}
+                  </p>
+                </div>
+                <div>
+                  <p class="font-medium">Phụ phí</p>
+                  <p class="font-semibold">
+                    <span class="text-orange-600">+ 200,000đ</span> / người (tính
+                  từ người thứ {{ home.guest + 1 }})
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-
-          <!-- Phụ phí thêm người -->
-          <div class="p-4 border rounded-2xl shadow-sm bg-white mb-4">
-            <h2 class="font-semibold text-lg mb-2">Phụ phí thêm người</h2>
-            <Separator class="mb-4" />
-            <p class="font-medium">
-              <span class="text-orange-600">+ 200,000đ</span> / người (tính từ
-              người thứ {{ home.guest + 1 }})
-            </p>
           </div>
 
           <!-- Dịch vụ -->
@@ -144,15 +163,6 @@
             >
               {{ service.title }}
             </p>
-          </div>
-
-          <!-- Giới thiệu -->
-          <div
-            class="p-4 border rounded-2xl shadow-sm bg-white leading-relaxed text-sm"
-          >
-            <h2 class="font-semibold text-lg mb-3">Giới thiệu căn hộ</h2>
-            <Separator class="mb-4" />
-            <p v-html="home.content"></p>
           </div>
         </div>
 

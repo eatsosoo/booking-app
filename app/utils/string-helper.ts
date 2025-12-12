@@ -1,3 +1,5 @@
+import { PROPERTY_TYPES } from "~/constants";
+
 export function formatCurrency(value: number | string): string {
   if (value === null || value === undefined || value === "") return "0 ₫";
 
@@ -129,3 +131,45 @@ export function calculateRoomPrice({
     total: price + surcharge,
   };
 }
+
+
+export function createBreadcrumbFromUrl(rawUrl: string) {
+  // bóc tách path + query params
+  const [path, queryString] = rawUrl.split("?");
+  const params = new URLSearchParams(queryString);
+
+  const priorityKeys = ["property_types", "region", "province", "district"];
+
+  const breadcrumb: any[] = [];
+
+  priorityKeys.forEach((key) => {
+    if (params.has(key)) {
+      let label = params.get(key) as string;
+
+      // xử lý riêng property_types vì là số
+      if (key === "property_types") {
+        const found = PROPERTY_TYPES.find((x) => x.value === Number(label));
+        label = found ? found.label : label;
+      }
+
+      // tạo url khi click breadcrumb (giữ nguyên các params phía trước)
+      const newParams = new URLSearchParams(params.toString());
+
+      // chỉ giữ lại các param từ đầu đến vị trí hiện tại
+      priorityKeys.forEach((removeKey) => {
+        if (priorityKeys.indexOf(removeKey) > priorityKeys.indexOf(key)) {
+          newParams.delete(removeKey);
+        }
+      });
+
+      breadcrumb.push({
+        key,
+        label,
+        url: `${path}?${newParams.toString()}`,
+      });
+    }
+  });
+
+  return breadcrumb;
+}
+

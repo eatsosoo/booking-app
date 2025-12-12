@@ -49,43 +49,10 @@ const pagination = computed(
 
 // COLUMNS DEFINITION
 const columns: ColumnDef<Province>[] = [
-  // {
-  //   id: "select",
-  //   header: ({ table }) =>
-  //     h(Checkbox, {
-  //       modelValue:
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate"),
-  //       "onUpdate:modelValue": (value) =>
-  //         table.toggleAllPageRowsSelected(!!value),
-  //       ariaLabel: "Select all",
-  //     }),
-  //   cell: ({ row }) =>
-  //     h(Checkbox, {
-  //       modelValue: row.getIsSelected(),
-  //       "onUpdate:modelValue": (value) => row.toggleSelected(!!value),
-  //       ariaLabel: "Select row",
-  //     }),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
   {
     accessorKey: "id",
     header: "ID",
     cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
-    enableSorting: false,
-  },
-  {
-    accessorKey: "name",
-    header: "Tên",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("name")),
-    enableSorting: false,
-  },
-  {
-    accessorKey: "region",
-    header: "Khu vực",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("region")),
     enableSorting: false,
   },
   {
@@ -101,20 +68,25 @@ const columns: ColumnDef<Province>[] = [
       ),
     enableSorting: false,
   },
-  // {
-  //   accessorKey: "created_at",
-  //   header: "Ngày tạo",
-  //   cell: ({ row }) =>
-  //     h("div", { class: "capitalize" }, convertUTC(row.getValue("created_at"))),
-  //   enableSorting: false,
-  // },
-  // {
-  //   accessorKey: "updated_at",
-  //   header: "Ngày cập nhật",
-  //   cell: ({ row }) =>
-  //     h("div", { class: "capitalize" }, convertUTC(row.getValue("updated_at"))),
-  //   enableSorting: false,
-  // },
+  {
+    accessorKey: "region",
+    header: "Khu vực",
+    cell: ({ row }) =>
+      h("div", { class: "capitalize" }, row.getValue("region")),
+    enableSorting: false,
+  },
+    {
+    accessorKey: "name",
+    header: "Địa danh",
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("name")),
+    enableSorting: false,
+  },
+   {
+    accessorKey: "district",
+    header: "Quận/Huyện",
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("district")),
+    enableSorting: false,
+  },
   {
     id: "actions",
     enableHiding: false,

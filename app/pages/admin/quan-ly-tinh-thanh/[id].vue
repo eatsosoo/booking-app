@@ -70,13 +70,7 @@ province.value.property_types = province.value.property_types.map(
   <section>
     <h1 class="text-2xl font-semibold mb-8">Địa điểm & Loại hình</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Question -->
-      <div>
-        <Label for="title" class="mb-2 ml-1">Địa danh</Label>
-        <Input id="title" v-model="province.name" placeholder="Nhập tên..." />
-      </div>
-
+    <div class="grid grid-cols-1 gap-6">
       <!-- Loại hình -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
@@ -104,6 +98,18 @@ province.value.property_types = province.value.property_types.map(
             </SelectGroup>
           </SelectContent>
         </Select>
+      </div>
+
+      <!-- Tỉnh -->
+      <div>
+        <Label for="title" class="mb-2 ml-1">Địa danh</Label>
+        <Input id="title" v-model="province.name" placeholder="Nhập tên..." />
+      </div>
+
+      <!-- Quận/Huyện -->
+      <div>
+        <Label for="title" class="mb-2 ml-1">Quận/Huyện</Label>
+        <Input id="title" v-model="province.district" placeholder="Nhập tên..." />
       </div>
     </div>
 

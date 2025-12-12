@@ -36,7 +36,7 @@ const items = [
     icon: ChartNoAxesCombinedIcon,
   },
   {
-    title: "Đặt phòng",
+    title: "Đặt phòng của khách hàng",
     url: "/admin/quan-ly-dat-phong",
     icon: LandmarkIcon,
   },
@@ -61,11 +61,6 @@ const items = [
     icon: MonitorCloud,
   },
   {
-    title: "Dự án",
-    url: "/admin/quan-ly-danh-muc",
-    icon: FolderKanban,
-  },
-  {
     title: "Các lựa chọn của Menu",
     url: "/admin/quan-ly-tinh-thanh",
     icon: MenuIcon,
@@ -79,7 +74,6 @@ const items = [
 
 const router = useRouter();
 const currentRoute = router.currentRoute;
-console.log(currentRoute.value.path);
 </script>
 
 <template>
