@@ -103,7 +103,7 @@ const columns: ColumnDef<Properties>[] = [
   },
   {
     accessorKey: "property_types",
-    header: "Hạng mục",
+    header: "Loại hình",
     cell: ({ row }) =>
       h(
         "div",
@@ -118,13 +118,33 @@ const columns: ColumnDef<Properties>[] = [
       ),
   },
   {
-    accessorKey: "area",
-    header: "Diện tích (m2)",
+    accessorKey: "region",
+    header: "Khu vực",
     cell: ({ row }) =>
       h(
         "div",
         { class: "capitalize" },
-        h("div", { class: "capitalize" }, row.getValue("area"))
+        h("div", { class: "captilize" }, row.getValue("region"))
+      ),
+  },
+  {
+    accessorKey: "province",
+    header: "Địa danh",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        h("div", { class: "captilize" }, row.getValue("province"))
+      ),
+  },
+  {
+    accessorKey: "district",
+    header: "Quận/Huyện",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        h("div", { class: "captilize" }, row.getValue("district"))
       ),
   },
   {
@@ -165,16 +185,6 @@ const columns: ColumnDef<Properties>[] = [
         "div",
         { class: "capitalize" },
         h("div", { class: "lowercase" }, row.getValue("bed") + " khách")
-      ),
-  },
-  {
-    accessorKey: "region",
-    header: "Khu vực",
-    cell: ({ row }) =>
-      h(
-        "div",
-        { class: "capitalize" },
-        h("div", { class: "captilize" }, row.getValue("region"))
       ),
   },
   {

@@ -21,6 +21,8 @@ export type PropertiesForm = {
   category_id: number
   slug: string
   region: string
+  province: string
+  district: string
 }
 
 export type PostForm = {

@@ -46,6 +46,22 @@ export function nowDate(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+export function nowDateTime(): string {
+  const now = new Date();
+  // Lấy thời gian UTC và cộng thêm 7 giờ (7 * 60 * 60 * 1000 mili giây)
+  // Chúng ta cộng 7 giờ vào UTC và xử lý để nó không vượt quá 24 giờ
+  const utcDate = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+
+  const year = utcDate.getUTCFullYear();
+  const month = ('0' + (utcDate.getUTCMonth() + 1)).slice(-2); // Tháng 0-11
+  const day = ('0' + utcDate.getUTCDate()).slice(-2);
+  const hours = ('0' + utcDate.getUTCHours()).slice(-2);
+  const minutes = ('0' + utcDate.getUTCMinutes()).slice(-2);
+  const seconds = ('0' + utcDate.getUTCSeconds()).slice(-2);
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 export function formatTelNumber(tel: string): string {
   // Xóa tất cả ký tự không phải số
   const cleaned = ("" + tel).replace(/\D/g, "");
@@ -172,4 +188,171 @@ export function createBreadcrumbFromUrl(rawUrl: string) {
 
   return breadcrumb;
 }
+
+type RoomPriceType = {
+  start_date: string
+  start_time: string
+  end_date: string
+  end_time: string
+  rent_type: 'base_hours' | 'per_day' | 'per_night' | 'per_month',
+  price: {
+    base_hours: number
+    extra_hour: number
+    per_day: number
+    per_night: number
+    per_month: number
+  }
+}
+
+// Hàm tạo đối tượng Date từ date và time
+export const createDateTime = (dateStr: string, timeStr: string) => {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  return new Date(year, month - 1, day, hours, minutes);
+};
+
+export function calculateRoomPriceV2(params: RoomPriceType) {
+  const {
+    start_date,
+    start_time,
+    end_date,
+    end_time,
+    rent_type, // 'base_hours', 'per_day', 'per_night', 'per_month'
+    price // { base_hours, extra_hour, per_day, per_night, per_month }
+  } = params;
+
+  const startDateTime = createDateTime(start_date, start_time);
+  const endDateTime = createDateTime(end_date, end_time);
+
+  // Đảm bảo thời gian kết thúc sau thời gian bắt đầu
+  if (endDateTime <= startDateTime) {
+    throw new Error('Thời gian kết thúc phải sau thời gian bắt đầu');
+  }
+
+  // Tính tổng số giờ thuê
+  const totalMilliseconds = endDateTime - startDateTime;
+  const totalHours = totalMilliseconds / (1000 * 60 * 60);
+  const totalDays = totalHours / 24;
+  const totalMonths = totalDays / 30; // Xấp xỉ
+
+  // Hàm tính số ngày thuê (trọn vẹn)
+  const getFullDays = () => {
+    // Chuyển về 00:00:00 để tính số ngày
+    const startDate = new Date(startDateTime);
+    startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date(endDateTime);
+    endDate.setHours(0, 0, 0, 0);
+
+    const diffTime = endDate - startDate;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  // Hàm kiểm tra có phải ban đêm không (18h - 6h)
+  const isNightTime = (dateTime) => {
+    const hours = dateTime.getHours();
+    return hours >= 18 || hours < 6;
+  };
+
+  // Hàm tính số giờ qua đêm
+  const calculateNightHours = () => {
+    let nightHours = 0;
+    let current = new Date(startDateTime);
+
+    while (current < endDateTime) {
+      // Thêm 1 giờ
+      const nextHour = new Date(current.getTime() + 60 * 60 * 1000);
+
+      // Kiểm tra nếu khoảng thời gian này thuộc ban đêm
+      if (isNightTime(current) || isNightTime(nextHour)) {
+        const segmentStart = current;
+        const segmentEnd = nextHour > endDateTime ? endDateTime : nextHour;
+
+        // Tính số giờ trong đoạn này
+        const segmentHours = (segmentEnd - segmentStart) / (1000 * 60 * 60);
+        nightHours += segmentHours;
+      }
+
+      current = nextHour;
+    }
+
+    return nightHours;
+  };
+
+  switch (rent_type) {
+    case 'base_hours': {
+      // Thuê theo giờ: có base_hours giờ đầu, sau đó tính theo extra_hour
+      const baseHours = 2; // Mặc định 2 giờ đầu
+      const basePrice = price.base_hours || 0;
+      const extraHourPrice = price.extra_hour || 0;
+
+      if (totalHours <= baseHours) {
+        return basePrice;
+      } else {
+        const extraHours = Math.ceil(totalHours - baseHours);
+        return basePrice + (extraHours * extraHourPrice);
+      }
+    }
+
+    case 'per_day': {
+      // Thuê theo ngày
+      const fullDays = getFullDays();
+      const dayPrice = price.per_day || 0;
+
+      // Nếu có lẻ giờ, tính thêm 1 ngày
+      const hasExtraHours = totalHours % 24 > 0;
+      const totalDaysToPay = hasExtraHours ? fullDays + 1 : fullDays;
+
+      return totalDaysToPay * dayPrice;
+    }
+
+    case 'per_night': {
+      // Thuê qua đêm (18h - 6h)
+      const nightPrice = price.per_night || 0;
+      const nightHours = calculateNightHours();
+
+      // Tính số đêm (mỗi đêm từ 18h hôm trước đến 6h hôm sau = 12h)
+      const totalNights = Math.ceil(nightHours / 12);
+
+      // Nếu có giờ ban ngày, tính thêm theo giá giờ thông thường
+      let dayTimeCost = 0;
+      const dayHours = totalHours - nightHours;
+
+      if (dayHours > 0) {
+        // Giả sử có giá giờ ban ngày
+        const dayHourPrice = price.day_hour_price || (nightPrice / 12) * 1.5;
+        dayTimeCost = Math.ceil(dayHours) * dayHourPrice;
+      }
+
+      return (totalNights * nightPrice) + dayTimeCost;
+    }
+
+    case 'per_month': {
+      // Thuê theo tháng
+      const monthPrice = price.per_month || 0;
+
+      // Tính số tháng trọn vẹn
+      const fullMonths = Math.floor(totalDays / 30);
+      const remainingDays = totalDays % 30;
+
+      let totalCost = fullMonths * monthPrice;
+
+      // Tính thêm ngày lẻ nếu có
+      if (remainingDays > 0) {
+        // Giá theo ngày = giá tháng / 30
+        const dayPriceFromMonth = monthPrice / 30;
+        totalCost += Math.ceil(remainingDays) * dayPriceFromMonth;
+      }
+
+      return totalCost;
+    }
+
+    default:
+      throw new Error('Loại hình thuê không hợp lệ');
+  }
+}
+
+export const buildUrl = (query: Record<string, any>) =>
+  `/tim-kiem?${new URLSearchParams(query).toString()}`
 

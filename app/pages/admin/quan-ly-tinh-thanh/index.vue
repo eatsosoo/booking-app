@@ -75,16 +75,17 @@ const columns: ColumnDef<Province>[] = [
       h("div", { class: "capitalize" }, row.getValue("region")),
     enableSorting: false,
   },
-    {
+  {
     accessorKey: "name",
     header: "Địa danh",
     cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("name")),
     enableSorting: false,
   },
-   {
+  {
     accessorKey: "district",
     header: "Quận/Huyện",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("district")),
+    cell: ({ row }) =>
+      h("div", { class: "capitalize" }, row.getValue("district")),
     enableSorting: false,
   },
   {
@@ -95,6 +96,8 @@ const columns: ColumnDef<Province>[] = [
       return h(ActionDropdown, {
         itemId: post.id,
         editLink: `/admin/quan-ly-tinh-thanh/${post.id}`,
+        showView: true,
+        viewLink: `/admin/quan-ly-tinh-thanh/view/${post.id}`,
         onDelete: () => deleteItem(post.id),
         onCopy: () => {
           navigator.clipboard.writeText(post.id.toString());

@@ -9,9 +9,25 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { PROPERTY_TYPES } from "~/constants";
+import { PROPERTY_TYPES, REGIONS } from "~/constants";
 
 const { getProvinces, getDistricts } = useProvinces();
+
+const menuTree = computed(() => {
+  return PROPERTY_TYPES.map((property) => ({
+    ...property,
+    regions: REGIONS.map((region) => {
+      const provinces = getProvinces(property.value, region);
+      return {
+        region,
+        provinces: provinces.map((province) => ({
+          province,
+          districts: getDistricts(property.value, region, province),
+        })),
+      };
+    }),
+  }));
+});
 </script>
 
 <template>
@@ -22,41 +38,48 @@ const { getProvinces, getDistricts } = useProvinces();
       </MenubarTrigger>
     </MenubarMenu>
 
-    <MenubarMenu v-for="property in PROPERTY_TYPES" :key="property.value">
+    <MenubarMenu v-for="level1 in menuTree" :key="level1.value">
       <MenubarTrigger>
-        {{ property.label }}
+        {{ level1.label }}
       </MenubarTrigger>
       <MenubarContent>
         <MenubarSub
-          v-for="region in ['Miền Bắc', 'Miền Trung', 'Miền Nam']"
-          :key="region"
+          v-for="level2 in level1.regions"
+          :key="`${level1.label}-${level2.region}`"
         >
-          <MenubarSubTrigger
-            v-if="getProvinces(property.value, region).length > 0"
-            >{{ region }}</MenubarSubTrigger
+          <MenubarSubTrigger v-if="level2.provinces.length > 0">
+            {{ level2.region }}</MenubarSubTrigger
           >
           <MenubarSubContent>
             <MenubarSub
-              v-for="province in getProvinces(property.value, region)"
-              :key="province.id"
+              v-for="level3 in level2.provinces"
+              :key="`${level1.label}-${level2.region}-${level3.province}`"
             >
-              <MenubarSubTrigger>{{ province.name }}</MenubarSubTrigger>
-              <MenubarSubContent
-                v-for="district in getDistricts(
-                  property.value,
-                  region,
-                  province.name
-                )"
-                :key="district.district"
-              >
+              <MenubarSubTrigger v-if="level3.districts.length > 0">{{
+                level3.province
+              }}</MenubarSubTrigger>
+              <MenubarSubContent>
                 <MenubarItem
-                  @click="
-                    navigateTo(
-                      `/tim-kiem?page=1&per_page=12&property_types=${property.value}&region=${region}&province=${province.name}&district=${district.district}`
-                    )
-                  "
-                  >{{ district.district }}</MenubarItem
+                  v-for="level4 in level3.districts"
+                  :key="`${level1.label}-${level2.region}-${level3.province}-${level4}`"
+                  as-child
                 >
+                  <NuxtLink
+                    :to="{
+                      path: '/tim-kiem',
+                      query: {
+                        page: 1,
+                        per_page: 12,
+                        property_types: level1.value,
+                        region: level2.region,
+                        province: level3.province,
+                        district: level4,
+                      },
+                    }"
+                  >
+                    {{ level4 }}
+                  </NuxtLink>
+                </MenubarItem>
               </MenubarSubContent>
             </MenubarSub>
           </MenubarSubContent>

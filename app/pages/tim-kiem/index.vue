@@ -11,10 +11,6 @@
       >
         <h1>
           <ClientBreadcrumb />
-          <!-- "
-          <span class="text-blue-900 font-bold"
-            >Khu đô thị Vinhomes Smart City</span
-          >" -->
         </h1>
       </div>
     </section>
@@ -66,7 +62,7 @@
             >
               {{ room.name }}
             </h2>
-            <p class="text-gray-600 mb-2 line-clamp-3">
+            <p class="text-gray-600 mb-2 text-[14px] line-clamp-3">
               {{ room.description }}
             </p>
 
@@ -132,13 +128,12 @@
               </p>
             </div>
             <div class="mt-2">
-              <Button
-                variant="outline"
-                @click="navigateTo(`/dia-diem/${room.id}`)"
-              >
-                Xem thêm
-                <LogOutIcon />
-              </Button>
+              <NuxtLink :to="`/dia-diem/${room.id}`">
+                <Button variant="outline">
+                  Xem thêm
+                  <LogOutIcon />
+                </Button>
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -189,14 +184,23 @@ const page = computed(() => {
 });
 const perPage = computed(() => route.query.per_page || 12);
 const region = computed(() => route.query.region || "");
-const filterVal = ref<string>("");
+const province = computed(() => route.query.province || "");
+const district = computed(() => route.query.district || "");
+const property_types = computed(() => route.query.property_types || "");
+const guest = computed(() => route.query.guest || "");
 
 /** ------------------------------------------------
  * API URL
  */
 const apiUrl = computed(
   () =>
-    `${config.public.apiBase}/home/properties?page=${page.value}&per_page=${perPage.value}&region=${region.value}&property_types=${filterVal.value}`
+    `${config.public.apiBase}/home/properties?page=${page.value}
+    &per_page=${perPage.value}
+    &property_types=${property_types.value}
+    &region=${region.value}
+    &province=${province.value}
+    &district=${district.value}
+    &guest=${guest.value}`
 );
 
 const { data } = await useAsyncData(
@@ -210,16 +214,6 @@ const updatePage = (newPage: number) => {
     query: {
       ...route.query,
       page: newPage,
-    },
-  });
-};
-
-const filterPage = (value: number) => {
-  filterVal.value = value.toString();
-  router.push({
-    query: {
-      ...route.query,
-      property_types: value,
     },
   });
 };

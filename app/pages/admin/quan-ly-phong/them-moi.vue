@@ -2,14 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type {
-  Category,
-  Option,
-  Option2,
-  Option3,
-  Response,
-  Service,
-} from "~/types";
+import type { Category, Option, Option3, Response, Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
@@ -17,8 +10,6 @@ import type { PropertiesForm } from "~/types/booking";
 import { PROPERTY_TYPES } from "~/constants";
 import MultiSelect from "~/components/common/MultiSelect.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
-import SearchSelect from "~/components/common/SearchSelect.vue";
-import { genSlug } from "~/utils/string-helper";
 import UploadImage from "~/components/common/UploadImage.vue";
 import UploadMultiImage from "~/components/common/UploadMultiImage.vue";
 import EditorCustom from "~/components/common/EditorCustom.vue";
@@ -38,8 +29,10 @@ definePageMeta({
 });
 
 const config = useRuntimeConfig();
+const { getProvinces, getDistricts } = useProvinces();
 const serviceOptions = ref<Option[]>([]);
 const categoryOptions = ref<Option3[]>([]);
+const roomTypeSelect = ref<number>(1);
 const post = ref<PropertiesForm>({
   name: "",
   description: "",
@@ -63,13 +56,15 @@ const post = ref<PropertiesForm>({
   category_id: 1,
   slug: "",
   region: "Miền Bắc",
+  province: "",
+  district: "",
 });
 
 const { data: servicesData } = await useFetch<Response<Service[]>>(
   "/api/services"
 );
 const { data: categoriesData } = await useFetch<Response<Category[]>>(
-  `${config.public.apiBase}/home/categories`
+  `${config.public.apiBase}/post/categories`
 );
 
 const { request } = useApi();
@@ -83,7 +78,7 @@ const savePost = async () => {
       method: "POST",
       body: {
         ...post.value,
-        category_id: Number(post.value.category_id),
+        slug: genSlug(post.value.name),
       },
     });
 
@@ -120,6 +115,16 @@ categoryOptions.value =
   })) || [];
 
 post.value.category_id = categoryOptions.value[0]?.value;
+const provinceOptions = computed(() => {
+  return getProvinces(roomTypeSelect.value, post.value.region);
+});
+const districtOptions = computed(() => {
+  return getDistricts(
+    roomTypeSelect.value,
+    post.value.region,
+    post.value.province
+  );
+});
 </script>
 
 <template>
@@ -130,33 +135,35 @@ post.value.category_id = categoryOptions.value[0]?.value;
       <!-- Title -->
       <div>
         <Label for="title" class="mb-2 ml-1">Tiêu đề</Label>
-        <Input
-          id="title"
-          v-model="post.name"
-          placeholder="Nhập tiêu đề..."
-          @change="post.slug = genSlug($event.target.value)"
-        />
+        <Input id="title" v-model="post.name" placeholder="Nhập tiêu đề..." />
       </div>
 
       <!-- Loại hình -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
-        <MultiSelect
-          v-model="post.property_types"
+        <!-- <MultiSelect
+          v-model="multiSelected.property_types"
           :options="PROPERTY_TYPES"
           placeholder="Chọn loại hình..."
           class="w-64"
-        />
-      </div>
-
-      <!-- Loại -->
-      <div>
-        <Label for="type" class="mb-2 ml-1">Loại dự án</Label>
-        <SearchSelect
-          :model-value="post.category_id"
-          :frameworks="categoryOptions"
-          @update:model-value="post.category_id = $event"
-        />
+        /> -->
+        <Select v-model="roomTypeSelect">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn loại hình..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem
+                v-for="type in PROPERTY_TYPES"
+                :key="type.value"
+                :value="type.value"
+              >
+                {{ type.label }}
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       <!-- Address -->
@@ -166,17 +173,6 @@ post.value.category_id = categoryOptions.value[0]?.value;
           id="address"
           v-model="post.address"
           placeholder="Nhập địa chỉ..."
-        />
-      </div>
-
-      <!-- Area -->
-      <div>
-        <Label for="area" class="mb-2 ml-1">Diện tích</Label>
-        <Input
-          id="area"
-          v-model="post.area"
-          type="number"
-          placeholder="Nhập diện tích..."
         />
       </div>
 
@@ -197,9 +193,67 @@ post.value.category_id = categoryOptions.value[0]?.value;
           </SelectContent>
         </Select>
       </div>
+
+      <!-- Area -->
+      <div>
+        <Label for="area" class="mb-2 ml-1">Diện tích</Label>
+        <Input
+          id="area"
+          v-model="post.area"
+          type="number"
+          placeholder="Nhập diện tích..."
+        />
+      </div>
+
+      <!-- Province -->
+      <div>
+        <Label for="answer" class="mb-2 ml-1">Địa danh</Label>
+        <Select v-model="post.province">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn địa danh..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem
+                v-for="province in provinceOptions"
+                :key="province"
+                :value="province"
+              >
+                {{ province }}
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div></div>
+
+      <!-- District -->
+      <div>
+        <Label for="answer" class="mb-2 ml-1">Quận/Huyện</Label>
+        <Select v-model="post.district">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn quận/huyện..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem
+                v-for="district in districtOptions"
+                :key="district"
+                :value="district"
+              >
+                {{ district }}
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
     </div>
 
     <Separator class="my-6" />
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Bathrooms -->
       <div>

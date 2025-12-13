@@ -124,7 +124,10 @@ if (typeof service.value.images === "string") {
       <!-- Loại -->
       <div>
         <Label for="is_published" class="mb-2 ml-1">Trạng thái</Label>
-        <Select v-model="service.is_published">
+        <Select
+          v-model="service.is_published"
+          :default-value="service.is_published"
+        >
           <SelectTrigger class="w-full">
             <SelectValue placeholder="Chọn trạng thái..." />
           </SelectTrigger>
@@ -148,10 +151,7 @@ if (typeof service.value.images === "string") {
       <!-- Image -->
       <div>
         <Label for="thumbnail" class="mb-2 ml-1">Hình ảnh</Label>
-        <UploadImage
-          :url="service.image"
-          @uploaded="service.image = $event"
-        />
+        <UploadImage :url="service.image" @uploaded="service.image = $event" />
       </div>
 
       <!-- description -->

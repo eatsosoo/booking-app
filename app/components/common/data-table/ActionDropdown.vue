@@ -14,7 +14,11 @@
         Sao chép ID
       </DropdownMenuItem>
 
-      <DropdownMenuSeparator v-if="showCopyId && (showDelete || showEdit || showDuplicate)" />
+      <DropdownMenuSeparator
+        v-if="
+          showCopyId && (showDelete || showEdit || showDuplicate || showView)
+        "
+      />
 
       <!-- Custom Actions Slot -->
       <slot />
@@ -44,6 +48,10 @@
         >
           Nhân bản
         </DropdownMenuItem>
+
+        <DropdownMenuItem v-if="showView">
+          <NuxtLink :to="viewLink" class="w-full"> Xem </NuxtLink>
+        </DropdownMenuItem>
       </template>
     </DropdownMenuContent>
   </DropdownMenu>
@@ -67,7 +75,9 @@ interface Props {
   showDelete?: boolean;
   showEdit?: boolean;
   showDuplicate?: boolean;
+  showView?: boolean;
   editLink?: string;
+  viewLink?: string;
   deleteLabel?: string;
 }
 
@@ -76,6 +86,7 @@ const props = withDefaults(defineProps<Props>(), {
   showDelete: true,
   showEdit: true,
   showDuplicate: false,
+  showView: false,
   deleteLabel: "Xoá",
 });
 

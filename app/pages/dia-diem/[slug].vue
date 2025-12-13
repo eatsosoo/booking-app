@@ -1,6 +1,22 @@
 <template>
   <div>
     <section class="p-4">
+      <div class="flex items-center text-gray-600 space-x-2 py-4">
+        <NuxtLink
+          v-for="(item, index) in breadcrumb"
+          :key="item.name"
+          :to="item.url"
+          class="hover:underline font-semibold text-lg flex items-center"
+        >
+          {{ item.name }}
+          <ChevronRight
+            v-if="index < breadcrumb.length - 1"
+            :size="16"
+            class="ml-4"
+          />
+        </NuxtLink>
+      </div>
+
       <div
         class="flex gap-2 cursor-pointer h-[390px] lg:h-[390px] xl:h-[500px]"
       >
@@ -109,25 +125,28 @@
             <Separator class="mb-4" />
             <div class="grid grid-cols-1 md:grid-cols-2">
               <div>
-                <div>
-                  <p class="font-medium">2 giờ đầu</p>
-                  <p class="text-orange-600 font-semibold">
-                    {{ formatCurrency(home.base_hours) }}
+                <div v-if="Number(home.base_hours)">
+                  <p class="font-medium">Thuê theo giờ</p>
+                  <p class="text-sm text-gray-600">
+                    2 giờ đầu
+                    <span class="text-orange-600 font-semibold">{{
+                      formatCurrency(home.base_hours)
+                    }}</span>
                   </p>
                   <p class="text-sm text-gray-600">
                     1 giờ tiếp theo + {{ formatCurrency(home.extra_hour) }}
                   </p>
                 </div>
 
-                <div>
-                  <p class="font-medium">Nghỉ qua đêm (20:00 - 12:00)</p>
+                <div v-if="Number(home.per_night)">
+                  <p class="font-medium">Nghỉ qua đêm (18:00 - 06:00)</p>
                   <p class="text-orange-600 font-semibold">
                     {{ formatCurrency(home.per_night) }}
                   </p>
                 </div>
 
-                <div>
-                  <p class="font-medium">Thuê trong ngày (10:00 - 18:00)</p>
+                <div v-if="Number(home.per_day)">
+                  <p class="font-medium">Thuê theo ngày</p>
                   <p class="text-orange-600 font-semibold">
                     {{ formatCurrency(home.per_day) }}
                   </p>
@@ -135,7 +154,7 @@
               </div>
               <!-- Phụ phí thêm người -->
               <div class="border-l px-2">
-                <div>
+                <div v-if="Number(home.per_month)">
                   <p class="font-medium">Thuê theo tháng</p>
                   <p class="text-orange-600 font-semibold">
                     {{ formatCurrency(home.per_month) }}
@@ -144,8 +163,8 @@
                 <div>
                   <p class="font-medium">Phụ phí</p>
                   <p class="font-semibold">
-                    <span class="text-orange-600">+ 200,000đ</span> / người (tính
-                  từ người thứ {{ home.guest + 1 }})
+                    <span class="text-orange-600">+ 200,000đ</span> / người
+                    (tính từ người thứ {{ home.guest + 1 }})
                   </p>
                 </div>
               </div>
@@ -156,10 +175,13 @@
           <div class="p-4 border rounded-2xl shadow-sm bg-white mb-4">
             <h2 class="font-semibold text-lg mb-2">Dịch vụ</h2>
             <Separator class="mb-4" />
+            <p v-if="home.services.length === 0" class="text-xs">
+              Không có dịch vụ đi kèm
+            </p>
             <p
               v-for="service in home.services"
               :key="service.id"
-              class="italic font-xs"
+              class="italic text-xs"
             >
               {{ service.title }}
             </p>
@@ -193,6 +215,7 @@
                     v-for="time in MORNING_TIMES"
                     :key="time"
                     :variant="time === times.start_time ? 'default' : 'outline'"
+                    :disabled="current > `${times.start_date} ${time}`"
                     @click="times.start_time = time"
                   >
                     {{ time }}
@@ -207,6 +230,7 @@
                     v-for="time in AFTERNOON_TIMES"
                     :key="time"
                     :variant="time === times.start_time ? 'default' : 'outline'"
+                    :disabled="current > `${times.start_date} ${time}`"
                     @click="times.start_time = time"
                   >
                     {{ time }}
@@ -239,6 +263,10 @@
                     v-for="time in MORNING_TIMES"
                     :key="time"
                     :variant="time === times.end_time ? 'default' : 'outline'"
+                    :disabled="
+                      `${times.end_date} ${time}` <
+                      `${times.start_date} ${times.start_time}`
+                    "
                     @click="times.end_time = time"
                   >
                     {{ time }}
@@ -252,6 +280,10 @@
                   <Button
                     v-for="time in AFTERNOON_TIMES"
                     :key="time"
+                    :disabled="
+                      `${times.end_date} ${time}` <
+                      `${times.start_date} ${times.start_time}`
+                    "
                     :variant="time === times.end_time ? 'default' : 'outline'"
                     @click="times.end_time = time"
                   >
@@ -262,9 +294,36 @@
             </Tabs>
           </div>
 
+          <!-- Chọn kiểu thuê -->
+          <div class="p-4 border rounded-2xl shadow-sm bg-white">
+            <!-- <p class="font-medium mb-3">Thuê</p> -->
+            <RadioGroup v-model="rentType">
+              <div class="flex items-center space-x-2">
+                <RadioGroupItem id="base_hours" value="base_hours" />
+                <Label for="base_hours">Thuê theo giờ</Label>
+              </div>
+              <div class="flex items-center space-x-2">
+                <RadioGroupItem id="per_night" value="per_night" />
+                <Label for="per_night">Thuê qua đêm</Label>
+              </div>
+              <div class="flex items-center space-x-2">
+                <RadioGroupItem id="per_day" value="per_day" />
+                <Label for="per_day">Thuê theo ngày</Label>
+              </div>
+              <div class="flex items-center space-x-2">
+                <RadioGroupItem
+                  id="per_month"
+                  value="per_month"
+                  :disabled="!enableRadio"
+                />
+                <Label for="per_month">Thuê theo tháng</Label>
+              </div>
+            </RadioGroup>
+          </div>
+
           <!-- Số lượng người -->
           <div class="p-4 border rounded-2xl shadow-sm bg-white">
-            <p class="font-medium mb-3">Số lượng người</p>
+            <p class="font-medium mb-2">Số lượng người</p>
             <div class="flex items-center gap-3">
               <Button
                 variant="outline"
@@ -282,7 +341,7 @@
 
           <!-- Số lượng người -->
           <div class="p-4 border rounded-2xl shadow-sm bg-white">
-            <p class="font-medium mb-3">Chi phí dự kiến</p>
+            <p class="font-medium mb-2">Chi phí dự kiến</p>
             <div class="flex items-center gap-3">
               <span class="font-semibold text-lg px-4">{{
                 formatCurrency(totalPrice)
@@ -309,12 +368,22 @@ import { AFTERNOON_TIMES, MORNING_TIMES } from "~/constants";
 import type { Properties, Response } from "~/types";
 import { formatCurrency } from "~/utils/string-helper";
 import { toast } from "vue-sonner";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ChevronRight } from "lucide-vue-next";
 
 const route = useRoute();
 const id = route.params.slug;
 const config = useRuntimeConfig();
 const minDate = nowDate();
+const current = nowDateTime();
 
+/* -----------------------
+   STATE
+------------------------- */
+const rentType = ref<"base_hours" | "per_day" | "per_night" | "per_month">(
+  "base_hours"
+);
 const home = ref<Properties>({} as Properties);
 const times = reactive({
   start_date: minDate,
@@ -323,29 +392,92 @@ const times = reactive({
   end_time: "",
 });
 
+/* -----------------------
+   FETCH API
+------------------------- */
 const apiUrl = `${config.public.apiBase}/home/properties/${id}`;
 const { data } = await useFetch<Response<Properties>>(apiUrl);
 
 home.value = data.value?.data.items || ({} as Properties);
 
 const amountGuest = ref<number>(home.value.guest);
+const homeVal = home.value;
+const typeName = homeVal.property_types?.[0];
+
+const breadcrumb = [
+  {
+    name: typeName?.name,
+    url: buildUrl({ property_types: typeName?.id }),
+  },
+  {
+    name: homeVal.region,
+    url: buildUrl({
+      property_types: typeName?.id,
+      region: homeVal.region,
+    }),
+  },
+  {
+    name: homeVal.province,
+    url: buildUrl({
+      property_types: typeName?.id,
+      region: homeVal.region,
+      province: homeVal.province,
+    }),
+  },
+  {
+    name: homeVal.district,
+    url: buildUrl({
+      property_types: typeName?.id,
+      region: homeVal.region,
+      province: homeVal.province,
+      district: homeVal.district,
+    }),
+  },
+  {
+    name: homeVal.name,
+    url: "",
+  },
+];
+
+/* -----------------------
+  COMPUTED
+------------------------- */
+const enableRadio = computed(() => {
+  const { start_date, start_time, end_date, end_time } = times;
+  if (!start_date || !start_time || !end_date || !end_time) return false;
+
+  const start = createDateTime(start_date, start_time);
+  const end = createDateTime(end_date, end_time);
+
+  if (end <= start) return false;
+
+  const days = (end.getTime() - start.getTime()) / 864e5; // 1000*60*60*24
+  return days >= 30;
+});
+
 const totalPrice = computed(() => {
   const { start_date, start_time, end_date, end_time } = times;
   if (!start_date || !start_time || !end_date || !end_time) return 0;
   const info = {
-    start_date: `${start_date} ${start_time}`,
-    end_date: `${end_date} ${end_time}`,
-    base_hours: home.value.base_hours,
-    extra_hour: home.value.extra_hour,
-    per_day: home.value.per_day,
-    per_night: home.value.per_night,
-    per_month: home.value.per_month,
-    guest: home.value.guest,
-    actual_guest: amountGuest.value,
+    base_hours: Number(home.value.base_hours),
+    extra_hour: Number(home.value.extra_hour),
+    per_day: Number(home.value.per_day),
+    per_night: Number(home.value.per_night),
+    per_month: Number(home.value.per_month),
   };
-  return calculateRoomPrice(info).total;
+  return calculateRoomPriceV2({
+    start_date,
+    start_time,
+    end_date,
+    end_time,
+    rent_type: rentType.value,
+    price: info,
+  });
 });
 
+/* -----------------------
+   METHODS
+------------------------- */
 const confirmOrder = () => {
   const { start_date, start_time, end_date, end_time } = times;
   if (!start_date) {

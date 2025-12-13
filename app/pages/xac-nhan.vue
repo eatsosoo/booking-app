@@ -144,14 +144,14 @@
             <Separator />
 
             <div class="flex justify-between">
-              <span class="font-semibold">Số lượng khách (1 khách)</span>
+              <span class="font-semibold">Số lượng khách</span>
               <a
                 class="text-blue-600 underline cursor-pointer"
                 @click="router.back()"
                 >Thay đổi</a
               >
             </div>
-            <p class="text-gray-700">{{ orderData.amount_guest }} người lớn</p>
+            <p class="text-gray-700">{{ orderData.amount_guest }} người</p>
 
             <Separator />
 

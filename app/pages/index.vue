@@ -194,7 +194,7 @@
       </div>
     </section>
 
-    <section>
+    <!-- <section>
       <div class="cus-container">
         <h2 class="text-3xl font-semibold text-center capitalize mb-10">
           Video
@@ -203,7 +203,7 @@
           <TiktokEmbed url="https://www.tiktok.com/@gc.ng.yu2/video/7580250980445441288" />
         </div>
       </div>
-    </section>
+    </section> -->
   </div>
 </template>
 

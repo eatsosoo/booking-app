@@ -37,7 +37,6 @@ definePageMeta({
 
 const { request } = useApi();
 const route = useRoute();
-const config = useRuntimeConfig();
 const { getProvinces, getDistricts } = useProvinces();
 const id = route.params.id;
 
@@ -48,7 +47,6 @@ const multiSelected = reactive({
 });
 const roomTypeSelect = ref<number>(1);
 const serviceOptions = ref<Option3[]>([]);
-const categoryOptions = ref<Option2[]>([]);
 
 /* -----------------------
    GET DATA
@@ -60,9 +58,6 @@ const home = ref<Properties>(data.value?.data.items || ({} as Properties));
 
 const { data: servicesData } = await useFetch<Response<Service[]>>(
   "/api/services"
-);
-const { data: categoriesData } = await useFetch<Response<Category[]>>(
-  `${config.public.apiBase}/home/categories`
 );
 
 /* -----------------------
@@ -96,17 +91,14 @@ const saveProperties = async () => {
 
 multiSelected.property_types = home.value.property_types.map((item) => item.id);
 multiSelected.services = home.value.services.map((item) => item.id);
-roomTypeSelect.value = home.value.property_types.map((item) => item.id)[0] as number;
+roomTypeSelect.value = home.value.property_types.map(
+  (item) => item.id
+)[0] as number;
 
 serviceOptions.value =
   servicesData.value?.data.items.map((service) => ({
     label: service.title,
     value: service.id,
-  })) || [];
-categoryOptions.value =
-  categoriesData.value?.data.items.map((service) => ({
-    label: service.name,
-    value: service.id.toString(),
   })) || [];
 
 const provinceOptions = computed(() => {
@@ -211,10 +203,10 @@ const districtOptions = computed(() => {
               <SelectLabel></SelectLabel>
               <SelectItem
                 v-for="province in provinceOptions"
-                :key="province.name"
-                :value="province.name"
+                :key="province"
+                :value="province"
               >
-                {{ province.name }}
+                {{ province }}
               </SelectItem>
             </SelectGroup>
           </SelectContent>
@@ -235,10 +227,10 @@ const districtOptions = computed(() => {
               <SelectLabel></SelectLabel>
               <SelectItem
                 v-for="district in districtOptions"
-                :key="district.district"
-                :value="district.district"
+                :key="district"
+                :value="district"
               >
-                {{ district.district }}
+                {{ district }}
               </SelectItem>
             </SelectGroup>
           </SelectContent>

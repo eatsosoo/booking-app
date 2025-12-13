@@ -59,24 +59,29 @@ export const useProvinces = () => {
     region: string
   ) => {
     if (!provinces.value) return []
-    return provinces.value?.data.items.filter(
+    const records = provinces.value?.data.items;
+    const res = [...records].filter(
       (p) =>
         p.property_types.map((item) => item.id).includes(propertyId) &&
         p.region === region
-    );
+    ).map((el) => el.name);
+    return [...new Set(res)]
   };
+
 
   const getDistricts = (
     propertyId: number,
     region: string,
-    name: string
+    province: string
   ) => {
     if (!provinces.value) return []
-    return provinces.value?.data.items.filter(
+    const records = provinces.value?.data.items;
+    const filtered = [...records].filter(
       (p) =>
         p.property_types.map((item) => item.id).includes(propertyId) &&
-        p.region === region && p.name === name
-    );
+        p.region === region && p.name === province
+    ).map((el) => el.district);
+    return filtered
   };
 
   return {
