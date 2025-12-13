@@ -54,7 +54,7 @@
             class="text-3xl p-4 bg-primary rounded-full font-bold text-white flex items-center gap-4"
           >
             <PhoneCall :size="34" />
-            {{ formatTelNumber(settings.phone_number) }}
+            <!-- {{ formatTelNumber(settings.phone_number) }} -->
           </button>
         </div>
       </div>
@@ -70,7 +70,7 @@
 
     <section ref="editorDiv">
       <div v-if="!enableEditor" class="cus-container">
-        <div v-html="settings.home_page"></div>
+        <div v-html="homePageHtml"></div>
       </div>
       <div v-else>
         <CommonEditorCustom
@@ -133,7 +133,7 @@
     <!-- Cẩm nang -->
     <section>
       <div class="cus-container">
-        <h2 class="text-3xl font-semibold text-center capitalize mb-10">
+        <h2 class="text-3xl font-semibold text-center capitalize">
           Tin tức & Sự kiện
         </h2>
         <Swiper
@@ -150,38 +150,28 @@
             <div class="rounded-md shadow-md flex h-[200px] border">
               <div class="h-[200px] w-[200px] shrink-0">
                 <img
-                  :src="
-                    settings.posts[index]
-                      ? settings.posts[index].image
-                      : settings.posts[0].image
-                  "
+                  :src="posts[index] ? posts[index].image : posts[0]?.image"
                   class="h-full w-[200px] object-cover rounded-l-md"
                 />
               </div>
               <div class="p-2 flex-1">
                 <p class="text-2xl font-semibold line-clamp-1">
-                  {{
-                    settings.posts[index]
-                      ? settings.posts[index].title
-                      : settings.posts[0].title
-                  }}
+                  {{ posts[index] ? posts[index].title : posts[0]?.title }}
                 </p>
                 <p class="flex text-gray-500 text-[14px] my-2">
                   <TimerIcon :size="20" />2025/12/11
                 </p>
                 <p class="text-[14px] line-clamp-4">
                   {{
-                    settings.posts[index]
-                      ? settings.posts[index].description
-                      : settings.posts[0].description
+                    posts[index]
+                      ? posts[index].description
+                      : posts[0]?.description
                   }}
                 </p>
                 <p class="">
                   <NuxtLink
                     :to="`/cam-nang/${
-                      settings.posts[index]
-                        ? settings.posts[index].slug
-                        : settings.posts[0].slug
+                      posts[index] ? posts[index].slug : posts[0]?.slug
                     }`"
                     class="underline text-primary"
                     >Xem thêm</NuxtLink
@@ -194,16 +184,33 @@
       </div>
     </section>
 
-    <!-- <section>
+    <section>
       <div class="cus-container">
         <h2 class="text-3xl font-semibold text-center capitalize mb-10">
           Video
         </h2>
-        <div>
-          <TiktokEmbed url="https://www.tiktok.com/@gc.ng.yu2/video/7580250980445441288" />
-        </div>
+        <Swiper
+          :modules="[Pagination, Autoplay, Grid]"
+          :pagination="{ clickable: true }"
+          :loop="true"
+          :slides-per-view="3"
+          :space-between="20"
+          class="video-slide"
+        >
+          <SwiperSlide v-for="video in videos" :key="`video-${video.id}`">
+            <div>
+              <iframe
+                v-if="getTikTokEmbedUrl(video.setting_value)"
+                :src="getTikTokEmbedUrl(video.setting_value)"
+                class="w-full aspect-9/16 rounded-xl"
+                frameborder="0"
+                allowfullscreen
+              />
+            </div>
+          </SwiperSlide>
+        </Swiper>
       </div>
-    </section> -->
+    </section>
   </div>
 </template>
 
@@ -212,7 +219,7 @@ import { PhoneCall, TimerIcon, XIcon } from "lucide-vue-next";
 import { formatTelNumber, genSlug } from "~/utils/string-helper";
 import Button from "~/components/ui/button/Button.vue";
 import { PROPERTY_TYPES } from "~/constants";
-import type { Response, SystemSetting } from "~/types";
+import type { Post, Response, SettingItem, SystemSetting } from "~/types";
 import { toast } from "vue-sonner";
 
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -220,7 +227,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/grid";
 import { Pagination, Autoplay, Grid } from "swiper/modules";
-import TiktokEmbed from "~/components/common/TiktokEmbed.vue";
 
 useSeoMeta({
   // --- BASIC ---
@@ -245,21 +251,21 @@ useSeoMeta({
 });
 
 const { provinces } = useProvinces();
-// const { settings } = useSystemSetting();
+const { homePageSetting, videos } = useSystemSetting();
 const token = useCookie("token");
 const { request } = useApi();
 
 const config = useRuntimeConfig();
-const { data, pending, refresh, error } = await useFetch<
-  Response<SystemSetting>
->(`${config.public.apiBase}/home/settings`);
+const { data } = await useFetch<Response<Post[]>>(
+  `${config.public.apiBase}/home/posts`
+);
 
-const settings = reactive(data.value?.data.items ?? ({} as SystemSetting));
-const homePageHtml = ref<string>(settings.home_page || "");
+const homePageHtml = ref<string>(homePageSetting.value.setting_value);
 const enableEditor = ref<boolean>(false);
 const btnText = ref<string>("Chỉnh sửa");
 const updating = ref<boolean>(false);
 const showActions = ref<boolean>(true);
+const posts = ref<Post[]>(data.value?.data.items || []);
 
 const result = provinces.value?.data.items ?? [];
 const groupOptions: any = {};
@@ -275,11 +281,11 @@ result.forEach((element) => {
 const updateHomePage = async () => {
   updating.value = true;
   try {
-    await request<SystemSetting>(`/settings/update`, {
+    await request<SystemSetting>(`/settings/${homePageSetting.value.id}`, {
       method: "PUT",
       body: {
-        ...settings,
-        home_page: homePageHtml.value,
+        ...homePageSetting.value,
+        setting_value: homePageHtml.value,
       },
     });
 
@@ -287,7 +293,6 @@ const updateHomePage = async () => {
       description: "Trang chủ đã được cập nhật thành công!",
     });
     enableEditor.value = false;
-    settings.home_page = homePageHtml.value;
   } catch (err: any) {
     toast.error("Cập nhật trang chủ", {
       description: err?.message || "Có lỗi xảy và vui lòng thử lại sau!",
@@ -302,6 +307,11 @@ watch(
   (newVal) => {
     btnText.value = newVal ? "Lưu thay đổi" : "Chỉnh sửa";
   }
+);
+
+watch(
+  () => homePageSetting.value,
+  (newVal) => (homePageHtml.value = newVal.setting_value)
 );
 
 const randomImages = ref<number[]>([]);
@@ -325,5 +335,8 @@ onMounted(() => {
 .mySwiper {
   width: 100%;
   height: 440px;
+}
+.video-slide {
+  width: 100%;
 }
 </style>

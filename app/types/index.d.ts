@@ -4,6 +4,12 @@ export interface Faq {
   answer: string
 }
 
+export interface SettingItem {
+  id: number
+  setting_key: string
+  setting_value: string
+}
+
 export interface Booking {
   id: number
   name: string

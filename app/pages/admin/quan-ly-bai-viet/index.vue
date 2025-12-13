@@ -132,7 +132,13 @@ const columns: ColumnDef<Post>[] = [
     accessorKey: "property_types",
     header: "Loại hình",
     cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("property_types").map((item) => item.name).join(' | ')),
+      h(
+        "div",
+        { class: "capitalize" },
+        (row.getValue("property_types") as any)
+          .map((item: { name: string }) => item.name)
+          .join(" | ")
+      ),
   },
   {
     accessorKey: "region",

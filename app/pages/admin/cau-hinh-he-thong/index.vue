@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useForm } from "vee-validate";
-import { z } from "zod";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { SystemSetting } from "~/types";
+import type { SettingItem, SystemSetting } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
-import { toTypedSchema } from "@vee-validate/zod";
+import {
+  Bolt,
+  CheckCheck,
+  House,
+  PlusSquareIcon,
+  Trash,
+} from "lucide-vue-next";
 
 definePageMeta({
   layout: "admin",
@@ -16,107 +20,36 @@ definePageMeta({
 
 const { request } = useApi();
 
-// 1. Define validation schema
-const validationSchema = z.object({
-  phone_number: z
-    .string()
-    .regex(/^(0|\+84)(3[2-9]|5[2689]|7[0-9]|8[1-9]|9[0-9])[0-9]{7}$/, {
-      message: "Số điện thoại không hợp lệ",
-    })
-    .optional(),
-
-  email: z
-    .string()
-    .email("Email không hợp lệ")
-    .max(100, "Email quá dài")
-    .optional(),
-
-  facebook_url: z
-    .string()
-    .url("URL Facebook không hợp lệ")
-    .max(500, "URL quá dài")
-    .optional(),
-
-  tiktok_url: z
-    .string()
-    .url("URL Tiktok không hợp lệ")
-    .max(500, "URL quá dài")
-    .optional(),
-
-  zalo_url: z
-    .string()
-    .url("URL Zalo không hợp lệ")
-    .max(500, "URL quá dài")
-    .optional(),
-
-  home_page: z.string().optional(),
-});
-
-// 2. Setup form with vee-validate
-const { handleSubmit, errors, resetForm, meta } = useForm({
-  validationSchema: toTypedSchema(validationSchema),
-  initialValues: {
-    phone_number: "",
-    email: "",
-    facebook_url: "",
-    tiktok_url: "",
-    zalo_url: "",
-    home_page: "",
-  },
-});
-
 /* -----------------------
    GET DATA
 ------------------------- */
 const { data } = await useAsyncData(`system-settings`, () =>
-  request<SystemSetting>(`/settings`)
+  request<SettingItem[]>(`/settings`)
 );
-
-// 3. Set initial values when data loads
-watch(
-  () => data.value,
-  (newData) => {
-    if (newData?.data?.items) {
-      resetForm({
-        values: {
-          phone_number: newData.data.items.phone_number || "",
-          email: newData.data.items.email || "",
-          facebook_url: newData.data.items.facebook_url || "",
-          tiktok_url: newData.data.items.tiktok_url || "",
-          zalo_url: newData.data.items.zalo_url || "",
-          home_page: newData.data.items.home_page || "",
-        },
-      });
-    }
-  },
-  { immediate: true }
-);
-
+const systemSettings = data.value?.data.items || [];
 const loading = ref<boolean>(false);
+
+const homePageSetting = systemSettings.find(
+  (item) => item.setting_key === "HOME_PAGE"
+);
 
 /* -----------------------
    UPDATE DATA
 ------------------------- */
-const saveSettings = handleSubmit(async (values) => {
+const saveSettings = async (item: SettingItem) => {
   loading.value = true;
 
   try {
-    await request<SystemSetting>(`/settings/update`, {
+    await request<SettingItem>(`/settings/${item.id}`, {
       method: "PUT",
       body: {
-        phone_number: values.phone_number,
-        email: values.email,
-        facebook_url: values.facebook_url,
-        tiktok_url: values.tiktok_url,
-        zalo_url: values.zalo_url,
-        home_page: values.home_page,
+        ...item,
       },
     });
 
     toast.success("Cấu hình hệ thống", {
-      description: "Đã được cập nhật.",
+      description: `Đã được cập nhật thiết lập ID: ${item.id} - ${item.setting_key}`,
     });
-    meta.value.dirty = false;
   } catch (err: any) {
     toast.error("Lỗi!", {
       description: err?.data?.message ?? err?.message ?? "Có lỗi xảy ra!",
@@ -124,198 +57,94 @@ const saveSettings = handleSubmit(async (values) => {
   } finally {
     loading.value = false;
   }
-});
+};
+
+const deleteSetting = async (item: SettingItem) => {
+  loading.value = true;
+
+  try {
+    await request<SettingItem>(`/settings/${item.id}`, {
+      method: "DELETE",
+    });
+
+    toast.success("Cấu hình hệ thống", {
+      description: `Đã xoá thiết lập ID: ${item.id} - ${item.setting_key}`,
+    });
+  } catch (err: any) {
+    toast.error("Lỗi!", {
+      description: err?.data?.message ?? err?.message ?? "Có lỗi xảy ra!",
+    });
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
 
 <template>
   <section>
     <h1 class="text-2xl font-semibold mb-8">Cấu hình hệ thống</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Phone Number -->
-      <div>
-        <Label for="phone_number" class="mb-2 ml-1">Số điện thoại</Label>
-        <VeeField
-          v-slot="{ field, errorMessage }"
-          name="phone_number"
-          :validate-on-input="true"
-        >
-          <div>
-            <Input
-              id="phone_number"
-              v-bind="field"
-              :model-value="field.value"
-              placeholder="Nhập số điện thoại..."
-              :class="{ 'border-red-500 focus:ring-red-500': errorMessage }"
-              @update:model-value="field.onChange"
-            />
-            <span
-              v-if="errorMessage"
-              class="text-red-500 text-xs mt-1 ml-1 block"
-            >
-              {{ errorMessage }}
-            </span>
-          </div>
-        </VeeField>
-      </div>
+    <NuxtLink to="/admin/cau-hinh-he-thong/them-moi">
+      <Button>
+        <PlusSquareIcon class="h-4 w-4" />
+        Tạo mới
+      </Button>
+    </NuxtLink>
 
-      <!-- Facebook URL -->
-      <div>
-        <Label for="facebook_url" class="mb-2 ml-1">Facebook</Label>
-        <VeeField
-          v-slot="{ field, errorMessage }"
-          name="facebook_url"
-          :validate-on-input="true"
+    <h2 class="mb-2 ml-1 text-xl font-semibold mt-4 flex items-center">
+      <Bolt class="mr-2" :size="22" /> Các thiết lập cơ bản
+    </h2>
+    <div class="grid grid-cols-2 mt-4 gap-4">
+      <template v-for="(item, index) in systemSettings" :key="item.id">
+        <div
+          v-if="item.setting_key !== 'HOME_PAGE'"
+          class="border border-gray-100 p-4 shadow-md rounded-md"
         >
-          <div>
+          <Label :for="item.setting_key" class="mb-2 ml-1">{{
+            item.setting_key
+          }}</Label>
+          <div class="flex space-x-2">
             <Input
-              id="facebook_url"
-              v-bind="field"
-              :model-value="field.value"
-              placeholder="Facebook..."
-              :class="{ 'border-red-500 focus:ring-red-500': errorMessage }"
-              @update:model-value="field.onChange"
+              :id="item.setting_key"
+              v-model="item.setting_value"
+              placeholder="Nhập..."
             />
-            <span
-              v-if="errorMessage"
-              class="text-red-500 text-xs mt-1 ml-1 block"
+            <Button
+              variant="outline"
+              :disabled="loading"
+              @click="saveSettings(item)"
             >
-              {{ errorMessage }}
-            </span>
-          </div>
-        </VeeField>
-      </div>
-
-      <!-- Tiktok URL -->
-      <div>
-        <Label for="tiktok_url" class="mb-2 ml-1">Tiktok</Label>
-        <VeeField
-          v-slot="{ field, errorMessage }"
-          name="tiktok_url"
-          :validate-on-input="true"
-        >
-          <div>
-            <Input
-              id="tiktok_url"
-              v-bind="field"
-              :model-value="field.value"
-              placeholder="Tiktok..."
-              :class="{ 'border-red-500 focus:ring-red-500': errorMessage }"
-              @update:model-value="field.onChange"
-            />
-            <span
-              v-if="errorMessage"
-              class="text-red-500 text-xs mt-1 ml-1 block"
+              <CheckCheck color="green" />
+            </Button>
+            <Button
+              variant="outline"
+              :disabled="loading"
+              @click="deleteSetting(item)"
             >
-              {{ errorMessage }}
-            </span>
+              <Trash color="red" />
+            </Button>
           </div>
-        </VeeField>
-      </div>
-
-      <!-- Zalo URL -->
-      <div>
-        <Label for="zalo_url" class="mb-2 ml-1">Zalo</Label>
-        <VeeField
-          v-slot="{ field, errorMessage }"
-          name="zalo_url"
-          :validate-on-input="true"
-        >
-          <div>
-            <Input
-              id="zalo_url"
-              v-bind="field"
-              :model-value="field.value"
-              placeholder="Zalo..."
-              :class="{ 'border-red-500 focus:ring-red-500': errorMessage }"
-              @update:model-value="field.onChange"
-            />
-            <span
-              v-if="errorMessage"
-              class="text-red-500 text-xs mt-1 ml-1 block"
-            >
-              {{ errorMessage }}
-            </span>
-          </div>
-        </VeeField>
-      </div>
-
-      <!-- Email -->
-      <div>
-        <Label for="email" class="mb-2 ml-1">Email</Label>
-        <VeeField
-          v-slot="{ field, errorMessage }"
-          name="email"
-          type="email"
-          :validate-on-input="true"
-        >
-          <div>
-            <Input
-              id="email"
-              v-bind="field"
-              :model-value="field.value"
-              placeholder="email..."
-              :class="{ 'border-red-500 focus:ring-red-500': errorMessage }"
-              @update:model-value="field.onChange"
-            />
-            <span
-              v-if="errorMessage"
-              class="text-red-500 text-xs mt-1 ml-1 block"
-            >
-              {{ errorMessage }}
-            </span>
-          </div>
-        </VeeField>
-      </div>
-
-      <!-- Home Page Content -->
-      <div class="col-span-2">
-        <Label for="home_page" class="mb-2 ml-1">Nội dung trang chủ</Label>
-        <VeeField v-slot="{ field }" name="home_page">
-          <ClientOnly>
-            <CommonEditorCustom
-              :model-value="field.value"
-              @update:model-value="field.onChange"
-            />
-          </ClientOnly>
-        </VeeField>
-        <span
-          v-if="errors.home_page"
-          class="text-red-500 text-xs mt-1 ml-1 block"
-        >
-          {{ errors.home_page }}
-        </span>
-      </div>
+        </div>
+      </template>
     </div>
 
-    <!-- Form Status -->
-    <div class="mt-4 text-sm text-gray-600">
-      <p v-if="meta.dirty" class="text-amber-600">
-        ⚠️ Có thay đổi chưa được lưu
-      </p>
-      <p v-else class="text-green-600">✓ Tất cả thay đổi đã được lưu</p>
-    </div>
-
-    <!-- Save button -->
-    <div class="mt-6 flex items-center gap-4">
+    <!-- Home Page Content -->
+    <h2 class="mb-2 ml-1 text-xl font-semibold mt-8 flex items-center">
+      <House class="mr-2" :size="22" /> Nội dung trang chủ
+    </h2>
+    <div v-if="homePageSetting" class="col-span-2 mt-4">
+      <ClientOnly>
+        <CommonEditorCustom
+          :model-value="homePageSetting.setting_value"
+          @update:model-value="homePageSetting.setting_value = $event"
+        />
+      </ClientOnly>
       <Button
-        variant="default"
-        :disabled="loading || !meta.dirty"
-        :class="{ 'opacity-50 cursor-not-allowed': !meta.dirty }"
-        @click="saveSettings"
+        class="mt-2"
+        :loading="loading"
+        @click="saveSettings(homePageSetting)"
+        >Lưu nội dung trang chủ</Button
       >
-        <span v-if="loading" class="animate-spin mr-2">↻</span>
-        {{ loading ? "Đang lưu..." : "Lưu thay đổi" }}
-      </Button>
-
-      <Button
-        v-if="meta.dirty"
-        variant="outline"
-        :disabled="loading"
-        @click="resetForm()"
-      >
-        Hủy thay đổi
-      </Button>
     </div>
   </section>
 </template>

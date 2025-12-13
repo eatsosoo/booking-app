@@ -356,3 +356,8 @@ export function calculateRoomPriceV2(params: RoomPriceType) {
 export const buildUrl = (query: Record<string, any>) =>
   `/tim-kiem?${new URLSearchParams(query).toString()}`
 
+export const getTikTokEmbedUrl = (url: string) => {
+  const match = url.match(/video\/(\d+)/)
+  return match ? `https://www.tiktok.com/embed/v2/${match[1]}` : ''
+}
+

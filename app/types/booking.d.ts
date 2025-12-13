@@ -66,3 +66,8 @@ export type SelectOption = {
   id: number
   name: string
 }
+
+export type SettingForm = {
+  setting_key: string
+  setting_value: string
+}

@@ -52,22 +52,19 @@ const columns: ColumnDef<Video>[] = [
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("id")),
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
     enableSorting: false,
   },
   {
     accessorKey: "name",
     header: "Tiêu đề",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("name")),
+    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("name")),
     enableSorting: false,
   },
   {
     accessorKey: "url",
     header: "URL",
-    cell: ({ row }) =>
-      h("div", { class: "capitalize" }, row.getValue("url")),
+    cell: ({ row }) => h("div", { class: "normal" }, row.getValue("url")),
     enableSorting: false,
   },
   {
