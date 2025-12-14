@@ -15,6 +15,10 @@
       </div>
     </section>
 
+    <section class="w-full px-6 pt-10 max-w-7xl mx-auto mt-4">
+      <SearchForm2 />
+    </section>
+
     <section class="w-full px-6 py-10 max-w-7xl mx-auto mt-4">
       <!-- Header -->
       <h1 class="text-4xl font-bold text-blue-950">DANH SÁCH PHÒNG</h1>
