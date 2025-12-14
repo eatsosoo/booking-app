@@ -6,7 +6,7 @@ import type {
   SortingState,
   VisibilityState,
 } from "@tanstack/vue-table";
-import { PlusSquareIcon } from "lucide-vue-next";
+import { Network, PlusSquareIcon } from "lucide-vue-next";
 import { h, ref } from "vue";
 import { Button } from "@/components/ui/button";
 import type { Province } from "~/types";
@@ -155,6 +155,12 @@ async function deleteItem(id: number) {
           <Button>
             <PlusSquareIcon class="h-4 w-4" />
             Tạo mới
+          </Button>
+        </NuxtLink>
+        <NuxtLink to="/admin/quan-ly-tinh-thanh/view">
+          <Button variant="outline">
+            <Network class="h-4 w-4" />
+            Menu
           </Button>
         </NuxtLink>
       </template>

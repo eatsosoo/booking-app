@@ -24,6 +24,7 @@ import type {
   VisibilityState,
 } from "@tanstack/vue-table";
 import type { SelectOption } from "~/types/booking";
+import { PlusSquareIcon } from "lucide-vue-next";
 
 definePageMeta({
   layout: "admin",
