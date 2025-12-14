@@ -61,11 +61,11 @@ const items = [
     url: "/admin/quan-ly-dich-vu",
     icon: MonitorCloud,
   },
-  {
-    title: "Videos",
-    url: "/admin/videos",
-    icon: VideoIcon,
-  },
+  // {
+  //   title: "Videos",
+  //   url: "/admin/videos",
+  //   icon: VideoIcon,
+  // },
   {
     title: "Các lựa chọn của Menu",
     url: "/admin/quan-ly-tinh-thanh",

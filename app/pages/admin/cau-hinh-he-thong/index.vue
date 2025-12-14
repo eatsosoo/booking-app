@@ -24,7 +24,7 @@ const { request } = useApi();
    GET DATA
 ------------------------- */
 const { data } = await useAsyncData(`system-settings`, () =>
-  request<SettingItem[]>(`/settings`)
+  request<SettingItem[]>(`/settings?per_page=1000`)
 );
 const systemSettings = data.value?.data.items || [];
 const loading = ref<boolean>(false);

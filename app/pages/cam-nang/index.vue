@@ -74,7 +74,7 @@
             </InputGroup>
           </div>
 
-          <div class="p-4 bg-white">
+          <!-- <div class="p-4 bg-white">
             <h2 class="text-2xl font-semibold">Danh mục dự án</h2>
 
             <ul class="mt-4 space-y-2">
@@ -90,7 +90,7 @@
                 </span>
               </li>
             </ul>
-          </div>
+          </div> -->
         </aside>
       </div>
     </section>
@@ -137,12 +137,12 @@ const pagination = computed(
   () => data.value?.result?.pagination ?? { current_page: 1, last_page: 1 }
 );
 
-const { data: projectData } = await useFetch<Response<Category[]>>(`${config.public.apiBase}/home/categories?page=1&per_page=12`, {
-  server: true,
-  lazy: false,
-  immediate: true,
-});
-const categories = ref<Category[]>(projectData.value?.data.items ?? [])
+// const { data: projectData } = await useFetch<Response<Category[]>>(`${config.public.apiBase}/home/categories?page=1&per_page=12`, {
+//   server: true,
+//   lazy: false,
+//   immediate: true,
+// });
+// const categories = ref<Category[]>(projectData.value?.data.items ?? [])
 
 // Format date
 const formatDate = (dateStr: string) => {

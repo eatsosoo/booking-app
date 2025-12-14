@@ -1,4 +1,16 @@
+import { PROPERTY_TYPES, REGIONS } from "~/constants";
 import type { Province, Response } from "~/types";
+
+type TreeProvinceType = {
+  label: string
+  value: string
+  regions: RegionType[]
+}
+
+type RegionType = {
+  region: string
+  provinces: string[]
+}
 
 export const useProvinces = () => {
   const config = useRuntimeConfig();
@@ -54,47 +66,62 @@ export const useProvinces = () => {
   };
 
   // Get province by property id and region
-  const getProvinces = (
-    propertyId: number,
-    region: string
-  ) => {
-    if (!provinces.value) return []
+  const getProvinces = (propertyId: number, region: string) => {
+    if (!provinces.value) return [];
     const records = provinces.value?.data.items;
-    const res = [...records].filter(
-      (p) =>
-        p.property_types.map((item) => item.id).includes(propertyId) &&
-        p.region === region
-    ).map((el) => el.name);
-    return [...new Set(res)]
+    const res = [...records]
+      .filter(
+        (p) =>
+          p.property_types.map((item) => item.id).includes(propertyId) &&
+          p.region === region
+      )
+      .map((el) => el.name);
+    return [...new Set(res)];
   };
-
 
   const getDistricts = (
     propertyId: number,
     region: string,
     province: string
   ) => {
-    if (!provinces.value) return []
+    if (!provinces.value) return [];
     const records = provinces.value?.data.items;
-    const filtered = [...records].filter(
-      (p) =>
-        p.property_types.map((item) => item.id).includes(propertyId) &&
-        p.region === region && p.name === province
-    ).map((el) => el.district);
-    return filtered
+    const filtered = [...records]
+      .filter(
+        (p) =>
+          p.property_types.map((item) => item.id).includes(propertyId) &&
+          p.region === region &&
+          p.name === province
+      )
+      .map((el) => el.district);
+    return filtered;
   };
+
+  const treeProvinces = computed(() => {
+    return PROPERTY_TYPES.map((property) => ({
+      ...property,
+      regions: REGIONS.map((region) => {
+        const provinces = getProvinces(property.value, region);
+        return {
+          region,
+          provinces,
+        };
+      }),
+    }));
+  });
 
   return {
     provinces,
     northernProvinces,
     centralProvinces,
     southernProvinces,
+    treeProvinces,
     pending,
     error,
     refresh,
     getProvinceBySlug,
     getProvinceByName,
     getProvinces,
-    getDistricts
+    getDistricts,
   };
 };

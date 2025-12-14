@@ -15,28 +15,28 @@
         </p>
         <div class="flex space-x-4 mt-4">
           <NuxtLink
-            to="#"
+            :to="baseInfo.FACEBOOK"
             aria-label="Facebook"
             class="hover:text-blue-400 transition"
           >
             <Facebook size="20" />
           </NuxtLink>
           <NuxtLink
-            to="#"
+            :to="baseInfo.INSTAGRAM"
             aria-label="Instagram"
             class="hover:text-pink-400 transition"
           >
             <Instagram size="20" />
           </NuxtLink>
           <NuxtLink
-            to="#"
+            :to="baseInfo.YOUTUBE"
             aria-label="YouTube"
             class="hover:text-red-500 transition"
           >
             <Youtube size="20" />
           </NuxtLink>
           <NuxtLink
-            to="#"
+            :to="baseInfo.TWITTER"
             aria-label="Twitter"
             class="hover:text-gray-500 transition"
           >
@@ -53,7 +53,7 @@
             <NuxtLink to="/" class="hover:text-blue-400">Trang chủ</NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/dia-diem" class="hover:text-blue-400"
+            <NuxtLink to="/tim-kiem" class="hover:text-blue-400"
               >Phòng</NuxtLink
             >
           </li>
@@ -107,15 +107,17 @@
         <h3 class="text-white font-semibold mb-4 text-lg">Liên hệ</h3>
         <ul class="space-y-3 text-sm">
           <li class="flex items-start space-x-2">
-            <i class="fa-solid fa-location-dot text-blue-400 mt-1" />
-            <span>193 Văn Cao, Ngô Quyền, TP.Hải Phòng, Việt Nam</span>
+            <LocationEdit />
+            <span>{{ baseInfo.ADDRESS }}</span>
           </li>
           <li class="flex items-center space-x-2 item">
             <Phone size="18" />
             <span
               >Hotline:
-              <NuxtLink to="tel:+84123456789" class="hover:text-blue-400"
-                >0123 456 789</NuxtLink
+              <NuxtLink
+                :to="`tel:+84${baseInfo.PHONE}`"
+                class="hover:text-blue-400"
+                >{{ baseInfo.PHONE }}</NuxtLink
               ></span
             >
           </li>
@@ -124,9 +126,9 @@
             <span
               >Email:
               <NuxtLink
-                to="mailto:support@bookingnow.vn"
+                :to="`mailto:${baseInfo.EMAIL}`"
                 class="hover:text-blue-400"
-                >support@bookingnow.vn
+                >{{ baseInfo.EMAIL }}
               </NuxtLink></span
             >
           </li>
@@ -144,13 +146,15 @@
 </template>
 
 <script setup>
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   Facebook,
   Instagram,
+  LocationEdit,
   Mail,
   Phone,
   Twitter,
   Youtube,
 } from "lucide-vue-next";
+
+const { baseInfo } = useSystemSetting();
 </script>

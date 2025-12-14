@@ -54,7 +54,7 @@
             class="text-3xl p-4 bg-primary rounded-full font-bold text-white flex items-center gap-4"
           >
             <PhoneCall :size="34" />
-            <!-- {{ formatTelNumber(settings.phone_number) }} -->
+            {{ baseInfo.PHONE }}
           </button>
         </div>
       </div>
@@ -63,7 +63,7 @@
     <section class="bg-section">
       <div class="cus-container">
         <div class="md:flex md:justify-center w-full">
-          <SearchForm :groups="groupOptions" />
+          <SearchForm />
         </div>
       </div>
     </section>
@@ -201,7 +201,7 @@
       </div>
     </section>
 
-    <section class="bg-section">
+    <!-- <section class="bg-section">
       <div class="cus-container">
         <h2 class="home-head-2">Video & Mạng xã hội</h2>
         <div class="lg:px-24">
@@ -245,7 +245,7 @@
           </Swiper>
         </div>
       </div>
-    </section>
+    </section> -->
   </div>
 </template>
 
@@ -253,7 +253,7 @@
 import { PhoneCall, TimerIcon, XIcon } from "lucide-vue-next";
 import { formatTelNumber, genSlug } from "~/utils/string-helper";
 import Button from "~/components/ui/button/Button.vue";
-import { PROPERTY_TYPES } from "~/constants";
+import { PROPERTY_TYPES, REGIONS } from "~/constants";
 import type { Post, Response, SettingItem, SystemSetting } from "~/types";
 import { toast } from "vue-sonner";
 
@@ -285,8 +285,7 @@ useSeoMeta({
   twitterImage: "https://dyhome.com/og-image.png",
 });
 
-const { provinces } = useProvinces();
-const { homePageSetting, videos } = useSystemSetting();
+const { homePageSetting, videos, baseInfo } = useSystemSetting();
 const token = useCookie("token");
 const { request } = useApi();
 
@@ -301,17 +300,6 @@ const btnText = ref<string>("Chỉnh sửa");
 const updating = ref<boolean>(false);
 const showActions = ref<boolean>(true);
 const posts = ref<Post[]>(data.value?.data.items || []);
-
-const result = provinces.value?.data.items ?? [];
-const groupOptions: any = {};
-
-result.forEach((element) => {
-  if (groupOptions[`${element.region}`]) {
-    groupOptions[`${element.region}`].push(element.name);
-  } else {
-    groupOptions[`${element.region}`] = [element.name];
-  }
-});
 
 const updateHomePage = async () => {
   updating.value = true;

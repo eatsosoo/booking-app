@@ -1,26 +1,50 @@
 <template>
   <div class="shadow-md rounded-md bg-white p-8">
     <h2 class="font-semibold">Bạn muốn đi đâu?</h2>
-    <div class="grid md:grid-cols-4 gap-4 ">
+    <div class="grid md:grid-cols-5 gap-4">
+      <Select v-model="selectedRoomType" @change="console.log($event)">
+        <SelectTrigger class="w-full">
+          <SelectValue placeholder="Chọn loại hình..." />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem
+            v-for="item in PROPERTY_TYPES"
+            :key="item.label"
+            :value="item.value"
+          >
+            {{ item.label }}
+          </SelectItem>
+        </SelectContent>
+      </Select>
+
       <Select v-model="selectedLocation">
         <SelectTrigger class="w-full">
           <SelectValue placeholder="Chọn địa điểm..." />
         </SelectTrigger>
         <SelectContent>
-          <SelectGroup v-for="(group, key) in groups" :key="key">
-            <SelectLabel>{{ key }}</SelectLabel>
-            <SelectItem v-for="item in group" :key="item" :value="item">
+          <SelectGroup v-for="group in groupOptions" :key="group.region">
+            <SelectLabel v-if="group.provinces.length > 0">{{
+              group.region
+            }}</SelectLabel>
+            <SelectItem
+              v-for="item in group.provinces"
+              :key="item"
+              :value="item"
+              @click="selectedRegion = group.region"
+            >
               {{ item }}
             </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
 
-      <RangeDatePicker @change="handleChange"/>
+      <RangeDatePicker @change="handleChange" />
 
       <Popover>
         <PopoverTrigger as-child>
-          <Button variant="outline" class="text-left">{{ selectRoomText }}</Button>
+          <Button variant="outline" class="text-left">{{
+            selectRoomText
+          }}</Button>
         </PopoverTrigger>
         <PopoverContent class="w-80">
           <div class="grid gap-4">
@@ -37,21 +61,21 @@
                   <Button
                     variant="outline"
                     class="h-8 w-8"
-                    :disabled="roomTypes.adults < 1"
-                    @click="roomTypes.adults--"
+                    :disabled="amountGuest.adults < 1"
+                    @click="amountGuest.adults--"
                   >
                     <FontAwesomeIcon :icon="['fas', 'minus']" />
                   </Button>
                   <Input
                     id="adultNum"
-                    v-model="roomTypes.adults"
+                    v-model="amountGuest.adults"
                     readonly
                     class="col-span-2 h-8 w-16 text-center"
                   />
                   <Button
                     variant="outline"
                     class="h-8 w-8"
-                    @click="roomTypes.adults++"
+                    @click="amountGuest.adults++"
                   >
                     <FontAwesomeIcon :icon="['fas', 'plus']" />
                   </Button>
@@ -63,20 +87,20 @@
                   <Button
                     variant="outline"
                     class="h-8 w-8"
-                    :disabled="roomTypes.children < 1"
-                    @click="roomTypes.children--"
+                    :disabled="amountGuest.children < 1"
+                    @click="amountGuest.children--"
                   >
                     <FontAwesomeIcon :icon="['fas', 'minus']" />
                   </Button>
                   <Input
                     id="childrenNum"
-                    v-model="roomTypes.children"
+                    v-model="amountGuest.children"
                     class="col-span-2 h-8 w-16 text-center"
                   />
                   <Button
                     variant="outline"
                     class="h-8 w-8"
-                    @click="roomTypes.children++"
+                    @click="amountGuest.children++"
                   >
                     <FontAwesomeIcon :icon="['fas', 'plus']" />
                   </Button>
@@ -114,46 +138,65 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { PROPERTY_TYPES } from "~/constants";
 
-const props = defineProps({
-  groups: { type: Object as PropType<{ [key: string]: string[]}>, default: () => {} },
-});
+const { treeProvinces } = useProvinces();
 
-const router = useRouter();
-
+const selectedRoomType = ref<string>("");
+const selectedRegion = ref<string>("");
 const selectedLocation = ref<string>("");
-const range = ref<{ start: string, end: string} | null>(null);
-const roomTypes = ref({
+const range = ref<{ start: string; end: string } | null>(null);
+const amountGuest = ref({
   adults: 0,
   children: 0,
   infants: 0,
 });
+const groupOptions = ref<any>(null);
 
 const selectRoomText = computed(() => {
-  const { adults, children, infants } = roomTypes.value;
-  if (!adults && !children && !infants) return 'Chọn số khách...';
+  const { adults, children, infants } = amountGuest.value;
+  if (!adults && !children && !infants) return "Chọn số khách...";
 
-  let string = '';
+  let string = "";
   if (adults > 0) {
     string += `${adults} người lớn`;
   }
   if (children > 0) {
     string += ` - ${children} trẻ em`;
-  } 
+  }
   if (infants > 0) {
     string += ` - ${infants} em bé`;
   }
 
   return string;
-})
+});
 
-const handleChange = (value: { start: string, end: string} | null) => {
-  console.log("Selected range:", value);
+watch(
+  () => selectedRoomType.value,
+  (newVal) => {
+    const data = treeProvinces.value.find(
+      (item) => item.value === Number(newVal)
+    );
+    if (data) {
+      groupOptions.value = data.regions;
+    }
+  }
+);
+
+const handleChange = (value: { start: string; end: string } | null) => {
   range.value = value;
 };
 
 const submit = () => {
   const { start, end } = range.value || { start: null, end: null };
-  router.push(`/tim-kiem?place=${selectedLocation.value}&from_date=${start}&start_date=${end}&guest=${roomTypes.value.adults + roomTypes.value.children}`);
-}
+  navigateTo(
+    `/tim-kiem?property_types=${selectedRoomType.value}
+    &region=${selectedRegion.value}
+    &province=${
+      selectedLocation.value
+    }&from_date=${start}&start_date=${end}&guest=${
+      amountGuest.value.adults + amountGuest.value.children
+    }`
+  );
+};
 </script>
