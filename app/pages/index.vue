@@ -82,14 +82,14 @@
     </section>
 
     <!-- Dự án hiện tại -->
-    <section class="bg-section py-10">
+    <section class="bg-section">
       <div class="cus-container">
         <div
           v-for="(property, index) in PROPERTY_TYPES"
           :key="property.value"
           class="space-y-10 mb-12"
         >
-          <h2 class="text-3xl font-semibold text-center capitalize">
+          <h2 class="home-head-2">
             {{ property.label }}
           </h2>
 
@@ -133,82 +133,117 @@
     <!-- Cẩm nang -->
     <section>
       <div class="cus-container">
-        <h2 class="text-3xl font-semibold text-center capitalize">
-          Tin tức & Sự kiện
-        </h2>
-        <Swiper
-          :modules="[Pagination, Autoplay, Grid]"
-          :pagination="{ clickable: true }"
-          :autoplay="{ delay: 2500 }"
-          :loop="true"
-          :grid="{ rows: 2 }"
-          :slides-per-view="2"
-          :space-between="20"
-          class="mySwiper"
-        >
-          <SwiperSlide v-for="index in 12" :key="index">
-            <div class="rounded-md shadow-md flex h-[200px] border">
-              <div class="h-[200px] w-[200px] shrink-0">
-                <img
-                  :src="posts[index] ? posts[index].image : posts[0]?.image"
-                  class="h-full w-[200px] object-cover rounded-l-md"
-                />
+        <h2 class="home-head-2">Tin tức & Sự kiện</h2>
+        <div class="lg:px-24">
+          <Swiper
+            :modules="[Pagination, Autoplay, Grid]"
+            :pagination="{ clickable: true }"
+            :autoplay="{ delay: 2500 }"
+            :loop="true"
+            :grid="{ rows: 2 }"
+            :slides-per-view="1"
+            :space-between="20"
+            :breakpoints="{
+              640: {
+                slidesPerView: 1,
+              },
+              768: {
+                slidesPerView: 1,
+                grid: {
+                  rows: 2,
+                },
+              },
+              1024: {
+                slidesPerView: 2,
+                grid: {
+                  rows: 2,
+                },
+              },
+            }"
+            class="mySwiper"
+          >
+            <SwiperSlide v-for="index in 12" :key="index">
+              <div class="rounded-md shadow-md flex h-[200px] border">
+                <div class="h-[200px] w-[200px] shrink-0">
+                  <img
+                    :src="posts[index] ? posts[index].image : posts[0]?.image"
+                    class="h-full w-[200px] object-cover rounded-l-md"
+                  />
+                </div>
+                <div class="p-2 flex-1">
+                  <p class="text-2xl font-semibold line-clamp-1">
+                    {{ posts[index] ? posts[index].title : posts[0]?.title }}
+                  </p>
+                  <p class="flex text-gray-500 text-[14px] my-2">
+                    <TimerIcon :size="20" />2025/12/11
+                  </p>
+                  <p class="text-[14px] line-clamp-4">
+                    {{
+                      posts[index]
+                        ? posts[index].description
+                        : posts[0]?.description
+                    }}
+                  </p>
+                  <p class="">
+                    <NuxtLink
+                      :to="`/cam-nang/${
+                        posts[index] ? posts[index].slug : posts[0]?.slug
+                      }`"
+                      class="underline text-primary"
+                      >Xem thêm</NuxtLink
+                    >
+                  </p>
+                </div>
               </div>
-              <div class="p-2 flex-1">
-                <p class="text-2xl font-semibold line-clamp-1">
-                  {{ posts[index] ? posts[index].title : posts[0]?.title }}
-                </p>
-                <p class="flex text-gray-500 text-[14px] my-2">
-                  <TimerIcon :size="20" />2025/12/11
-                </p>
-                <p class="text-[14px] line-clamp-4">
-                  {{
-                    posts[index]
-                      ? posts[index].description
-                      : posts[0]?.description
-                  }}
-                </p>
-                <p class="">
-                  <NuxtLink
-                    :to="`/cam-nang/${
-                      posts[index] ? posts[index].slug : posts[0]?.slug
-                    }`"
-                    class="underline text-primary"
-                    >Xem thêm</NuxtLink
-                  >
-                </p>
-              </div>
-            </div>
-          </SwiperSlide>
-        </Swiper>
+            </SwiperSlide>
+          </Swiper>
+        </div>
       </div>
     </section>
 
-    <section>
+    <section class="bg-section">
       <div class="cus-container">
-        <h2 class="text-3xl font-semibold text-center capitalize mb-10">
-          Video
-        </h2>
-        <Swiper
-          :modules="[Pagination, Autoplay, Grid]"
-          :pagination="{ clickable: true }"
-          :loop="true"
-          :slides-per-view="3"
-          :space-between="20"
-          class="video-slide"
-        >
-          <SwiperSlide v-for="video in videos" :key="`video-${video.id}`">
-            <div>
-              <iframe
-                v-if="getTikTokEmbedUrl(video.setting_value)"
-                :src="getTikTokEmbedUrl(video.setting_value)"
-                class="w-full aspect-9/16 rounded-xl"
-                frameborder="0"
-                allowfullscreen
-              />
-            </div>
-          </SwiperSlide>
-        </Swiper>
+        <h2 class="home-head-2">Video & Mạng xã hội</h2>
+        <div class="lg:px-24">
+          <Swiper
+            :modules="[Pagination, Autoplay, Grid]"
+            :pagination="{ clickable: true }"
+            :loop="true"
+            :slides-per-view="1"
+            :space-between="20"
+            :breakpoints="{
+              640: {
+                slidesPerView: 1,
+              },
+              768: {
+                slidesPerView: 1,
+              },
+              1024: {
+                slidesPerView: 2,
+              },
+              1280: {
+                slidesPerView: 3,
+              },
+            }"
+            class="video-slide"
+          >
+            <SwiperSlide
+              v-for="video in videos"
+              :key="`video-${video.id}`"
+              class="shadow-md rounded-xl video-slide-h"
+            >
+              <div>
+                <iframe
+                  v-if="getTikTokEmbedUrl(video.setting_value)"
+                  :src="getTikTokEmbedUrl(video.setting_value)"
+                  class="w-full aspect-9/16 rounded-xl"
+                  frameborder="0"
+                  allowfullscreen
+                />
+              </div>
+            </SwiperSlide>
+          </Swiper>
+        </div>
       </div>
     </section>
   </div>
@@ -338,5 +373,10 @@ onMounted(() => {
 }
 .video-slide {
   width: 100%;
+  height: 800px;
+  border-radius: 16px;
+}
+.video-slide-h {
+  height: 769px !important;
 }
 </style>

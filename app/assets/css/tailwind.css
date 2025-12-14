@@ -153,6 +153,10 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .home-head-2 {
+    @apply text-3xl font-semibold text-center capitalize mb-10 text-blue-950;
+  }
 }
 
 body {
