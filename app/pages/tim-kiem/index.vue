@@ -17,7 +17,7 @@
 
     <section class="w-full px-6 py-10 max-w-7xl mx-auto mt-4">
       <!-- Header -->
-      <h1 class="text-4xl font-bold text-gray-900">DANH SÁCH PHÒNG</h1>
+      <h1 class="text-4xl font-bold text-blue-950">DANH SÁCH PHÒNG</h1>
       <p class="text-gray-600 mt-1">
         Kết quả hiển thị cho
         <span class="font-semibold">{{ paginate.total }} phòng</span>
@@ -30,6 +30,29 @@
           :key="room.id"
           class="bg-white rounded-3xl shadow-sm p-6 grid grid-cols-1 md:grid-cols-2 gap-6 border border-gray-100 relative"
         >
+          <!-- Ribbon -->
+          <div
+            class="absolute top-4 left-0 bg-amber-200 text-gray-600 text-[10px] px-2 font-medium after:content-[''] after:absolute after:right-[-12px] after:top-0 after:border-y-[9px] after:border-y-transparent after:border-l-[14px] after:border-l-amber-200"
+          >
+            {{ room.property_types[0]?.name }}
+          </div>
+          <div
+            class="absolute top-9 left-0 bg-amber-200 text-gray-600 text-[10px] px-2 font-medium after:content-[''] after:absolute after:right-[-12px] after:top-0 after:border-y-[9px] after:border-y-transparent after:border-l-[14px] after:border-l-amber-200"
+          >
+            {{ room.region }}
+          </div>
+          <div
+            class="absolute top-14 left-0 bg-amber-200 text-gray-600 text-[10px] px-2 font-medium after:content-[''] after:absolute after:right-[-12px] after:top-0 after:border-y-[9px] after:border-y-transparent after:border-l-[14px] after:border-l-amber-200"
+          >
+            {{ room.province }}
+          </div>
+          <div
+            class="absolute top-19 left-0 bg-amber-200 text-gray-600 text-[10px] px-2 font-medium after:content-[''] after:absolute after:right-[-12px] after:top-0 after:border-y-[9px] after:border-y-transparent after:border-l-[14px] after:border-l-amber-200"
+          >
+            {{ room.district }}
+          </div>
+
+          <!-- Bookmark -->
           <span class="bookmark text-primary">
             <ClientOnly>
               <FontAwesomeIcon
