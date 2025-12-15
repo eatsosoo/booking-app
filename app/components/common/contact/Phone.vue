@@ -2,7 +2,7 @@
   <!-- Thêm vào layout hoặc component -->
   <div class="fixed bottom-16 left-4 z-50">
     <!-- Container với hiệu ứng rung -->
-    <div class="animate-[shake_1s_ease-in-out_infinite]">
+    <div class="animate-[shake_2s_ease-in-out_infinite]">
       <!-- Phone button -->
       <a
         :href="`tel${props.tel}`"

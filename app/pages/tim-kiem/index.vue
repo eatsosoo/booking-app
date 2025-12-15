@@ -20,180 +20,107 @@
     </section>
 
     <section class="w-full px-6 py-10 max-w-7xl mx-auto mt-4">
-      <!-- Header -->
-      <h1 class="text-4xl font-bold text-blue-950">DANH SÁCH PHÒNG</h1>
-      <p class="text-gray-600 mt-1">
-        Kết quả hiển thị cho
-        <span class="font-semibold">{{ paginate.total }} phòng</span>
-      </p>
+      <div v-if="pending">Loading...</div>
+      <div v-else-if="error">Có lỗi xảy ra</div>
+      <div v-else>
+        <!-- Header -->
+        <h1 class="text-4xl font-bold text-blue-950">DANH SÁCH PHÒNG</h1>
+        <p class="text-gray-600 mt-1">
+          Kết quả hiển thị cho
+          <span class="font-semibold">{{ paginate.total }} phòng</span>
+        </p>
 
-      <!-- Room List -->
-      <div class="mt-10 space-y-8">
-        <div
-          v-for="room in rooms"
-          :key="room.id"
-          class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 relative"
-        >
-          <!-- Title -->
-          <h2
-            class="text-xl font-bold text-gray-800 hover:text-yellow-500 transition cursor-pointer line-clamp-1 mb-2"
-          >
-            {{ room.name }}
-          </h2>
-          <!-- Ribbon -->
-          <!-- <div
-            class="absolute top-4 left-0 bg-amber-200 text-gray-600 text-[10px] px-2 font-medium after:content-[''] after:absolute after:right-[-12px] after:top-0 after:border-y-[9px] after:border-y-transparent after:border-l-[14px] after:border-l-amber-200"
-          >
-            {{ room.is_published }}
-          </div> -->
-
-          <!-- Bookmark -->
-          <span class="bookmark text-primary">
-            <ClientOnly>
-              <FontAwesomeIcon
-                :icon="['fas', 'bookmark']"
-                class="bookmark-icon"
-              />
-            </ClientOnly>
-          </span>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Images -->
-            <div class="grid grid-cols-2 gap-1 h-78">
-              <NuxtImg
-                :src="room.thumbnail"
-                class="object-cover w-full h-78 transition-transform duration-300 hover:scale-105 border border-gray-200"
-              />
-              <div class="grid grid-cols-2 grid-rows-2 gap-1 overflow-hidden">
-                <template v-for="index in 4" :key="index">
-                  <NuxtImg
-                    v-if="room.gallery[index]"
-                    :src="room.gallery[index]"
-                    :alt="`${room.slug}-galerry-${index}`"
-                    class="object-cover w-full h-full transition-transform duration-300 hover:scale-105 border border-gray-200"
-                  />
-                </template>
+        <!-- Room List -->
+        <div v-if="province" class="mt-10 space-y-8">
+          <div v-for="room in rooms" :key="room.id">
+            <RoomItem :room="room" />
+          </div>
+        </div>
+        <div v-else class="mt-10 space-y-8">
+          <div v-for="(districts, province) in regionMenus" :key="province">
+            <div
+              class="bg-white rounded-xl shadow-sm p-4 pb-0 border border-gray-100 relative"
+            >
+              <div class="border-l-6 border-l-primary mb-4">
+                <p class="text-xl font-semibold ml-4">{{ province }}</p>
               </div>
-            </div>
-
-            <!-- Content -->
-            <div>
-              <p class="text-gray-600 mb-2 text-[14px] line-clamp-3">
-                {{ room.description }}
-              </p>
-
-              <!-- Location -->
-              <ClientOnly>
-                <p class="text-gray-600 mb-1 line-clamp-2 text-[14px]">
-                  <FontAwesomeIcon
-                    :icon="['fas', 'location-dot']"
-                    class="mr-2"
-                  />
-                  {{ room.address }}
-                </p>
-                <p class="text-gray-600 mb-1 text-[14px]">
-                  <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
-                  {{ room.bedrooms }} phòng ngủ
-                </p>
-                <p class="text-gray-600 mb-1 text-[14px]">
-                  <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
-                  {{ room.bathrooms }} phòng tắm
-                </p>
-                <p class="text-gray-600 mb-1 text-[14px]">
-                  <FontAwesomeIcon
-                    :icon="['fas', 'people-group']"
-                    class="mr-2"
-                  />
-                  {{ room.guest }} người
-                </p>
-              </ClientOnly>
-
-              <Separator class="my-4" />
-
-              <!-- Prices -->
-              <div class="space-x-2 space-y-2 flex flex-wrap">
-                <p
-                  v-if="Number(room.base_hours)"
-                  :class="tagStyle"
-                  class="bg-primary"
+              <Swiper
+                :modules="[Pagination, Autoplay, Grid]"
+                :pagination="{ clickable: true }"
+                :autoplay="{ delay: 3000 }"
+                :loop="true"
+                :slides-per-view="1"
+                :space-between="20"
+                :breakpoints="{
+                  640: {
+                    slidesPerView: 1,
+                  },
+                  768: {
+                    slidesPerView: 1,
+                  },
+                  1024: {
+                    slidesPerView: 2,
+                  },
+                  1280: {
+                    slidesPerView: 3,
+                  },
+                }"
+                class="slide-district rounded"
+              >
+                <SwiperSlide
+                  v-for="district in districts"
+                  :key="`image-slider-${district.title}`"
+                  class=""
                 >
-                  {{ formatCurrency(room.base_hours) }} / 2 giờ đầu
-                </p>
-                <p
-                  v-if="Number(room.extra_hour)"
-                  :class="tagStyle"
-                  class="bg-red-300"
-                >
-                  {{ formatCurrency(room.extra_hour) }} / giờ tiếp theo
-                </p>
-
-                <p
-                  v-if="Number(room.per_night)"
-                  :class="tagStyle"
-                  class="bg-orange-300"
-                >
-                  {{ formatCurrency(room.per_night) }} / đêm
-                </p>
-                <p
-                  v-if="Number(room.per_day)"
-                  :class="tagStyle"
-                  class="bg-blue-300"
-                >
-                  {{ formatCurrency(room.per_day) }} / ngày
-                </p>
-                <p
-                  v-if="Number(room.per_month)"
-                  :class="tagStyle"
-                  class="bg-indigo-300"
-                >
-                  {{ formatCurrency(room.per_month) }} / tháng
-                </p>
-              </div>
-              <div class="mt-2">
-                <NuxtLink :to="`/dia-diem/${room.id}`">
-                  <Button variant="outline">
-                    Xem thêm
-                    <LogOutIcon />
-                  </Button>
-                </NuxtLink>
-              </div>
+                  <div class="grid grid-cols-1">
+                    <NuxtImg
+                      :src="district.thumbnail"
+                      class="object-cover rounded border border-gray-200 w-full h-58"
+                      @click="updateFilter(province, district.title)"
+                    />
+                    <p
+                      class="text-center my-2 hover:text-primary hover:underline cursor-pointer"
+                      @click="updateFilter(province, district.title)"
+                    >
+                      {{ district.title }}
+                    </p>
+                  </div>
+                </SwiperSlide>
+              </Swiper>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Pagination -->
-      <!-- <Separator class="mb-10 mt-12"/> -->
-      <div class="mt-12">
-        <PaginationPage
-          class="mt-6"
-          :page="paginate.current_page"
-          :total-pages="paginate.last_page"
-          @change="updatePage($event)"
-        />
+        <!-- Pagination -->
+        <div class="mt-12">
+          <PaginationPage
+            class="mt-6"
+            :page="paginate.current_page"
+            :total-pages="paginate.last_page"
+            @change="updatePage($event)"
+          />
+        </div>
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import PaginationPage from "~/components/PaginationPage.vue";
-import Button from "~/components/ui/button/Button.vue";
-import Separator from "~/components/ui/separator/Separator.vue";
-import type { Pagination, Properties, Response } from "~/types";
-import { formatCurrency } from "~/utils/string-helper";
-import { LogOutIcon } from "lucide-vue-next";
+import type { PaginationType, Properties, Response } from "~/types";
+import RoomItem from "~/components/common/place/RoomItem.vue";
 
-const tagStyle =
-  "text-white py-1 px-2 text-[14px] rounded-full font-semibold h-8";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/grid";
+import { Pagination, Autoplay, Grid } from "swiper/modules";
 
 const config = useRuntimeConfig();
 const route = useRoute();
 const router = useRouter();
 
-const rooms = ref<Properties[]>([]);
-const paginate = ref<Pagination>({
+const paginate = ref<PaginationType>({
   current_page: 1,
   last_page: 1,
   per_page: 10,
@@ -205,6 +132,7 @@ const page = computed(() => {
   const p = Number(route.query.page) || 1;
   return p < 1 ? 1 : p;
 });
+
 const perPage = computed(() => route.query.per_page || 12);
 const region = computed(() => route.query.region || "");
 const province = computed(() => route.query.province || "");
@@ -212,61 +140,102 @@ const district = computed(() => route.query.district || "");
 const property_types = computed(() => route.query.property_types || "");
 const guest = computed(() => route.query.guest || "");
 
+const regionMenus = computed(() => {
+  if (!property_types.value || !region.value) return {};
+  return getProvinceAndDistrict(
+    Number(property_types.value),
+    region.value as string,
+    rooms.value
+  );
+});
+
 /** ------------------------------------------------
  * API URL
  */
-const apiUrl = computed(
+const apiParams = computed(() => ({
+  page: page.value,
+  per_page: perPage.value,
+  property_types: property_types.value || undefined,
+  region: region.value || undefined,
+  province: province.value || undefined,
+  district: district.value || undefined,
+  guest: guest.value || undefined,
+}));
+
+const { data, pending, error } = await useAsyncData(
+  () => `places-list-${page.value}_${perPage.value}_${property_types.value}`,
   () =>
-    `${config.public.apiBase}/home/properties?page=${page.value}
-    &per_page=${perPage.value}
-    &property_types=${property_types.value}
-    &region=${region.value}
-    &province=${province.value}
-    &district=${district.value}
-    &guest=${guest.value}`
+    $fetch<Response<Properties[]>>(`${config.public.apiBase}/home/properties`, {
+      params: apiParams.value,
+    }),
+  { watch: [apiParams] }
 );
 
-const { data } = await useAsyncData(
-  () => `places-list-${apiUrl.value}`,
-  () => $fetch<Response<Properties[]>>(apiUrl.value),
-  { watch: [apiUrl] }
-);
+const rooms = computed(() => data.value?.data.items ?? []);
 
 const updatePage = (newPage: number) => {
+  if (newPage < 1) return;
+
   router.push({
-    query: {
-      ...route.query,
-      page: newPage,
-    },
+    query: { ...route.query, page: newPage },
   });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-watchEffect(() => {
-  if (data.value) {
-    rooms.value = data.value.data.items;
-    paginate.value = data.value.result?.pagination || paginate.value;
-  }
-});
+const updateFilter = (newProvince: string, newDistrict: string) => {
+  router.push({
+    query: { ...route.query, province: newProvince, district: newDistrict },
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+const getProvinceAndDistrict = (
+  propertyId: number,
+  region: string,
+  rooms: Properties[]
+) => {
+  if (!rooms) return {};
+
+  const records = rooms;
+
+  const filtered = records.filter(
+    (p) =>
+      p.property_types.some((item) => item.id === propertyId) &&
+      p.region === region
+  );
+
+  const group: Record<string, { title: string; thumbnail: string }[]> = {};
+
+  filtered.forEach((el) => {
+    const disItem = {
+      title: el.district,
+      thumbnail: el.thumbnail,
+    };
+    if (!group[el.province]) {
+      group[el.province] = [disItem];
+    } else if (group[el.province]?.some((dist) => dist.title !== el.district)) {
+      group[el.province]?.push(disItem);
+    }
+  });
+
+  return group;
+};
+
+watch(
+  data,
+  (val) => {
+    if (!val) return;
+
+    paginate.value = val.result?.pagination ?? paginate.value;
+  },
+  { immediate: true }
+);
 </script>
 
-<style scoped>
-.bookmark {
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 9;
-  border-top: 48px solid #fff5e0;
-  border-left: 48px solid transparent;
-  border-radius: 0 10px;
-}
-.bookmark-icon {
-  z-index: 999;
-  top: 0;
-  right: 0;
-  position: absolute;
-  margin-top: -40px;
-  margin-right: 5px;
-  color: #ffa920;
-  font-size: 12px;
+<style lang="css" scoped>
+.slide-district {
+  height: 300px;
 }
 </style>

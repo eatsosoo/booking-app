@@ -100,4 +100,8 @@ export default defineNuxtConfig({
   routeRules: {
     '/admin/**': { ssr: false },
   },
+
+  image: {
+    domains: [process.env.NUXT_API_SUBDOMAIN || ""],
+  },
 })

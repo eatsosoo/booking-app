@@ -9,25 +9,8 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { PROPERTY_TYPES, REGIONS } from "~/constants";
 
-const { getProvinces, getDistricts } = useProvinces();
-
-const menuTree = computed(() => {
-  return PROPERTY_TYPES.map((property) => ({
-    ...property,
-    regions: REGIONS.map((region) => {
-      const provinces = getProvinces(property.value, region);
-      return {
-        region,
-        provinces: provinces.map((province) => ({
-          province,
-          districts: getDistricts(property.value, region, province),
-        })),
-      };
-    }),
-  }));
-});
+const { menuTree } = useProvinces();
 </script>
 
 <template>

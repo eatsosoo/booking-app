@@ -32,10 +32,6 @@
       </Button>
     </div>
 
-    <!-- Tooltip/Phone Number -->
-    <Contact :phone="baseInfo.PHONE" />
-    <Zalo :phone="baseInfo.PHONE" />
-
     <section class="bg-[url('/google1.jpg')] h-160 bg-cover bg-center relative">
       <div
         class="absolute top-0 bottom-0 right-0 left-0 bg-black opacity-60"
@@ -100,7 +96,7 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
             <!-- Project item -->
             <div
-              v-for="(project, i) in ['Miền Bắc', 'Miền Trung', 'Miền Nam']"
+              v-for="(region, i) in ['Miền Bắc', 'Miền Trung', 'Miền Nam']"
               :key="i"
               class="relative bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col"
             >
@@ -108,20 +104,20 @@
               <NuxtImg
                 :src="
                   randomImages[i]
-                    ? `/rooms/${genSlug(property.label)}-${genSlug(project)}-${
+                    ? `/rooms/${genSlug(property.label)}-${genSlug(region)}-${
                         randomImages[i]
                       }.jpg`
                     : '/no-image.jpg'
                 "
                 class="h-58 w-full object-cover transition-transform duration-300 hover:scale-105 shadow-sm"
-                :alt="`Tìm kiếm phong loại ${property.label} khu vực ${project}`"
+                :alt="`Tìm kiếm phong loại ${property.label} khu vực ${region}`"
               ></NuxtImg>
 
               <!-- Content -->
               <div class="text-center">
-                <h3 class="mt-4 font-semibold italic">{{ project }}</h3>
+                <h3 class="mt-4 font-semibold italic">{{ region }}</h3>
                 <NuxtLink
-                  :to="`/tim-kiem?page=1&per_page=12&property_types=${property.value}`"
+                  :to="`/tim-kiem?page=1&per_page=12&property_types=${property.value}&region=${region}`"
                 >
                   <Button class="w-fit underline" variant="link">
                     Xem thêm
@@ -270,8 +266,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/grid";
 import { Pagination, Autoplay, Grid } from "swiper/modules";
-import Contact from "~/components/common/contact/Phone.vue";
-import Zalo from "~/components/common/contact/Zalo.vue";
 
 useSeoMeta({
   // --- BASIC ---
