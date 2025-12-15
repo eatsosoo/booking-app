@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Category, Option, Option3, Response, Service } from "~/types";
+import type { Option, Response, Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
@@ -28,10 +28,8 @@ definePageMeta({
   middleware: "auth",
 });
 
-const config = useRuntimeConfig();
 const { getProvinces, getDistricts } = useProvinces();
 const serviceOptions = ref<Option[]>([]);
-const categoryOptions = ref<Option3[]>([]);
 const roomTypeSelect = ref<number>(1);
 const post = ref<PropertiesForm>({
   name: "",
@@ -53,7 +51,6 @@ const post = ref<PropertiesForm>({
   gallery: [],
   services: [],
   property_types: [],
-  category_id: 1,
   slug: "",
   region: "Miền Bắc",
   province: "",
@@ -62,9 +59,6 @@ const post = ref<PropertiesForm>({
 
 const { data: servicesData } = await useFetch<Response<Service[]>>(
   "/api/services"
-);
-const { data: categoriesData } = await useFetch<Response<Category[]>>(
-  `${config.public.apiBase}/post/categories`
 );
 
 const { request } = useApi();
@@ -79,6 +73,7 @@ const savePost = async () => {
       body: {
         ...post.value,
         slug: genSlug(post.value.name),
+        property_types: [roomTypeSelect.value],
       },
     });
 
@@ -108,13 +103,7 @@ serviceOptions.value =
     label: service.title,
     value: service.id,
   })) || [];
-categoryOptions.value =
-  categoriesData.value?.data.items.map((service) => ({
-    label: service.name,
-    value: service.id,
-  })) || [];
 
-post.value.category_id = categoryOptions.value[0]?.value;
 const provinceOptions = computed(() => {
   return getProvinces(roomTypeSelect.value, post.value.region);
 });
@@ -141,12 +130,6 @@ const districtOptions = computed(() => {
       <!-- Loại hình -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
-        <!-- <MultiSelect
-          v-model="multiSelected.property_types"
-          :options="PROPERTY_TYPES"
-          placeholder="Chọn loại hình..."
-          class="w-64"
-        /> -->
         <Select v-model="roomTypeSelect">
           <SelectTrigger class="w-full">
             <SelectValue placeholder="Chọn loại hình..." />

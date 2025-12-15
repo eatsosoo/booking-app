@@ -40,9 +40,11 @@ const url = computed(
 );
 
 const provinceOptions = computed(() => {
+  if (!params.property_types) return []
   return getProvinces(params.property_types, params.region);
 });
 const districtOptions = computed(() => {
+  if (!params.property_types) return []
   return getDistricts(params.property_types, params.region, params.province);
 });
 </script>

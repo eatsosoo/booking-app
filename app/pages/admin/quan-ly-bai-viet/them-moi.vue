@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { Category, Option2, Option3, Post, Response } from "~/types";
+import type { Post, Response } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
@@ -10,7 +10,7 @@ import type { PostForm } from "~/types/booking";
 import { genSlug } from "~/utils/string-helper";
 import UploadImage from "~/components/common/UploadImage.vue";
 import EditorCustom from "~/components/common/EditorCustom.vue";
-import { PROPERTY_TYPES } from "~/constants";
+import { PROPERTY_TYPES, REGIONS } from "~/constants";
 import {
   Select,
   SelectContent,
@@ -20,13 +20,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import SearchSelect from "~/components/common/SearchSelect.vue";
 
 definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
 
+const loading = ref<boolean>(false);
+const roomTypeSelect = ref<number>(1);
 const post = ref<PostForm>({
   title: "",
   slug: "",
@@ -34,26 +35,27 @@ const post = ref<PostForm>({
   description: "",
   keywords: "",
   property_types: [],
-  category_id: null,
-  region: "Miền bắc",
+  region: "Miền Bắc",
+  province: "",
+  district: "",
   content: "Nội dung bài viết...",
 });
-const categoryOptions = ref<Option2[]>([]);
 
-const config = useRuntimeConfig();
 const { request } = useApi();
-const { data: categoriesData } = await useFetch<Response<Category[]>>(
-  `${config.public.apiBase}/home/categories`
-);
+const { getProvinces, getDistricts } = useProvinces();
 
 const savePost = async () => {
   const titleNotify = "Tạo bài viết mới";
-
+  loading.value = true;
   try {
     // POST bài viết mới
     await request<Response<Post>>("/posts", {
       method: "POST",
-      body: post.value,
+      body: {
+        ...post.value,
+        category_id: "4",
+        property_types: [roomTypeSelect.value],
+      },
     });
 
     toast.success(titleNotify, {
@@ -65,6 +67,8 @@ const savePost = async () => {
   } catch (err: any) {
     const msg = err?.data?.message || "Có lỗi xảy ra, vui lòng thử lại sau!";
     toast.error(titleNotify, { description: msg });
+  } finally {
+    loading.value = true;
   }
 };
 
@@ -72,13 +76,16 @@ const handleContentChange = (val: string) => {
   post.value.content = val;
 };
 
-categoryOptions.value =
-  categoriesData.value?.data.items.map((service) => ({
-    label: service.name,
-    value: service.id.toString(),
-  })) || [];
-
-post.value.category_id = categoryOptions.value[0]?.value;
+const provinceOptions = computed(() => {
+  return getProvinces(roomTypeSelect.value, post.value.region);
+});
+const districtOptions = computed(() => {
+  return getDistricts(
+    roomTypeSelect.value,
+    post.value.region,
+    post.value.province
+  );
+});
 </script>
 
 <template>
@@ -97,31 +104,32 @@ post.value.category_id = categoryOptions.value[0]?.value;
         />
       </div>
 
-      <!-- Slug -->
-      <div>
-        <Label for="slug" class="mb-2 ml-1">Slug</Label>
-        <Input id="slug" v-model="post.slug" readonly />
-      </div>
-
       <!-- Loại hình -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
-        <CommonMultiSelect
-          v-model="post.property_types"
-          :options="PROPERTY_TYPES"
-          placeholder="Chọn loại hình..."
-          class="w-64"
-        />
+        <Select v-model="roomTypeSelect">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn loại hình..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem
+                v-for="type in PROPERTY_TYPES"
+                :key="type.value"
+                :value="type.value"
+              >
+                {{ type.label }}
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
-      <!-- Loại -->
+      <!-- Slug -->
       <div>
-        <Label for="type" class="mb-2 ml-1">Loại dự án</Label>
-        <SearchSelect
-          :model-value="post.category_id"
-          :frameworks="categoryOptions"
-          @update:model-value="post.category_id = $event"
-        />
+        <Label for="slug" class="mb-2 ml-1">Slug</Label>
+        <Input id="slug" v-model="post.slug" disabled />
       </div>
 
       <!-- Region -->
@@ -134,9 +142,12 @@ post.value.category_id = categoryOptions.value[0]?.value;
           <SelectContent>
             <SelectGroup>
               <SelectLabel></SelectLabel>
-              <SelectItem value="Miền Bắc"> Miền Bắc </SelectItem>
-              <SelectItem value="Miền Trung"> Miền Trung </SelectItem>
-              <SelectItem value="Miền Nam"> Miền Nam </SelectItem>
+              <SelectItem
+                v-for="region in REGIONS"
+                :key="region"
+                :value="region"
+                >{{ region }}
+              </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -150,6 +161,54 @@ post.value.category_id = categoryOptions.value[0]?.value;
           v-model="post.keywords"
           placeholder="Nhập từ khoá..."
         />
+      </div>
+
+      <!-- Province -->
+      <div>
+        <Label for="answer" class="mb-2 ml-1">Địa danh</Label>
+        <Select v-model="post.province">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn địa danh..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem :value="null">Không thiết lập</SelectItem>
+              <SelectItem
+                v-for="province in provinceOptions"
+                :key="province"
+                :value="province"
+              >
+                {{ province }}
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div></div>
+
+      <!-- District -->
+      <div>
+        <Label for="answer" class="mb-2 ml-1">Quận/Huyện</Label>
+        <Select v-model="post.district">
+          <SelectTrigger class="w-full">
+            <SelectValue placeholder="Chọn quận/huyện..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel></SelectLabel>
+              <SelectItem :value="null">Không thiết lập</SelectItem>
+              <SelectItem
+                v-for="district in districtOptions"
+                :key="district"
+                :value="district"
+              >
+                {{ district }}
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       <!-- Description -->
@@ -182,7 +241,9 @@ post.value.category_id = categoryOptions.value[0]?.value;
 
     <!-- Save button -->
     <div class="mt-6">
-      <Button variant="default" @click="savePost">Tạo mới</Button>
+      <Button variant="default" :loading="loading" @click="savePost"
+        >Tạo mới</Button
+      >
     </div>
   </section>
 </template>

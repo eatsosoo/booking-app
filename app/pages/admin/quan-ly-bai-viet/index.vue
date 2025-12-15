@@ -147,6 +147,26 @@ const columns: ColumnDef<Post>[] = [
       h("div", { class: "capitalize" }, row.getValue("region")),
   },
   {
+    accessorKey: "province",
+    header: "Địa danh",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        row.getValue("province") || "Không thiết lập"
+      ),
+  },
+  {
+    accessorKey: "district",
+    header: "Quận/Huyện",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        row.getValue("district") || "Không thiết lập"
+      ),
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {

@@ -21,6 +21,9 @@
         v-if="imageUrl"
         :src="imageUrl"
         alt="Ảnh phòng"
+        width="288"
+        height="192"
+        format="webp"
         class="w-72 h-48 mt-2"
       />
     </div>

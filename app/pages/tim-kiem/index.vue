@@ -32,29 +32,20 @@
         <div
           v-for="room in rooms"
           :key="room.id"
-          class="bg-white rounded-3xl shadow-sm p-6 grid grid-cols-1 md:grid-cols-2 gap-6 border border-gray-100 relative"
+          class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 relative"
         >
+          <!-- Title -->
+          <h2
+            class="text-xl font-bold text-gray-800 hover:text-yellow-500 transition cursor-pointer line-clamp-1 mb-2"
+          >
+            {{ room.name }}
+          </h2>
           <!-- Ribbon -->
-          <div
+          <!-- <div
             class="absolute top-4 left-0 bg-amber-200 text-gray-600 text-[10px] px-2 font-medium after:content-[''] after:absolute after:right-[-12px] after:top-0 after:border-y-[9px] after:border-y-transparent after:border-l-[14px] after:border-l-amber-200"
           >
-            {{ room.property_types[0]?.name }}
-          </div>
-          <div
-            class="absolute top-9 left-0 bg-amber-200 text-gray-600 text-[10px] px-2 font-medium after:content-[''] after:absolute after:right-[-12px] after:top-0 after:border-y-[9px] after:border-y-transparent after:border-l-[14px] after:border-l-amber-200"
-          >
-            {{ room.region }}
-          </div>
-          <div
-            class="absolute top-14 left-0 bg-amber-200 text-gray-600 text-[10px] px-2 font-medium after:content-[''] after:absolute after:right-[-12px] after:top-0 after:border-y-[9px] after:border-y-transparent after:border-l-[14px] after:border-l-amber-200"
-          >
-            {{ room.province }}
-          </div>
-          <div
-            class="absolute top-19 left-0 bg-amber-200 text-gray-600 text-[10px] px-2 font-medium after:content-[''] after:absolute after:right-[-12px] after:top-0 after:border-y-[9px] after:border-y-transparent after:border-l-[14px] after:border-l-amber-200"
-          >
-            {{ room.district }}
-          </div>
+            {{ room.is_published }}
+          </div> -->
 
           <!-- Bookmark -->
           <span class="bookmark text-primary">
@@ -65,102 +56,107 @@
               />
             </ClientOnly>
           </span>
-          <!-- Images -->
-          <div class="grid grid-cols-2 gap-1 h-78">
-            <NuxtImg
-              :src="room.thumbnail"
-              class="object-cover w-full h-78 transition-transform duration-300 hover:scale-105"
-            />
-            <div class="grid grid-cols-2 grid-rows-2 gap-1 overflow-hidden">
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Images -->
+            <div class="grid grid-cols-2 gap-1 h-78">
               <NuxtImg
-                v-for="(img, i) in room.gallery"
-                :key="i"
-                :src="img"
-                class="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+                :src="room.thumbnail"
+                class="object-cover w-full h-78 transition-transform duration-300 hover:scale-105 border border-gray-200"
               />
+              <div class="grid grid-cols-2 grid-rows-2 gap-1 overflow-hidden">
+                <template v-for="index in 4" :key="index">
+                  <NuxtImg
+                    v-if="room.gallery[index]"
+                    :src="room.gallery[index]"
+                    :alt="`${room.slug}-galerry-${index}`"
+                    class="object-cover w-full h-full transition-transform duration-300 hover:scale-105 border border-gray-200"
+                  />
+                </template>
+              </div>
             </div>
-          </div>
 
-          <!-- Content -->
-          <div>
-            <!-- Title -->
-            <h2
-              class="text-xl font-bold text-gray-800 hover:text-yellow-500 transition cursor-pointer line-clamp-1"
-            >
-              {{ room.name }}
-            </h2>
-            <p class="text-gray-600 mb-2 text-[14px] line-clamp-3">
-              {{ room.description }}
-            </p>
-
-            <!-- Location -->
-            <ClientOnly>
-              <p class="text-gray-600 mb-1 line-clamp-2 text-[14px]">
-                <FontAwesomeIcon :icon="['fas', 'location-dot']" class="mr-2" />
-                {{ room.address }}
-              </p>
-              <p class="text-gray-600 mb-1 text-[14px]">
-                <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
-                {{ room.bedrooms }} phòng ngủ
-              </p>
-              <p class="text-gray-600 mb-1 text-[14px]">
-                <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
-                {{ room.bathrooms }} phòng tắm
-              </p>
-              <p class="text-gray-600 mb-1 text-[14px]">
-                <FontAwesomeIcon :icon="['fas', 'people-group']" class="mr-2" />
-                {{ room.guest }} người
-              </p>
-            </ClientOnly>
-
-            <Separator class="my-4" />
-
-            <!-- Prices -->
-            <div class="space-x-2 space-y-2 flex flex-wrap">
-              <p
-                v-if="Number(room.base_hours)"
-                :class="tagStyle"
-                class="bg-primary"
-              >
-                {{ formatCurrency(room.base_hours) }} / 2 giờ đầu
-              </p>
-              <p
-                v-if="Number(room.extra_hour)"
-                :class="tagStyle"
-                class="bg-red-300"
-              >
-                {{ formatCurrency(room.extra_hour) }} / giờ tiếp theo
+            <!-- Content -->
+            <div>
+              <p class="text-gray-600 mb-2 text-[14px] line-clamp-3">
+                {{ room.description }}
               </p>
 
-              <p
-                v-if="Number(room.per_night)"
-                :class="tagStyle"
-                class="bg-orange-300"
-              >
-                {{ formatCurrency(room.per_night) }} / đêm
-              </p>
-              <p
-                v-if="Number(room.per_day)"
-                :class="tagStyle"
-                class="bg-blue-300"
-              >
-                {{ formatCurrency(room.per_day) }} / ngày
-              </p>
-              <p
-                v-if="Number(room.per_month)"
-                :class="tagStyle"
-                class="bg-indigo-300"
-              >
-                {{ formatCurrency(room.per_month) }} / tháng
-              </p>
-            </div>
-            <div class="mt-2">
-              <NuxtLink :to="`/dia-diem/${room.id}`">
-                <Button variant="outline">
-                  Xem thêm
-                  <LogOutIcon />
-                </Button>
-              </NuxtLink>
+              <!-- Location -->
+              <ClientOnly>
+                <p class="text-gray-600 mb-1 line-clamp-2 text-[14px]">
+                  <FontAwesomeIcon
+                    :icon="['fas', 'location-dot']"
+                    class="mr-2"
+                  />
+                  {{ room.address }}
+                </p>
+                <p class="text-gray-600 mb-1 text-[14px]">
+                  <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
+                  {{ room.bedrooms }} phòng ngủ
+                </p>
+                <p class="text-gray-600 mb-1 text-[14px]">
+                  <FontAwesomeIcon :icon="['fas', 'bed']" class="mr-2" />
+                  {{ room.bathrooms }} phòng tắm
+                </p>
+                <p class="text-gray-600 mb-1 text-[14px]">
+                  <FontAwesomeIcon
+                    :icon="['fas', 'people-group']"
+                    class="mr-2"
+                  />
+                  {{ room.guest }} người
+                </p>
+              </ClientOnly>
+
+              <Separator class="my-4" />
+
+              <!-- Prices -->
+              <div class="space-x-2 space-y-2 flex flex-wrap">
+                <p
+                  v-if="Number(room.base_hours)"
+                  :class="tagStyle"
+                  class="bg-primary"
+                >
+                  {{ formatCurrency(room.base_hours) }} / 2 giờ đầu
+                </p>
+                <p
+                  v-if="Number(room.extra_hour)"
+                  :class="tagStyle"
+                  class="bg-red-300"
+                >
+                  {{ formatCurrency(room.extra_hour) }} / giờ tiếp theo
+                </p>
+
+                <p
+                  v-if="Number(room.per_night)"
+                  :class="tagStyle"
+                  class="bg-orange-300"
+                >
+                  {{ formatCurrency(room.per_night) }} / đêm
+                </p>
+                <p
+                  v-if="Number(room.per_day)"
+                  :class="tagStyle"
+                  class="bg-blue-300"
+                >
+                  {{ formatCurrency(room.per_day) }} / ngày
+                </p>
+                <p
+                  v-if="Number(room.per_month)"
+                  :class="tagStyle"
+                  class="bg-indigo-300"
+                >
+                  {{ formatCurrency(room.per_month) }} / tháng
+                </p>
+              </div>
+              <div class="mt-2">
+                <NuxtLink :to="`/dia-diem/${room.id}`">
+                  <Button variant="outline">
+                    Xem thêm
+                    <LogOutIcon />
+                  </Button>
+                </NuxtLink>
+              </div>
             </div>
           </div>
         </div>

@@ -49,6 +49,7 @@
 
       <NuxtImg
         :src="`${post.image}`"
+        :alt="`${post.slug}`"
         class="rounded-xl w-full max-h-[400px] object-cover mb-8 shadow"
       />
 

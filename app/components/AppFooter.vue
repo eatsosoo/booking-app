@@ -80,22 +80,28 @@
         <h3 class="text-white font-semibold mb-4 text-lg">Hỗ trợ khách hàng</h3>
         <ul class="space-y-2 text-sm">
           <li>
-            <NuxtLink to="/" class="hover:text-blue-400"
+            <NuxtLink
+              to="/gioi-thieu/cau-hoi-thuong-gap"
+              class="hover:text-blue-400"
               >Câu hỏi thường gặp</NuxtLink
             >
           </li>
           <li>
-            <NuxtLink to="/" class="hover:text-blue-400"
+            <NuxtLink
+              to="/gioi-thieu/cau-hoi-thuong-gap"
+              class="hover:text-blue-400"
               >Chính sách & điều khoản</NuxtLink
             >
           </li>
           <li>
-            <NuxtLink to="/" class="hover:text-blue-400"
+            <NuxtLink
+              to="/gioi-thieu/cau-hoi-thuong-gap"
+              class="hover:text-blue-400"
               >Bảo mật thông tin</NuxtLink
             >
           </li>
           <li>
-            <NuxtLink to="/" class="hover:text-blue-400"
+            <NuxtLink to="/gioi-thieu/tu-van-ho-tro" class="hover:text-blue-400"
               >Trung tâm hỗ trợ</NuxtLink
             >
           </li>

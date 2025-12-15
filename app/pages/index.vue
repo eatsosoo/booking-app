@@ -54,7 +54,7 @@
             class="text-3xl p-4 bg-primary rounded-full font-bold text-white flex items-center gap-4"
           >
             <PhoneCall :size="34" />
-            {{ baseInfo.PHONE }}
+            {{ formatTelNumber(baseInfo.PHONE || "") }}
           </button>
         </div>
       </div>
@@ -133,7 +133,7 @@
     <!-- Cẩm nang -->
     <section>
       <div class="cus-container">
-        <h2 class="home-head-2">Tin tức & Sự kiện</h2>
+        <h2 class="home-head-2">Tin tức & Cẩm nang du lịch</h2>
         <div class="lg:px-24">
           <Swiper
             :modules="[Pagination, Autoplay, Grid]"
@@ -201,7 +201,7 @@
       </div>
     </section>
 
-    <!-- <section class="bg-section">
+    <section class="bg-section">
       <div class="cus-container">
         <h2 class="home-head-2">Video & Mạng xã hội</h2>
         <div class="lg:px-24">
@@ -245,16 +245,20 @@
           </Swiper>
         </div>
       </div>
-    </section> -->
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { PhoneCall, TimerIcon, XIcon } from "lucide-vue-next";
-import { formatTelNumber, genSlug } from "~/utils/string-helper";
+import {
+  formatTelNumber,
+  genSlug,
+  getTikTokEmbedUrl,
+} from "~/utils/string-helper";
 import Button from "~/components/ui/button/Button.vue";
-import { PROPERTY_TYPES, REGIONS } from "~/constants";
-import type { Post, Response, SettingItem, SystemSetting } from "~/types";
+import { PROPERTY_TYPES } from "~/constants";
+import type { Post, Response, SystemSetting } from "~/types";
 import { toast } from "vue-sonner";
 
 import { Swiper, SwiperSlide } from "swiper/vue";

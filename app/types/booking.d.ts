@@ -18,7 +18,6 @@ export type PropertiesForm = {
   gallery: string[]
   services: number[]
   property_types: number[]
-  category_id: number
   slug: string
   region: string
   province: string
@@ -32,9 +31,10 @@ export type PostForm = {
   description: string
   keywords: string
   content: string
-  category_id: string | null
   property_types: number[]
   region: string
+  province: string
+  district: string
 }
 
 export type ServiceForm = {

@@ -27,9 +27,11 @@ export interface Post {
   description: string
   content: string
   created_at: string
-  region: string
   property_types: { id: number, name: string }[]
-  cateogrory_id: number
+  region: string
+  province: string
+  district: string
+  is_published: number
 }
 
 export interface Properties {
@@ -57,6 +59,7 @@ export interface Properties {
   property_types: { id: number, name: string }[]
   province: string
   district: string
+  slug: string
 }
 
 export interface Service {
