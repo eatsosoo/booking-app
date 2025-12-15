@@ -2,21 +2,13 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type {
-  Category,
-  Option2,
-  Option3,
-  Properties,
-  Response,
-  Service,
-} from "~/types";
+import type { Option3, Properties, Response, Service } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import { PROPERTY_TYPES } from "~/constants";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
 import MultiSelect from "~/components/common/MultiSelect.vue";
-import SearchSelect from "~/components/common/SearchSelect.vue";
 import UploadImage from "~/components/common/UploadImage.vue";
 import UploadMultiImage from "~/components/common/UploadMultiImage.vue";
 import EditorCustom from "~/components/common/EditorCustom.vue";

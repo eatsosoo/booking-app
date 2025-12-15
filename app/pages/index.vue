@@ -32,6 +32,10 @@
       </Button>
     </div>
 
+    <!-- Tooltip/Phone Number -->
+    <Contact :phone="baseInfo.PHONE" />
+    <Zalo :phone="baseInfo.PHONE" />
+
     <section class="bg-[url('/google1.jpg')] h-160 bg-cover bg-center relative">
       <div
         class="absolute top-0 bottom-0 right-0 left-0 bg-black opacity-60"
@@ -266,6 +270,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/grid";
 import { Pagination, Autoplay, Grid } from "swiper/modules";
+import Contact from "~/components/common/contact/Phone.vue";
+import Zalo from "~/components/common/contact/Zalo.vue";
 
 useSeoMeta({
   // --- BASIC ---
