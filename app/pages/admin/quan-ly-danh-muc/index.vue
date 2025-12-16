@@ -74,9 +74,9 @@ const columns: ColumnDef<Category>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
+    accessorKey: "order_no",
+    header: "STT",
+    cell: ({ row }) => row.index + 1,
     enableSorting: false,
   },
   {

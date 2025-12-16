@@ -15,6 +15,7 @@ import { toast } from "vue-sonner";
 import type { SelectOption } from "~/types/booking";
 import DataTable from "~/components/common/data-table/DataTable.vue";
 import ActionDropdown from "~/components/common/data-table/ActionDropdown.vue";
+import { ROOM_STATUSES } from "~/constants";
 
 definePageMeta({
   layout: "admin",
@@ -75,9 +76,9 @@ const columns: ColumnDef<Properties>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
+    accessorKey: "order_no",
+    header: "STT",
+    cell: ({ row }) => row.index + 1,
     enableSorting: false,
   },
   {
@@ -184,7 +185,23 @@ const columns: ColumnDef<Properties>[] = [
       h(
         "div",
         { class: "capitalize" },
-        h("div", { class: "lowercase" }, row.getValue("bed") + " khách")
+        h("div", { class: "capitalize" }, row.getValue("bed") + " khách")
+      ),
+  },
+  {
+    accessorKey: "is_published",
+    header: "Trạng thái",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        h(
+          "div",
+          { class: "capitalize" },
+          ROOM_STATUSES[
+            row.getValue("is_published") as keyof typeof ROOM_STATUSES
+          ]
+        )
       ),
   },
   {

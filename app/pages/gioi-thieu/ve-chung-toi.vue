@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 const { aboutPageSetting } = useSystemSetting();
 
 const aboutPageHtml = ref<string>(aboutPageSetting.value.setting_value);
+
+watch(
+  () => aboutPageSetting.value,
+  (newVal) => {
+    aboutPageHtml.value = newVal.setting_value;
+  }
+);
 </script>
 
 <template>

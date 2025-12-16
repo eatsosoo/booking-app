@@ -50,9 +50,9 @@ const pagination = computed(
 // COLUMNS DEFINITION
 const columns: ColumnDef<Video>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
+    accessorKey: "order_no",
+    header: "STT",
+    cell: ({ row }) => row.index + 1,
     enableSorting: false,
   },
   {

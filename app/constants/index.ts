@@ -1,8 +1,13 @@
-import type { Pagination } from "~/types";
+import type { PaginationType } from "~/types";
 
 export const PUBLISHED_STATUSES = {
   0: "Không hiển thị",
   1: "Hiển thị",
+} as const;
+
+export const ROOM_STATUSES = {
+  0: "Hết phòng",
+  1: "Còn phòng",
 } as const;
 
 export const TYPE_ROOM = {
@@ -153,7 +158,7 @@ export const BATHROOM_OPTIONS = [
   },
 ] as const;
 
-export const PAGINATION: Pagination = {
+export const PAGINATION: PaginationType = {
   current_page: 1,
   last_page: 1,
   per_page: 1,

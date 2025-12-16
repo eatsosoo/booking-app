@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 definePageMeta({
   layout: "admin",
@@ -119,12 +120,6 @@ const districtOptions = computed(() => {
       <!-- Loại hình -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
-        <!-- <MultiSelect
-          v-model="multiSelected.property_types"
-          :options="PROPERTY_TYPES"
-          placeholder="Chọn loại hình..."
-          class="w-64"
-        /> -->
         <Select v-model="roomTypeSelect">
           <SelectTrigger class="w-full">
             <SelectValue placeholder="Chọn loại hình..." />
@@ -205,7 +200,19 @@ const districtOptions = computed(() => {
         </Select>
       </div>
 
-      <div></div>
+      <div>
+        <Label for="is_published" class="mb-2 ml-1">Trạng thái</Label>
+        <RadioGroup v-model="home.is_published" class="flex">
+          <div class="flex items-center space-x-2">
+            <RadioGroupItem id="r1" :value="1" />
+            <Label for="r1" class="text-gray-500">Còn phòng</Label>
+          </div>
+          <div class="flex items-center space-x-2">
+            <RadioGroupItem id="r2" :value="0" />
+            <Label for="r2" class="text-gray-500">Không còn phòng</Label>
+          </div>
+        </RadioGroup>
+      </div>
 
       <!-- District -->
       <div>

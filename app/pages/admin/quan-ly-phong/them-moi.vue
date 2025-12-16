@@ -7,7 +7,7 @@ import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import Textarea from "~/components/ui/textarea/Textarea.vue";
 import type { PropertiesForm } from "~/types/booking";
-import { PROPERTY_TYPES } from "~/constants";
+import { PROPERTY_TYPES, PUBLISHED_STATUSES } from "~/constants";
 import MultiSelect from "~/components/common/MultiSelect.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
 import UploadImage from "~/components/common/UploadImage.vue";
@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 definePageMeta({
   layout: "admin",
@@ -55,6 +56,7 @@ const post = ref<PropertiesForm>({
   region: "Miền Bắc",
   province: "",
   district: "",
+  is_published: 1,
 });
 
 const { data: servicesData } = await useFetch<Response<Service[]>>(
@@ -210,7 +212,19 @@ const districtOptions = computed(() => {
         </Select>
       </div>
 
-      <div></div>
+      <div>
+        <Label for="is_published" class="mb-2 ml-1">Trạng thái</Label>
+        <RadioGroup v-model="post.is_published" class="flex">
+          <div class="flex items-center space-x-2">
+            <RadioGroupItem id="r1" :value="1" />
+            <Label for="r1" class="text-gray-500">Còn phòng</Label>
+          </div>
+          <div class="flex items-center space-x-2">
+            <RadioGroupItem id="r2" :value="0" />
+            <Label for="r2" class="text-gray-500">Không còn phòng</Label>
+          </div>
+        </RadioGroup>
+      </div>
 
       <!-- District -->
       <div>

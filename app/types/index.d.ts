@@ -60,6 +60,7 @@ export interface Properties {
   province: string;
   district: string;
   slug: string;
+  is_published: 1 | 0;
 }
 
 export interface Service {
@@ -72,6 +73,7 @@ export interface Service {
   menu: string;
   price: string;
   is_published: number;
+  content: string;
   created_at: string;
   updated_at: string;
 }

@@ -19,7 +19,8 @@
       <!-- Header -->
       <h1 class="text-4xl font-bold text-gray-900 uppercase">Danh sách</h1>
       <p class="text-gray-600 mt-1">
-        Kết quả hiển thị cho <span class="font-semibold">{{ services.length }} dịch vụ</span>
+        Kết quả hiển thị cho
+        <span class="font-semibold">{{ services.length }} dịch vụ</span>
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-4">
@@ -30,21 +31,25 @@
         >
           <div>
             <div
-            :style="{ backgroundImage: `url('${service.image}')` }"
-            class="h-60 w-full rounded-lg mb-4 bg-cover bg-center"
-          ></div>
-          <h2 class="text-blue-950 font-bold text-lg leading-6 px-2">
-            {{ service.title }}
-          </h2>
-          <h3 class="text-gray-400 font-semibold text-[14px] px-2">
-            {{ service.description }}
-          </h3>
+              :style="{ backgroundImage: `url('${service.image}')` }"
+              class="h-60 w-full rounded-lg mb-4 bg-cover bg-center"
+            ></div>
+            <h2 class="text-blue-950 font-bold text-lg leading-6 px-2">
+              {{ service.title }}
+            </h2>
+            <h3 class="text-gray-400 font-semibold text-[14px] px-2">
+              {{ service.description }}
+            </h3>
           </div>
-          <div class="flex justify-between items-center text-primary font-semibold text-md mx-2 border-t border-gray-200 mt-4 pt-2">
+          <div
+            class="flex justify-between items-center text-primary font-semibold text-md mx-2 border-t border-gray-200 mt-4 pt-2"
+          >
             <p class="">
               {{ formatCurrency(parseInt(service.price)) }}
             </p>
-            <NuxtLink to="/dich-vu" class="hover:underline">Xem thêm</NuxtLink>
+            <NuxtLink :to="`/dich-vu/${service.id}`" class="hover:underline"
+              >Xem thêm</NuxtLink
+            >
           </div>
         </div>
       </div>
@@ -53,14 +58,11 @@
 </template>
 
 <script setup lang="ts">
-import type { Response, Service } from '~/types';
-import { formatCurrency } from '~/utils/string-helper';
+import type { Response, Service } from "~/types";
+import { formatCurrency } from "~/utils/string-helper";
 
 const config = useRuntimeConfig();
-const apiUrl = computed(
-  () =>
-    `${config.public.apiBase}/home/services`
-);
+const apiUrl = computed(() => `${config.public.apiBase}/home/services`);
 
 const { data } = await useFetch<Response<Service[]>>(apiUrl, {
   server: true,

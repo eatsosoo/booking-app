@@ -74,9 +74,9 @@ const columns: ColumnDef<Service>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => h("div", { class: "capitalize" }, row.getValue("id")),
+    accessorKey: "order_no",
+    header: "STT",
+    cell: ({ row }) => row.index + 1,
     enableSorting: false,
   },
   {
@@ -119,7 +119,7 @@ const columns: ColumnDef<Service>[] = [
   },
   {
     accessorKey: "updated_at",
-    header: "Ngày cập nhất",
+    header: "Ngày cập nhật",
     cell: ({ row }) =>
       h("div", { class: "capitalize" }, convertUTC(row.getValue("updated_at"))),
   },

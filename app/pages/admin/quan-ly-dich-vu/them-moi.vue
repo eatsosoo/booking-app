@@ -17,6 +17,9 @@ import { PUBLISHED_STATUSES, SERVICE_TYPES } from "~/constants";
 import { genSlug } from "~/utils/string-helper";
 import type { Service } from "~/types";
 import UploadImage from "~/components/common/UploadImage.vue";
+import EditorCustom from "~/components/common/EditorCustom.vue";
+import RadioGroupItem from "~/components/ui/radio-group/RadioGroupItem.vue";
+import RadioGroup from "~/components/ui/radio-group/RadioGroup.vue";
 
 definePageMeta({
   layout: "admin",
@@ -35,6 +38,7 @@ const service = ref<ServiceForm>({
   price: 0,
   is_published: 1,
   images: [],
+  content: "",
 });
 
 const pending = ref(false);
@@ -120,32 +124,24 @@ const saveService = async () => {
       <!-- Loại -->
       <div>
         <Label for="is_published" class="mb-2 ml-1">Trạng thái</Label>
-        <Select v-model="service.is_published">
-          <SelectTrigger class="w-full">
-            <SelectValue placeholder="Chọn trạng thái..." />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Lựa chọn</SelectLabel>
-              <SelectItem
-                v-for="(label, key) in PUBLISHED_STATUSES"
-                :key="key"
-                :value="key"
-              >
-                {{ label }}
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <RadioGroup v-model="service.is_published" class="flex">
+          <div class="flex items-center space-x-2">
+            <RadioGroupItem id="r1" :value="1" />
+            <Label for="r1" class="text-gray-500">Hiển thị</Label>
+          </div>
+          <div class="flex items-center space-x-2">
+            <RadioGroupItem id="r2" :value="0" />
+            <Label for="r2" class="text-gray-500">Không hiển thị</Label>
+          </div>
+        </RadioGroup>
       </div>
+
+      <div></div>
 
       <!-- Image -->
       <div>
         <Label for="thumbnail" class="mb-2 ml-1">Hình ảnh</Label>
-        <UploadImage
-          :url="service.image"
-          @uploaded="service.image = $event"
-        />
+        <UploadImage :url="service.image" @uploaded="service.image = $event" />
       </div>
 
       <!-- description -->
@@ -156,6 +152,17 @@ const saveService = async () => {
           v-model="service.description"
           placeholder="Nhập mô tả..."
         />
+      </div>
+
+      <!-- Content -->
+      <div class="col-span-1 md:col-span-2">
+        <Label for="content" class="mb-2 ml-1">Nội dung bài viết</Label>
+        <ClientOnly>
+          <EditorCustom
+            :model-value="service.content"
+            @update:model-value="service.content = $event"
+          />
+        </ClientOnly>
       </div>
     </div>
 
