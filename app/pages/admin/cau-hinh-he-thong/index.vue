@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
-import type { SettingItem, SystemSetting } from "~/types";
+import type { SettingItem } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
 import { toast } from "vue-sonner";
 import {
@@ -26,11 +26,15 @@ const { request } = useApi();
 const { data } = await useAsyncData(`system-settings`, () =>
   request<SettingItem[]>(`/settings?per_page=1000`)
 );
-const systemSettings = data.value?.data.items || [];
+const systemSettings = ref<SettingItem[]>(data.value?.data.items || []);
 const loading = ref<boolean>(false);
 
-const homePageSetting = systemSettings.find(
+const homePageSetting = systemSettings.value.find(
   (item) => item.setting_key === "HOME_PAGE"
+);
+
+const aboutPageSetting = systemSettings.value.find(
+  (item) => item.setting_key === "ABOUT_PAGE"
 );
 
 /* -----------------------
@@ -70,6 +74,9 @@ const deleteSetting = async (item: SettingItem) => {
     toast.success("Cấu hình hệ thống", {
       description: `Đã xoá thiết lập ID: ${item.id} - ${item.setting_key}`,
     });
+    systemSettings.value = systemSettings.value.filter(
+      (setting) => setting.id !== item.id
+    );
   } catch (err: any) {
     toast.error("Lỗi!", {
       description: err?.data?.message ?? err?.message ?? "Có lỗi xảy ra!",
@@ -97,7 +104,7 @@ const deleteSetting = async (item: SettingItem) => {
     <div class="grid grid-cols-2 mt-4 gap-4">
       <template v-for="(item, index) in systemSettings" :key="item.id">
         <div
-          v-if="item.setting_key !== 'HOME_PAGE'"
+          v-if="!['HOME_PAGE', 'ABOUT_PAGE'].includes(item.setting_key)"
           class="border border-gray-100 p-4 shadow-md rounded-md"
         >
           <Label :for="item.setting_key" class="mb-2 ml-1">{{
@@ -144,6 +151,25 @@ const deleteSetting = async (item: SettingItem) => {
         :loading="loading"
         @click="saveSettings(homePageSetting)"
         >Lưu nội dung trang chủ</Button
+      >
+    </div>
+
+    <!-- Home Page About -->
+    <h2 class="mb-2 ml-1 text-xl font-semibold mt-8 flex items-center">
+      <House class="mr-2" :size="22" /> Nội dung về chúng tôi
+    </h2>
+    <div v-if="aboutPageSetting" class="col-span-2 mt-4">
+      <ClientOnly>
+        <CommonEditorCustom
+          :model-value="aboutPageSetting.setting_value"
+          @update:model-value="aboutPageSetting.setting_value = $event"
+        />
+      </ClientOnly>
+      <Button
+        class="mt-2"
+        :loading="loading"
+        @click="saveSettings(aboutPageSetting)"
+        >Lưu nội dung về chúng tôi</Button
       >
     </div>
   </section>

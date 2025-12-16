@@ -163,7 +163,8 @@ const apiParams = computed(() => ({
 }));
 
 const { data, pending, error } = await useAsyncData(
-  () => `places-list-${page.value}_${perPage.value}_${property_types.value}`,
+  () =>
+    `places-list-${page.value}_${perPage.value}_${property_types.value}_${region.value}_${province.value}_${district.value}`,
   () =>
     $fetch<Response<Properties[]>>(`${config.public.apiBase}/home/properties`, {
       params: apiParams.value,

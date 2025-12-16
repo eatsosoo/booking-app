@@ -9,7 +9,12 @@ export const useSystemSetting = () => {
 
   const homePageSetting = computed(() => {
     const res = settings.value?.data.items || [];
-    return res.find((item) => item.setting_key === 'HOME_PAGE') || { id: 0, setting_key: "", setting_value: ""}
+    return res.find((item) => item.setting_key === 'HOME_PAGE') || { id: 0, setting_key: "", setting_value: "" }
+  })
+
+  const aboutPageSetting = computed(() => {
+    const res = settings.value?.data.items || [];
+    return res.find((item) => item.setting_key === 'ABOUT_PAGE') || { id: 0, setting_key: "", setting_value: "" }
   })
 
   const videos = computed(() => {
@@ -32,6 +37,7 @@ export const useSystemSetting = () => {
     error,
     refresh,
     homePageSetting,
+    aboutPageSetting,
     videos,
     baseInfo
   }

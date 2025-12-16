@@ -5,7 +5,7 @@
     <div class="animate-[shake_2s_ease-in-out_infinite]">
       <!-- Phone button -->
       <a
-        :href="`tel${props.tel}`"
+        :href="`tel:${props.phone}`"
         class="relative flex items-center justify-center w-10 h-10 bg-amber-500 rounded-full shadow-2xl hover:bg-amber-600 transition-colors duration-300 group"
       >
         <!-- Icon nhấp nháy -->
@@ -42,7 +42,7 @@
           class="absolute left-[50px] bg-amber-400 bg-opacity-90 text-blue-950 text-sm px-3 pt-1 pb-2 rounded-lg animate-pulse w-32"
         >
           <p class="mt-1">
-            <span class="font-bold">{{ formatTelNumber(props.tel) }}</span>
+            <span class="font-bold">{{ formatTelNumber(props.phone) }}</span>
           </p>
         </div>
       </a>
@@ -52,11 +52,14 @@
 
 <script setup lang="ts">
 import { formatTelNumber } from "~/utils/string-helper";
-const props = defineProps({
-  tel: {
-    type: String,
-    default: "0123456789",
-  },
+interface Props {
+  phone?: string;
+  showNotification?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  phone: "0123456789",
+  showNotification: false,
 });
 </script>
 
