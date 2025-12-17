@@ -32,7 +32,17 @@
       </Button>
     </div>
 
-    <section class="bg-[url('/google1.jpg')] h-160 bg-cover bg-center relative">
+    <section class="h-160 bg-cover bg-center relative">
+      <NuxtImg
+        src="/google1.jpg"
+        alt="Đặt phòng khách sạn giá tốt"
+        format="webp"
+        sizes="100vw"
+        preload
+        priority
+        fetchpriority="high"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
       <div
         class="absolute top-0 bottom-0 right-0 left-0 bg-black opacity-60"
       ></div>
@@ -85,39 +95,30 @@
     <section class="bg-section">
       <div class="cus-container">
         <div
-          v-for="(property, index) in PROPERTY_TYPES"
-          :key="property.value"
+          v-for="property in regionImages"
+          :key="property.key"
           class="space-y-10 mb-12"
         >
           <h2 class="home-head-2">
-            {{ property.label }}
+            {{ property.title }}
           </h2>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:px-24">
             <!-- Project item -->
             <div
-              v-for="(region, i) in ['Miền Bắc', 'Miền Trung', 'Miền Nam']"
+              v-for="(region, i) in property.regions"
               :key="i"
               class="relative bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col"
             >
-              <!-- Image -->
-              <NuxtImg
-                :src="
-                  randomImages[i]
-                    ? `/rooms/${genSlug(property.label)}-${genSlug(region)}-${
-                        randomImages[i]
-                      }.jpg`
-                    : '/no-image.jpg'
-                "
-                class="h-58 w-full object-cover transition-transform duration-300 hover:scale-105 shadow-sm"
-                :alt="`Tìm kiếm phong loại ${property.label} khu vực ${region}`"
-              ></NuxtImg>
-
-              <!-- Content -->
-              <div class="text-center">
-                <h3 class="mt-4 font-semibold italic">{{ region }}</h3>
+              <RegionCard
+                :region="region.title"
+                :property="property.title"
+                :images="region.images"
+              />
+              <div class="text-center mb-2">
+                <h3 class="mt-4 font-semibold italic">{{ region.title }}</h3>
                 <NuxtLink
-                  :to="`/tim-kiem?page=1&per_page=12&property_types=${property.value}&region=${region}`"
+                  :to="`/tim-kiem?page=1&per_page=12&property_types=${property.key}&region=${region.title}`"
                 >
                   <Button class="w-fit underline" variant="link">
                     Xem thêm
@@ -134,11 +135,14 @@
     <section>
       <div class="cus-container">
         <h2 class="home-head-2">Tin tức & Cẩm nang du lịch</h2>
-        <div class="lg:px-24">
+        <div class="lg:px-24 relative">
           <Swiper
-            :modules="[Pagination, Autoplay, Grid]"
-            :pagination="{ clickable: true }"
-            :autoplay="{ delay: 2500 }"
+            :modules="[Pagination, Autoplay, Grid, Navigation]"
+            :navigation="{
+              prevEl: '.swiper-prev',
+              nextEl: '.swiper-next',
+            }"
+            :autoplay="{ delay: 5000 }"
             :loop="true"
             :grid="{ rows: 2 }"
             :slides-per-view="1"
@@ -167,6 +171,7 @@
                 <div class="h-[200px] w-[200px] shrink-0">
                   <img
                     :src="posts[index] ? posts[index].image : posts[0]?.image"
+                    :alt="`anh-slider-bai-viet-${index + 1}`"
                     class="h-full w-[200px] object-cover rounded-l-md"
                   />
                 </div>
@@ -175,7 +180,11 @@
                     {{ posts[index] ? posts[index].title : posts[0]?.title }}
                   </p>
                   <p class="flex text-gray-500 text-[14px] my-2">
-                    <TimerIcon :size="20" />2025/12/11
+                    <TimerIcon :size="20" />{{
+                      posts[index]
+                        ? posts[index].created_at
+                        : posts[0]?.created_at
+                    }}
                   </p>
                   <p class="text-[14px] line-clamp-4">
                     {{
@@ -197,11 +206,27 @@
               </div>
             </SwiperSlide>
           </Swiper>
+
+          <!-- Prev -->
+          <button
+            class="swiper-prev absolute left-8 top-1/2 -translate-y-1/2 z-10 bg-primary shadow rounded-lg p-2"
+            aria-label="Bài viết trước"
+          >
+            <ChevronLeft :size="30" />
+          </button>
+
+          <!-- Next -->
+          <button
+            class="swiper-next absolute right-8 top-1/2 -translate-y-1/2 z-10 bg-primary shadow rounded-lg p-2"
+            aria-label="Bài viết tiếp theo"
+          >
+            <ChevronRight :size="30" />
+          </button>
         </div>
       </div>
     </section>
 
-    <section class="bg-section">
+    <!-- <section class="bg-section">
       <div class="cus-container">
         <h2 class="home-head-2">Video & Mạng xã hội</h2>
         <div class="lg:px-24">
@@ -245,19 +270,20 @@
           </Swiper>
         </div>
       </div>
-    </section>
+    </section> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { PhoneCall, TimerIcon, XIcon } from "lucide-vue-next";
 import {
-  formatTelNumber,
-  genSlug,
-  getTikTokEmbedUrl,
-} from "~/utils/string-helper";
+  ChevronLeft,
+  ChevronRight,
+  PhoneCall,
+  TimerIcon,
+  XIcon,
+} from "lucide-vue-next";
+import { formatTelNumber, getTikTokEmbedUrl } from "~/utils/string-helper";
 import Button from "~/components/ui/button/Button.vue";
-import { PROPERTY_TYPES } from "~/constants";
 import type { Post, Response, SystemSetting } from "~/types";
 import { toast } from "vue-sonner";
 
@@ -265,7 +291,8 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/grid";
-import { Pagination, Autoplay, Grid } from "swiper/modules";
+import { Pagination, Autoplay, Grid, Navigation } from "swiper/modules";
+import RegionCard from "~/components/common/RegionCard.vue";
 
 useSeoMeta({
   // --- BASIC ---
@@ -289,7 +316,7 @@ useSeoMeta({
   twitterImage: "https://dyhome.com/og-image.png",
 });
 
-const { homePageSetting, videos, baseInfo } = useSystemSetting();
+const { homePageSetting, videos, baseInfo, regionImages } = useSystemSetting();
 const token = useCookie("token");
 const { request } = useApi();
 
@@ -341,20 +368,15 @@ watch(
   (newVal) => (homePageHtml.value = newVal.setting_value)
 );
 
-const randomImages = ref<number[]>([]);
-
-// tạo mảng 13 phần tử random cho mỗi project
 onMounted(() => {
-  randomImages.value = Array.from(
-    { length: PROPERTY_TYPES.length },
-    () => Math.floor(Math.random() * 2) + 1
-  );
-
-  setInterval(() => {
-    randomImages.value = randomImages.value.map(
-      () => Math.floor(Math.random() * 2) + 1
-    );
-  }, 2000);
+  regionImages.value.forEach((element) => {
+    element.regions.forEach((region) => {
+      region.images.forEach((src: any) => {
+        const img = new Image();
+        img.src = src;
+      });
+    });
+  });
 });
 </script>
 

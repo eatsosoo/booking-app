@@ -44,44 +44,6 @@ export const PROPERTY_TYPES = [
 
 export const REGIONS = ["Miền Bắc", "Miền Trung", "Miền Nam"] as const;
 
-export const PLACE_GROUPS = [
-  {
-    label: "Khu vực Miền Bắc",
-    value: [
-      "Hà Nội",
-      "Hoà Bình",
-      "Ba Vì",
-      "Sóc Sơn",
-      "Tam Đảo",
-      "Đại Lải",
-      "Hạ Long",
-      "Tuần Châu",
-      "Ninh Bình",
-      "Mộc Châu",
-      "Sa Pa",
-    ],
-  },
-  {
-    label: "Khu vực Miền Trung",
-    value: [
-      "FLC Sầm Sơn",
-      "Hải Tiến",
-      "Huế",
-      "Đà Nẵng",
-      "Hội An",
-      "Quy Nhơn",
-      "Nha Trang",
-      "Mũi Né",
-      "Phú Yên",
-      "Đà Lạt",
-    ],
-  },
-  {
-    label: "Khu vực Miền Nam",
-    value: ["Vũng Tàu", "Hồ Tràm", "Sài Gòn", "Phú Quốc"],
-  },
-] as const;
-
 export const MORNING_TIMES = [
   "00:00",
   "01:00",

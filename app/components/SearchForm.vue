@@ -2,7 +2,11 @@
   <div class="shadow-md rounded-md bg-white p-8">
     <h2 class="font-semibold">Bạn muốn đi đâu?</h2>
     <div class="grid md:grid-cols-5 gap-4">
-      <Select v-model="selectedRoomType" @change="console.log($event)">
+      <Select
+        v-model="selectedRoomType"
+        name="room_type"
+        @change="console.log($event)"
+      >
         <SelectTrigger class="w-full">
           <SelectValue placeholder="Chọn loại hình..." />
         </SelectTrigger>
@@ -17,7 +21,7 @@
         </SelectContent>
       </Select>
 
-      <Select v-model="selectedLocation">
+      <Select v-model="selectedLocation" name="location">
         <SelectTrigger class="w-full">
           <SelectValue placeholder="Chọn địa điểm..." />
         </SelectTrigger>

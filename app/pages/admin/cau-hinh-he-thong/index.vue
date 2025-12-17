@@ -9,9 +9,13 @@ import {
   Bolt,
   CheckCheck,
   House,
+  LibraryBig,
   PlusSquareIcon,
   Trash,
+  Wallpaper,
 } from "lucide-vue-next";
+import { Separator } from "~/components/ui/separator";
+import UploadMultiImage from "~/components/common/UploadMultiImage.vue";
 
 definePageMeta({
   layout: "admin",
@@ -37,6 +41,13 @@ const aboutPageSetting = systemSettings.value.find(
   (item) => item.setting_key === "ABOUT_PAGE"
 );
 
+const regionImages = systemSettings.value
+  .filter((item) => item.setting_key.startsWith("IMAGE"))
+  .map((setting) => ({
+    ...setting,
+    setting_value: setting.setting_value.split(","),
+  }));
+
 /* -----------------------
    UPDATE DATA
 ------------------------- */
@@ -48,6 +59,9 @@ const saveSettings = async (item: SettingItem) => {
       method: "PUT",
       body: {
         ...item,
+        setting_value: item.setting_key.startsWith("IMAGE")
+          ? item.setting_value.join(",")
+          : item.setting_value,
       },
     });
 
@@ -104,7 +118,12 @@ const deleteSetting = async (item: SettingItem) => {
     <div class="grid grid-cols-2 mt-4 gap-4">
       <template v-for="(item, index) in systemSettings" :key="item.id">
         <div
-          v-if="!['HOME_PAGE', 'ABOUT_PAGE'].includes(item.setting_key)"
+          v-if="
+            !(
+              ['HOME_PAGE', 'ABOUT_PAGE'].includes(item.setting_key) ||
+              item.setting_key.startsWith('IMAGE_')
+            )
+          "
           class="border border-gray-100 p-4 shadow-md rounded-md"
         >
           <Label :for="item.setting_key" class="mb-2 ml-1">{{
@@ -154,9 +173,11 @@ const deleteSetting = async (item: SettingItem) => {
       >
     </div>
 
+    <Separator class="my-4" />
+
     <!-- Home Page About -->
     <h2 class="mb-2 ml-1 text-xl font-semibold mt-8 flex items-center">
-      <House class="mr-2" :size="22" /> Nội dung về chúng tôi
+      <LibraryBig class="mr-2" :size="22" /> Nội dung về chúng tôi
     </h2>
     <div v-if="aboutPageSetting" class="col-span-2 mt-4">
       <ClientOnly>
@@ -171,6 +192,32 @@ const deleteSetting = async (item: SettingItem) => {
         @click="saveSettings(aboutPageSetting)"
         >Lưu nội dung về chúng tôi</Button
       >
+    </div>
+
+    <Separator class="my-4" />
+
+    <h2 class="mb-2 ml-1 text-xl font-semibold mt-8 flex items-center">
+      <Wallpaper class="mr-2" :size="22" /> Ảnh loại hình trang chủ
+    </h2>
+    <div
+      v-for="(region, index) in regionImages"
+      :key="region.setting_key"
+      class="border border-primary rounded-md p-4 mb-4"
+    >
+      <div class="flex items-center mb-2 space-x-2">
+        <p class="font-semibold text-blue-950" v-text="region.setting_key"></p>
+        <Button
+          variant="outline"
+          :disabled="loading"
+          @click="saveSettings(region)"
+        >
+          <CheckCheck color="green" />
+        </Button>
+      </div>
+      <UploadMultiImage
+        :urls="region.setting_value"
+        @uploaded="region.setting_value = $event"
+      />
     </div>
   </section>
 </template>

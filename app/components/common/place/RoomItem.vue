@@ -12,8 +12,7 @@
     <div
       class="absolute top-18 left-0 bg-amber-200 text-gray-600 text-xs px-3 py-1 font-medium after:content-[''] after:absolute after:right-[-14px] after:top-0 after:border-y-[12px] after:border-y-transparent after:border-l-[14px] after:border-l-amber-200"
     >
-      <!-- {{ room.is_published }} -->
-      Còn phòng
+      {{ ROOM_STATUSES[room.is_published] }}
     </div>
 
     <!-- Bookmark -->
@@ -124,6 +123,7 @@ import { LogOutIcon } from "lucide-vue-next";
 import type { PropType } from "vue";
 import Button from "~/components/ui/button/Button.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
+import { ROOM_STATUSES } from "~/constants";
 import type { Properties } from "~/types";
 
 const tagStyle =

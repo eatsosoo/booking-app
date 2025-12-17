@@ -7,7 +7,7 @@ export interface Faq {
 export interface SettingItem {
   id: number;
   setting_key: string;
-  setting_value: string;
+  setting_value: any;
 }
 
 export interface Booking {
