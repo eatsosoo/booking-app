@@ -7,7 +7,7 @@
         class="bg-white"
       />
 
-      <Select v-model="formData.place">
+      <!-- <Select v-model="formData.place">
         <SelectTrigger class="w-full bg-white">
           <SelectValue placeholder="Chọn địa điểm..." />
         </SelectTrigger>
@@ -19,7 +19,7 @@
             </SelectItem>
           </SelectGroup>
         </SelectContent>
-      </Select>
+      </Select> -->
 
       <Select v-model="formData.bedroom">
         <SelectTrigger class="w-full bg-white">
@@ -112,7 +112,7 @@ import Button from "./ui/button/Button.vue";
 import Checkbox from "@/components/ui/checkbox/Checkbox.vue";
 import { Input } from "@/components/ui/input";
 import type { Response, Service } from "~/types";
-import { BATHROOM_OPTIONS, BEDROOM_OPTIONS, PLACE_GROUPS } from "~/constants";
+import { BATHROOM_OPTIONS, BEDROOM_OPTIONS } from "~/constants";
 import { ChevronDown, ChevronUp } from "lucide-vue-next";
 import Label from "./ui/label/Label.vue";
 
