@@ -105,10 +105,18 @@
                 </p>
               </ClientOnly>
               <div class="mt-4 space-x-2 space-y-2 flex flex-wrap">
-                <p v-if="Number(room.base_hours)" :class="tagStyle" class="bg-primary">
+                <p
+                  v-if="Number(room.base_hours)"
+                  :class="tagStyle"
+                  class="bg-primary"
+                >
                   {{ formatCurrency(room.base_hours) }} / 2 giờ đầu
                 </p>
-                <p v-if="Number(room.extra_hour)" :class="tagStyle" class="bg-red-300">
+                <p
+                  v-if="Number(room.extra_hour)"
+                  :class="tagStyle"
+                  class="bg-red-300"
+                >
                   {{ formatCurrency(room.extra_hour) }} / giờ tiếp theo
                 </p>
 
@@ -119,7 +127,11 @@
                 >
                   {{ formatCurrency(room.per_night) }} / đêm
                 </p>
-                <p v-if="Number(room.per_day)" :class="tagStyle" class="bg-blue-300">
+                <p
+                  v-if="Number(room.per_day)"
+                  :class="tagStyle"
+                  class="bg-blue-300"
+                >
                   {{ formatCurrency(room.per_day) }} / ngày
                 </p>
                 <p
@@ -165,7 +177,7 @@ import { formatCurrency } from "~/utils/string-helper";
 useSeoMeta({
   title: "Danh sách phòng",
   description:
-    "Danh sách các phòng khách sạn đẹp, giá tốt, đặt ngay tại Booking App.",
+    "Danh sách các phòng khách sạn đẹp, giá tốt, đặt ngay tại DyHome.",
 });
 
 const route = useRoute();

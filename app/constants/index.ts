@@ -10,6 +10,11 @@ export const ROOM_STATUSES = {
   1: "Còn phòng",
 } as const;
 
+export const TAG_COLORS = {
+  0: "#FF5555",
+  1: "#08CB00",
+};
+
 export const TYPE_ROOM = {
   villa: "Villa",
   homestay: "Homestay",

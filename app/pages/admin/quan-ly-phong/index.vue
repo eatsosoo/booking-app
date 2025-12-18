@@ -197,7 +197,13 @@ const columns: ColumnDef<Properties>[] = [
         { class: "capitalize" },
         h(
           "div",
-          { class: "capitalize" },
+          {
+            class: `capitalize ${
+              row.getValue("is_published") === 0
+                ? "text-red-600"
+                : "text-green-600"
+            }`,
+          },
           ROOM_STATUSES[
             row.getValue("is_published") as keyof typeof ROOM_STATUSES
           ]
@@ -213,12 +219,15 @@ const columns: ColumnDef<Properties>[] = [
         itemId: post.id,
         showDuplicate: true,
         editLink: `/admin/quan-ly-phong/${post.id}`,
+        otherAction: true,
+        otherLabel: "Chuyển trạng thái",
         onDelete: () => deleteItem(post.id),
         onDuplicate: () => duplicateItem(),
         onCopy: () => {
           navigator.clipboard.writeText(post.id.toString());
           toast.success("Đã sao chép ID");
         },
+        onOther: () => updateStatus(post),
       });
     },
   },
@@ -270,6 +279,29 @@ async function duplicateItem() {
 
     toast.success("Thành công", {
       description: "Phòng đã được sao chép thành công!",
+    });
+  } catch (error) {
+    toast.error("Lỗi!", {
+      description: `Có lỗi xảy ra, vui lòng thử lại sau: ${error} !`,
+    });
+  }
+}
+
+async function updateStatus(item: Properties) {
+  try {
+    await request(`/properties/${item.id}`, {
+      method: "PUT",
+      body: {
+        ...item,
+        is_published: item.is_published === 0 ? 1 : 0,
+        property_types: item.property_types.map((type) => type.id),
+      },
+    });
+
+    await refresh();
+
+    toast.success("Thành công", {
+      description: "Phòng đã được cập nhật trạng thái!",
     });
   } catch (error) {
     toast.error("Lỗi!", {

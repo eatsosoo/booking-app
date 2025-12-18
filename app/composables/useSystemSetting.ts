@@ -75,6 +75,7 @@ export const useSystemSetting = () => {
       "ADDRESS",
       "YOUTUBE",
       "INSTAGRAM",
+      "BANNER",
     ];
     const res = settings.value?.data.items || [];
     const filtered = res.filter((item) => baseKeys.includes(item.setting_key));

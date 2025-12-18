@@ -66,7 +66,7 @@ import "vue-sonner/style.css";
 
 useSeoMeta({
   title: "Đăng nhập",
-  description: "Trang đăng nhập hệ thống Booking App, tối ưu SEO và bảo mật.",
+  description: "Trang đăng nhập hệ thống DyHome, tối ưu SEO và bảo mật.",
 });
 
 definePageMeta({

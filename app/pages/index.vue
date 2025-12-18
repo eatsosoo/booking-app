@@ -34,10 +34,9 @@
 
     <section class="h-160 bg-cover bg-center relative">
       <NuxtImg
-        src="/google1.jpg"
+        :src="baseInfo.BANNER"
         alt="Đặt phòng khách sạn giá tốt"
         format="webp"
-        sizes="100vw"
         preload
         priority
         fetchpriority="high"
@@ -51,7 +50,7 @@
       >
         <div class="text-gray-200 w-3/4">
           <h1 class="font-bold text-4xl mb-6 text-shadow-2xs">
-            Chào mứng đến với DYHOME
+            Chào mừng đến với DYHOME
           </h1>
           <p class="text-lg font-semibold text-shadow-2xs mb-4">
             DYHOME là đơn vị chuyên cung cấp giải pháp đặt phòng thảnh thơi và
@@ -283,7 +282,6 @@ import {
   ChevronLeft,
   ChevronRight,
   PhoneCall,
-  TimerIcon,
   XIcon,
 } from "lucide-vue-next";
 import {

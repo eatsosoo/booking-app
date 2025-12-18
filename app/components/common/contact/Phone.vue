@@ -39,7 +39,7 @@
 
         <!-- Tooltip -->
         <div
-          class="absolute left-[50px] bg-amber-400 bg-opacity-90 text-blue-950 text-sm px-3 pt-1 pb-2 rounded-lg animate-pulse w-32"
+          class="absolute left-[50px] bg-amber-400 bg-opacity-90 text-blue-950 text-sm px-3 pt-1 pb-2 rounded-lg w-32"
         >
           <p class="mt-1">
             <span class="font-bold">{{ formatTelNumber(props.phone) }}</span>

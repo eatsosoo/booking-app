@@ -9,6 +9,7 @@
       :class="i === activeIndex ? 'opacity-100' : 'opacity-0'"
       loading="eager"
       decoding="async"
+      format="webp"
       :alt="`Tìm kiếm phong loại ${property.label} khu vực ${region}`"
     />
   </div>

@@ -22,7 +22,7 @@ const { menuTree } = useProvinces();
     </MenubarMenu>
 
     <MenubarMenu v-for="level1 in menuTree" :key="level1.value">
-      <MenubarTrigger>
+      <MenubarTrigger class="cursor-pointer">
         {{ level1.label }}
       </MenubarTrigger>
       <MenubarContent>
@@ -30,7 +30,10 @@ const { menuTree } = useProvinces();
           v-for="level2 in level1.regions"
           :key="`${level1.label}-${level2.region}`"
         >
-          <MenubarSubTrigger v-if="level2.provinces.length > 0">
+          <MenubarSubTrigger
+            v-if="level2.provinces.length > 0"
+            class="cursor-pointer"
+          >
             {{ level2.region }}</MenubarSubTrigger
           >
           <MenubarSubContent>
@@ -38,9 +41,11 @@ const { menuTree } = useProvinces();
               v-for="level3 in level2.provinces"
               :key="`${level1.label}-${level2.region}-${level3.province}`"
             >
-              <MenubarSubTrigger v-if="level3.districts.length > 0">{{
-                level3.province
-              }}</MenubarSubTrigger>
+              <MenubarSubTrigger
+                v-if="level3.districts.length > 0"
+                class="cursor-pointer"
+                >{{ level3.province }}</MenubarSubTrigger
+              >
               <MenubarSubContent>
                 <MenubarItem
                   v-for="level4 in level3.districts"
@@ -59,6 +64,7 @@ const { menuTree } = useProvinces();
                         district: level4,
                       },
                     }"
+                    class="cursor-pointer"
                   >
                     {{ level4 }}
                   </NuxtLink>

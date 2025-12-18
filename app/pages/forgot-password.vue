@@ -19,7 +19,9 @@
         </div>
 
         <div>
-          <label for="password" class="block mb-1 text-gray-600">Mật khẩu</label>
+          <label for="password" class="block mb-1 text-gray-600"
+            >Mật khẩu</label
+          >
           <Input
             id="password"
             v-model="password"
@@ -30,7 +32,9 @@
         </div>
 
         <div>
-          <label for="confirm_password" class="block mb-1 text-gray-600">Xác nhận mật khẩu</label>
+          <label for="confirm_password" class="block mb-1 text-gray-600"
+            >Xác nhận mật khẩu</label
+          >
           <Input
             id="confirm_password"
             v-model="password"
@@ -40,12 +44,7 @@
           />
         </div>
 
-        <Button
-          type="submit"
-          class="w-full"
-        >
-          Đổi mật khẩu
-        </Button>
+        <Button type="submit" class="w-full"> Đổi mật khẩu </Button>
       </form>
 
       <p class="text-center text-gray-600 text-sm mt-6">
@@ -58,32 +57,32 @@
 </template>
 
 <script setup lang="ts">
-import Button from '~/components/ui/button/Button.vue';
-import Input from '~/components/ui/input/Input.vue';
+import Button from "~/components/ui/button/Button.vue";
+import Input from "~/components/ui/input/Input.vue";
 
 useSeoMeta({
-  title: 'Đăng nhập',
-  description: 'Trang đăng nhập hệ thống Booking App, tối ưu SEO và bảo mật.',
+  title: "Đăng nhập",
+  description: "Trang đăng nhập hệ thống DyHome, tối ưu SEO và bảo mật.",
 });
 
 definePageMeta({
   layout: false,
 });
 
-const email = ref('');
-const password = ref('');
+const email = ref("");
+const password = ref("");
 const remember = ref(false);
 
 const handleLogin = () => {
   if (!email.value || !password.value) {
-    alert('Vui lòng nhập đầy đủ thông tin');
+    alert("Vui lòng nhập đầy đủ thông tin");
     return;
   }
 
   // Sau này sẽ thay bằng gọi API login
-  console.log('Email:', email.value);
-  console.log('Password:', password.value);
-  console.log('Remember:', remember.value);
-  alert('Đăng nhập thành công (demo)');
+  console.log("Email:", email.value);
+  console.log("Password:", password.value);
+  console.log("Remember:", remember.value);
+  alert("Đăng nhập thành công (demo)");
 };
 </script>

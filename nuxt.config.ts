@@ -17,7 +17,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      titleTemplate: "%s | Booking App",
+      titleTemplate: "%s | DyHome",
       meta: [
         {
           name: "description",
@@ -31,7 +31,7 @@ export default defineNuxtConfig({
         },
         {
           property: "og:title",
-          content: "Booking App - Đặt chỗ nhanh, trải nghiệm tốt",
+          content: "DyHome - Đặt chỗ nhanh, trải nghiệm tốt",
         },
         {
           property: "og:description",
@@ -91,8 +91,8 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
     build: {
-      cssCodeSplit: true
-    }
+      cssCodeSplit: true,
+    },
   },
   shadcn: {
     /**

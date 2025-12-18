@@ -52,6 +52,10 @@
         <DropdownMenuItem v-if="showView">
           <NuxtLink :to="viewLink" class="w-full"> Xem </NuxtLink>
         </DropdownMenuItem>
+
+        <DropdownMenuItem v-if="otherAction" @click="handleOtherAction">
+          {{ otherLabel }}
+        </DropdownMenuItem>
       </template>
     </DropdownMenuContent>
   </DropdownMenu>
@@ -79,6 +83,8 @@ interface Props {
   editLink?: string;
   viewLink?: string;
   deleteLabel?: string;
+  otherAction?: boolean;
+  otherLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -88,12 +94,14 @@ const props = withDefaults(defineProps<Props>(), {
   showDuplicate: false,
   showView: false,
   deleteLabel: "Xoá",
+  otherAction: false,
 });
 
 const emit = defineEmits<{
   delete: [string | number];
   copy: [string | number];
   duplicate: any;
+  other: any;
 }>();
 
 const copyId = () => {
@@ -107,5 +115,9 @@ const handleDelete = () => {
 
 const handleDuplicate = () => {
   emit("duplicate");
+};
+
+const handleOtherAction = () => {
+  emit("other");
 };
 </script>
