@@ -144,7 +144,7 @@
 
     <!-- Dòng bản quyền -->
     <div
-      class="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-500"
+      class="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-white"
     >
       © {{ new Date().getFullYear() }} DYHOME. Tất cả các quyền được bảo lưu.
     </div>

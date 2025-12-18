@@ -115,14 +115,15 @@
                 :property="property.title"
                 :images="region.images"
               />
-              <div class="text-center mb-2">
-                <h3 class="mt-4 font-semibold italic">{{ region.title }}</h3>
+              <div class="text-center mb-4">
                 <NuxtLink
                   :to="`/tim-kiem?page=1&per_page=12&property_types=${property.key}&region=${region.title}`"
                 >
-                  <Button class="w-fit underline" variant="link">
-                    Xem thêm
-                  </Button>
+                  <h3
+                    class="mt-4 font-semibold italic hover:underline cursoir-pointer"
+                  >
+                    {{ region.title }}
+                  </h3>
                 </NuxtLink>
               </div>
             </div>
@@ -175,15 +176,17 @@
                     class="h-full w-[200px] object-cover rounded-l-md"
                   />
                 </div>
-                <div class="p-2 flex-1">
+                <div class="p-2 flex-1 mx-2">
                   <p class="text-2xl font-semibold line-clamp-1">
                     {{ posts[index] ? posts[index].title : posts[0]?.title }}
                   </p>
                   <p class="flex text-gray-500 text-[14px] my-2">
-                    <TimerIcon :size="20" />{{
-                      posts[index]
-                        ? posts[index].created_at
-                        : posts[0]?.created_at
+                    <Calendar :size="20" class="mr-2" />{{
+                      convertUTC(
+                        posts[index]?.created_at ||
+                          posts[0]?.created_at ||
+                          nowDate()
+                      )
                     }}
                   </p>
                   <p class="text-[14px] line-clamp-4">
@@ -198,7 +201,7 @@
                       :to="`/cam-nang/${
                         posts[index] ? posts[index].slug : posts[0]?.slug
                       }`"
-                      class="underline text-primary"
+                      class="underline text-blue-950 font-semibold"
                       >Xem thêm</NuxtLink
                     >
                   </p>
@@ -276,13 +279,19 @@
 
 <script setup lang="ts">
 import {
+  Calendar,
   ChevronLeft,
   ChevronRight,
   PhoneCall,
   TimerIcon,
   XIcon,
 } from "lucide-vue-next";
-import { formatTelNumber, getTikTokEmbedUrl } from "~/utils/string-helper";
+import {
+  formatTelNumber,
+  getTikTokEmbedUrl,
+  convertUTC,
+  nowDate,
+} from "~/utils/string-helper";
 import Button from "~/components/ui/button/Button.vue";
 import type { Post, Response, SystemSetting } from "~/types";
 import { toast } from "vue-sonner";

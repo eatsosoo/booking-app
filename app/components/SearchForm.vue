@@ -5,6 +5,7 @@
       <Select
         v-model="selectedRoomType"
         name="room_type"
+        aria-label="room_type"
         @change="console.log($event)"
       >
         <SelectTrigger class="w-full">
@@ -117,7 +118,7 @@
 
       <!-- Action -->
       <div class="">
-        <Button class="w-full" @click="submit">Tìm kiếm</Button>
+        <Button class="w-full text-blue-950" @click="submit">Tìm kiếm</Button>
       </div>
     </div>
   </div>

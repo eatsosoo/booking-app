@@ -90,6 +90,9 @@ export default defineNuxtConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      cssCodeSplit: true
+    }
   },
   shadcn: {
     /**
