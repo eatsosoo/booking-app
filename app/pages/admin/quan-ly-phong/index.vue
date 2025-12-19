@@ -185,7 +185,7 @@ const columns: ColumnDef<Properties>[] = [
       h(
         "div",
         { class: "capitalize" },
-        h("div", { class: "capitalize" }, row.getValue("bed") + " khách")
+        h("div", { class: "capitalize" }, row.getValue("guest") + " khách")
       ),
   },
   {

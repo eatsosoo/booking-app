@@ -82,7 +82,7 @@
         <div v-html="homePageHtml"></div>
       </div>
       <div v-else>
-        <CommonEditorCustom
+        <EditorCustom
           :model-value="homePageHtml"
           :menu-bar="false"
           @update:model-value="homePageHtml = $event"
@@ -300,6 +300,7 @@ import "swiper/css/pagination";
 import "swiper/css/grid";
 import { Pagination, Autoplay, Grid, Navigation } from "swiper/modules";
 import RegionCard from "~/components/common/RegionCard.vue";
+import EditorCustom from "~/components/common/editor/EditorCustom.vue";
 
 useSeoMeta({
   // --- BASIC ---

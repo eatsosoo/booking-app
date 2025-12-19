@@ -6,7 +6,7 @@ import Label from "~/components/ui/label/Label.vue";
 import type { Post } from "~/types";
 import { toast } from "vue-sonner";
 import { useApi } from "~/composables/useApi";
-import EditorCustom from "~/components/common/EditorCustom.vue";
+import EditorCustom from "~/components/common/editor/EditorCustom.vue";
 import UploadImage from "~/components/common/UploadImage.vue";
 import { PROPERTY_TYPES } from "~/constants";
 import {

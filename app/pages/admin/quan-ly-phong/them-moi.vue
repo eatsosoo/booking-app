@@ -12,7 +12,7 @@ import MultiSelect from "~/components/common/MultiSelect.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
 import UploadImage from "~/components/common/UploadImage.vue";
 import UploadMultiImage from "~/components/common/UploadMultiImage.vue";
-import EditorCustom from "~/components/common/EditorCustom.vue";
+import EditorCustom from "~/components/common/editor/EditorCustom.vue";
 import {
   Select,
   SelectContent,

@@ -17,7 +17,7 @@ import { PUBLISHED_STATUSES, SERVICE_TYPES } from "~/constants";
 import { genSlug } from "~/utils/string-helper";
 import type { Service } from "~/types";
 import UploadImage from "~/components/common/UploadImage.vue";
-import EditorCustom from "~/components/common/EditorCustom.vue";
+import EditorCustom from "~/components/common/editor/EditorCustom.vue";
 import RadioGroupItem from "~/components/ui/radio-group/RadioGroupItem.vue";
 import RadioGroup from "~/components/ui/radio-group/RadioGroup.vue";
 

@@ -129,7 +129,7 @@ const editorConfig = ref({
     "FFFACD",
     "Lemon Chiffon",
   ],
-  content_css: ["~/assets/css/tailwind.css"],
+  content_css: ["/tailwind.css"],
   content_style: CONTENT_STYLE,
   branding: false, // Ẩn branding
   promotion: false, // Ẩn quảng cáo nâng cấp

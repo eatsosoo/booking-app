@@ -9,7 +9,7 @@ import Textarea from "~/components/ui/textarea/Textarea.vue";
 import type { PostForm } from "~/types/booking";
 import { genSlug } from "~/utils/string-helper";
 import UploadImage from "~/components/common/UploadImage.vue";
-import EditorCustom from "~/components/common/EditorCustom.vue";
+import EditorCustom from "~/components/common/editor/EditorCustom.vue";
 import { PROPERTY_TYPES, REGIONS } from "~/constants";
 import {
   Select,
