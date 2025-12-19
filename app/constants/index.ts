@@ -15,13 +15,6 @@ export const TAG_COLORS = {
   1: "#08CB00",
 };
 
-export const TYPE_ROOM = {
-  villa: "Villa",
-  homestay: "Homestay",
-  hotel: "Khách sạn",
-  apartment: "Chung cư mini",
-} as const;
-
 export const SERVICE_TYPES = {
   standard: "Tiêu chuẩn",
   basic: "Cơ bản",
@@ -38,7 +31,7 @@ export const PROPERTY_TYPES = [
     value: 2,
   },
   {
-    label: "Chung cư mini",
+    label: "Chung cư/Căn hộ",
     value: 3,
   },
   {

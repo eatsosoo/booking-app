@@ -15,7 +15,7 @@ export const useSystemSetting = () => {
   const properties = [
     { id: 1, code: "VILLA", title: "Villa" },
     { id: 2, code: "HOMESTAY", title: "Homestay" },
-    { id: 3, code: "CCMN", title: "Chung cư mini" },
+    { id: 3, code: "CCMN", title: "Chung cư/Căn hộ" },
     { id: 4, code: "HOTEL", title: "Khách sạn" },
   ];
   const regions = [

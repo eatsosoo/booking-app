@@ -211,7 +211,7 @@
 
           <!-- Prev -->
           <button
-            class="swiper-prev absolute left-8 top-1/2 -translate-y-1/2 z-10 bg-primary shadow rounded-lg p-2"
+            class="hidden lg:block swiper-prev absolute left-8 top-1/2 -translate-y-1/2 z-10 bg-primary shadow rounded-lg p-2"
             aria-label="Bài viết trước"
           >
             <ChevronLeft :size="30" />
@@ -219,7 +219,7 @@
 
           <!-- Next -->
           <button
-            class="swiper-next absolute right-8 top-1/2 -translate-y-1/2 z-10 bg-primary shadow rounded-lg p-2"
+            class="hidden lg:block swiper-next absolute right-8 top-1/2 -translate-y-1/2 z-10 bg-primary shadow rounded-lg p-2"
             aria-label="Bài viết tiếp theo"
           >
             <ChevronRight :size="30" />
