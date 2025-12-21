@@ -167,8 +167,8 @@ watch(
       <template #left-actions>
         <NuxtLink to="/admin/quan-ly-danh-muc/them-moi">
           <Button>
-            <PlusSquareIcon class="h-4 w-4" />
             Tạo mới
+            <PlusSquareIcon class="h-4 w-4" />
           </Button>
         </NuxtLink>
       </template>

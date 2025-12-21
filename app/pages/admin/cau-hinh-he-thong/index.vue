@@ -107,8 +107,8 @@ const deleteSetting = async (item: SettingItem) => {
 
     <NuxtLink to="/admin/cau-hinh-he-thong/them-moi">
       <Button>
-        <PlusSquareIcon class="h-4 w-4" />
         Tạo mới
+        <PlusSquareIcon class="h-4 w-4" />
       </Button>
     </NuxtLink>
 

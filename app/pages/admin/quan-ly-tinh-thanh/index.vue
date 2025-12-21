@@ -153,8 +153,8 @@ async function deleteItem(id: number) {
       <template #left-actions>
         <NuxtLink to="/admin/quan-ly-tinh-thanh/them-moi">
           <Button>
-            <PlusSquareIcon class="h-4 w-4" />
             Tạo mới
+            <PlusSquareIcon class="h-4 w-4" />
           </Button>
         </NuxtLink>
         <NuxtLink to="/admin/quan-ly-tinh-thanh/view">

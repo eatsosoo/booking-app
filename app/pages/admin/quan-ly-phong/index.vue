@@ -16,6 +16,7 @@ import type { SelectOption } from "~/types/booking";
 import DataTable from "~/components/common/data-table/DataTable.vue";
 import ActionDropdown from "~/components/common/data-table/ActionDropdown.vue";
 import { ROOM_STATUSES } from "~/constants";
+import RoomSearch from "~/components/common/form/RoomSearch.vue";
 
 definePageMeta({
   layout: "admin",
@@ -27,6 +28,10 @@ const { request } = useApi();
 // STATE
 const page = ref<number>(1);
 const search = ref<string>("");
+const propertiesType = ref<string>("");
+const region = ref<string>("");
+const province = ref<string>("");
+const district = ref<string>("");
 
 // Table states
 const sorting = ref<SortingState>([]);
@@ -40,10 +45,14 @@ const { data, refresh, pending } = await useAsyncData(
   "properties-list",
   () =>
     request<Properties[]>(
-      `/properties?page=${page.value}&search=${search.value}`
+      `/properties?page=${page.value}&search=${search.value}&property_types=${
+        propertiesType.value || ""
+      }&region=${region.value}&province=${province.value}&district=${
+        district.value
+      }`
     ),
   {
-    watch: [page, search],
+    watch: [page, search, propertiesType, region, province, district],
   }
 );
 
@@ -309,12 +318,20 @@ async function updateStatus(item: Properties) {
     });
   }
 }
+
+function handleSearch(event: any) {
+  console.log(event);
+  search.value = event.title;
+  propertiesType.value = event.property_types;
+  region.value = event.region;
+  province.value = event.province;
+  district.value = event.district;
+}
 </script>
 
 <template>
   <section>
     <h1 class="font-semibold text-2xl">Danh sách phòng</h1>
-
     <DataTable
       :data="rooms"
       :columns="columns"
@@ -325,6 +342,7 @@ async function updateStatus(item: Properties) {
       :expanded="expanded"
       :search-value="search"
       :loading="pending"
+      :show-search="false"
       search-placeholder="Tìm kiếm theo tiêu đề..."
       @update:sorting="sorting = $event"
       @update:column-filters="columnFilters = $event"
@@ -334,14 +352,17 @@ async function updateStatus(item: Properties) {
         console.log($event);
       "
       @update:expanded="expanded = $event"
-      @update:search="search = $event"
     >
       <!-- Left Actions Slot -->
       <template #left-actions>
+        <RoomSearch @search="handleSearch" />
+      </template>
+
+      <template #actions>
         <NuxtLink to="/admin/quan-ly-phong/them-moi">
-          <Button>
-            <PlusSquareIcon class="h-4 w-4" />
+          <Button variant="outline">
             Tạo mới
+            <PlusSquareIcon class="h-4 w-4" />
           </Button>
         </NuxtLink>
       </template>
