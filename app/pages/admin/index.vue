@@ -1,14 +1,6 @@
 <template>
   <section class="px-6 py-10 max-w-7xl mx-auto mt-4 min-h-[calc(100vh-415px)]">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div
-        v-for="(block, index) in blocks"
-        :key="index"
-        class="p-4 rounded-md border border-gray-300 w-full text-center hover:bg-primary hover:text-white transition-transform duration-300 hover:scale-105 shadow-sm"
-      >
-        <NuxtLink :to="block.url">{{ block.label }}</NuxtLink>
-      </div>
-    </div>
+    <p class="font-semibold text-2xl">Welcome to DyHome</p>
   </section>
 </template>
 
@@ -17,35 +9,4 @@ definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
-
-const blocks = [
-  // {
-  //   label: "Quản lý bài viết",
-  //   url: "/admin/quan-ly-bai-viet",
-  // },
-  // {
-  //   label: "Quản lý phòng",
-  //   url: "/admin/quan-ly-phong",
-  // },
-  // {
-  //   label: "Quản lý FAQs",
-  //   url: "/admin/quan-ly-faq",
-  // },
-  // {
-  //   label: "Quản lý dịch vụ",
-  //   url: "/admin/quan-ly-dich-vu",
-  // },
-  // {
-  //   label: "Quản lý dự án",
-  //   url: "/admin/quan-ly-danh-muc",
-  // },
-  // {
-  //   label: "Quản lý tỉnh thành",
-  //   url: "/admin/quan-ly-tinh-thanh",
-  // },
-  // {
-  //   label: "Cấu hình hệ thống",
-  //   url: "/admin/cau-hinh-he-thong",
-  // }
-];
 </script>

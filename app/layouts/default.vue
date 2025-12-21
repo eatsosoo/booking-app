@@ -1,5 +1,8 @@
 <template>
   <div>
+    <!-- ✅ Loading khi tải / chuyển trang -->
+    <AppLoading />
+
     <AppHeader>
       <AppMenu />
     </AppHeader>
@@ -25,6 +28,7 @@ import "vue-sonner/style.css";
 import { Toaster } from "@/components/ui/sonner";
 import Phone from "~/components/common/contact/Phone.vue";
 import Zalo from "~/components/common/contact/Zalo.vue";
+import AppLoading from "~/components/common/app/AppLoading.vue";
 
 const { baseInfo } = useSystemSetting();
 </script>
