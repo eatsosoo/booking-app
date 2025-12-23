@@ -345,6 +345,17 @@ const districtOptions = computed(() => {
         />
       </div>
 
+      <!-- Phụ phí theo người -->
+      <div>
+        <Label for="room" class="mb-2 ml-1">Phụ phí/1 người (VND)</Label>
+        <Input
+          id="room"
+          v-model="home.room"
+          type="number"
+          placeholder="Nhập số tiền..."
+        />
+      </div>
+
       <!-- Dịch vụ đi kèm -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Dịch vụ đi kèm</Label>

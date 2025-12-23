@@ -167,6 +167,20 @@ const columns: ColumnDef<Post>[] = [
       ),
   },
   {
+    accessorKey: "created_at",
+    header: "Ngày tạo",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        h(
+          "div",
+          { class: "capitalize" },
+          convertUTC(row.getValue("created_at"))
+        )
+      ),
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {

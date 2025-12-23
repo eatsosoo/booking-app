@@ -108,13 +108,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import Button from "./ui/button/Button.vue";
+import Button from "~/components/ui/button/Button.vue";
 import Checkbox from "@/components/ui/checkbox/Checkbox.vue";
 import { Input } from "@/components/ui/input";
 import type { Response, Service } from "~/types";
 import { BATHROOM_OPTIONS, BEDROOM_OPTIONS } from "~/constants";
 import { ChevronDown, ChevronUp } from "lucide-vue-next";
-import Label from "./ui/label/Label.vue";
+import Label from "~/components/ui/label/Label.vue";
 
 const props = defineProps({
   title: { type: String, default: "" },

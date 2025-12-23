@@ -88,7 +88,7 @@ const columns: ColumnDef<Booking>[] = [
       const info = booking.booking_info;
       return h(
         "div",
-        { class: "text-center" },
+        { class: "" },
         `${info.times.start_date} ${info.times.start_time}`
       );
     },
@@ -101,10 +101,24 @@ const columns: ColumnDef<Booking>[] = [
       const info = booking.booking_info;
       return h(
         "div",
-        { class: "text-center" },
+        { class: "" },
         `${info.times.end_date} ${info.times.end_time}`
       );
     },
+  },
+  {
+    accessorKey: "created_at",
+    header: "Ngày tạo booking",
+    cell: ({ row }) =>
+      h(
+        "div",
+        { class: "capitalize" },
+        h(
+          "div",
+          { class: "capitalize" },
+          convertUTC(row.getValue("created_at"))
+        )
+      ),
   },
   {
     id: "actions",

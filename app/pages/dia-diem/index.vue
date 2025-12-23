@@ -171,7 +171,7 @@ import Popover from "~/components/ui/popover/Popover.vue";
 import PopoverContent from "~/components/ui/popover/PopoverContent.vue";
 import PopoverTrigger from "~/components/ui/popover/PopoverTrigger.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
-import type { Pagination, Properties, Response } from "~/types";
+import type { PaginationType, Properties, Response } from "~/types";
 import { formatCurrency } from "~/utils/string-helper";
 
 useSeoMeta({
@@ -197,7 +197,7 @@ const bedRoomNum = computed(() => route.query.bed || "");
 const services = computed(() => route.query.services || "");
 
 const rooms = ref<Properties[]>([]);
-const paginate = ref<Pagination>({
+const paginate = ref<PaginationType>({
   current_page: 1,
   last_page: 1,
   per_page: 10,

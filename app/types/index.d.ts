@@ -61,6 +61,7 @@ export interface Properties {
   district: string;
   slug: string;
   is_published: 1 | 0;
+  room: string;
 }
 
 export interface Service {
