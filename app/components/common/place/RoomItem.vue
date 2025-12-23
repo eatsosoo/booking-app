@@ -103,6 +103,9 @@
           >
             {{ formatCurrency(room.per_month) }} / tháng
           </p>
+          <p v-if="Number(room.room)" :class="tagStyle" class="bg-green-500">
+            Phụ phí {{ formatCurrency(room.room) }} / người
+          </p>
         </div>
         <div class="mt-2">
           <NuxtLink :to="`/dia-diem/${room.id}`">
@@ -125,6 +128,7 @@ import Button from "~/components/ui/button/Button.vue";
 import Separator from "~/components/ui/separator/Separator.vue";
 import { ROOM_STATUSES } from "~/constants";
 import type { Properties } from "~/types";
+import { formatCurrency } from "~/utils/string-helper";
 
 const tagStyle =
   "text-white py-1 px-2 text-[14px] rounded-full font-semibold h-8";

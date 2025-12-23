@@ -1,12 +1,15 @@
 <template>
   <div>
     <section class="p-4">
-      <div class="flex items-center text-gray-600 space-x-2 py-4">
+      <div
+        class="flex items-center text-gray-600 space-x-2 py-4 w-7xl mx-auto px-8"
+      >
+        <MapPinHouse :size="18" class="mr-4" />
         <NuxtLink
           v-for="(item, index) in breadcrumb"
           :key="item.name"
           :to="item.url"
-          class="hover:underline font-semibold text-lg flex items-center"
+          class="hover:underline font-semibold text-lg flex items-center text-blue-950 cursor-pointer"
         >
           {{ item.name }}
           <ChevronRight
@@ -160,11 +163,13 @@
                     {{ formatCurrency(home.per_month) }}
                   </p>
                 </div>
-                <div>
+                <div v-if="Number(home.room)">
                   <p class="font-medium">Phụ phí</p>
                   <p class="font-semibold">
-                    <span class="text-orange-600">+ 200,000đ</span> / người
-                    (tính từ người thứ {{ home.guest + 1 }})
+                    <span class="text-orange-600"
+                      >+ {{ formatCurrency(home.room) }}</span
+                    >
+                    / người (tính từ người thứ {{ home.guest + 1 }})
                   </p>
                 </div>
               </div>
@@ -370,7 +375,7 @@ import { formatCurrency } from "~/utils/string-helper";
 import { toast } from "vue-sonner";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ChevronRight } from "lucide-vue-next";
+import { ChevronRight, MapPinHouse } from "lucide-vue-next";
 
 const route = useRoute();
 const id = route.params.slug;

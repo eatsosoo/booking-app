@@ -13,6 +13,11 @@ import type { Province } from "~/types";
 import { toast } from "vue-sonner";
 import DataTable from "~/components/common/data-table/DataTable.vue";
 import ActionDropdown from "~/components/common/data-table/ActionDropdown.vue";
+import MenuSearch from "~/components/common/form/MenuSearch.vue";
+import TooltipProvider from "~/components/ui/tooltip/TooltipProvider.vue";
+import Tooltip from "~/components/ui/tooltip/Tooltip.vue";
+import TooltipTrigger from "~/components/ui/tooltip/TooltipTrigger.vue";
+import TooltipContent from "~/components/ui/tooltip/TooltipContent.vue";
 
 definePageMeta({
   layout: "admin",
@@ -23,6 +28,10 @@ const { request } = useApi();
 // STATE
 const page = ref<number>(1);
 const search = ref<string>("");
+const propertiesType = ref<string>("");
+const region = ref<string>("");
+const province = ref<string>("");
+const district = ref<string>("");
 
 // Table states
 const sorting = ref<SortingState>([]);
@@ -35,9 +44,15 @@ const expanded = ref<ExpandedState>({});
 const { data, refresh, pending } = await useAsyncData(
   "menu-list",
   () =>
-    request<Province[]>(`/provinces?page=${page.value}&search=${search.value}`),
+    request<Province[]>(
+      `/provinces?page=${page.value}&search=${search.value}&&property_types=${
+        propertiesType.value || ""
+      }&region=${region.value}&province=${province.value}&district=${
+        district.value
+      }`
+    ),
   {
-    watch: [page, search],
+    watch: [page, search, propertiesType, region, province, district],
   }
 );
 
@@ -63,6 +78,7 @@ const columns: ColumnDef<Province>[] = [
         "div",
         { class: "capitalize" },
         (row.getValue("property_types") as Array<{ id: number; name: string }>)
+          .sort((a, b) => a.id - b.id)
           .map((type) => type.name)
           .join(" | ")
       ),
@@ -139,6 +155,14 @@ async function deleteItem(id: number) {
     });
   }
 }
+
+function handleSearch(event: any) {
+  search.value = event.title;
+  propertiesType.value = event.property_types;
+  region.value = event.region;
+  province.value = event.province;
+  district.value = event.district;
+}
 </script>
 
 <template>
@@ -155,6 +179,7 @@ async function deleteItem(id: number) {
       :expanded="expanded"
       :search-value="search"
       :loading="pending"
+      :show-search="false"
       search-placeholder="Tìm kiếm theo tiêu đề..."
       @update:sorting="sorting = $event"
       @update:column-filters="columnFilters = $event"
@@ -165,18 +190,40 @@ async function deleteItem(id: number) {
     >
       <!-- Left Actions Slot -->
       <template #left-actions>
-        <NuxtLink to="/admin/quan-ly-tinh-thanh/them-moi">
-          <Button>
-            Tạo mới
-            <PlusSquareIcon class="h-4 w-4" />
-          </Button>
-        </NuxtLink>
-        <NuxtLink to="/admin/quan-ly-tinh-thanh/view">
-          <Button variant="outline">
-            <Network class="h-4 w-4" />
-            Menu
-          </Button>
-        </NuxtLink>
+        <MenuSearch @search="handleSearch" />
+      </template>
+
+      <!-- Left Actions Slot -->
+      <template #actions>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger as-child>
+              <NuxtLink to="/admin/quan-ly-tinh-thanh/them-moi">
+                <Button variant="outline">
+                  <PlusSquareIcon class="h-4 w-4" />
+                </Button>
+              </NuxtLink>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Tạo menu mới</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger as-child>
+              <NuxtLink to="/admin/quan-ly-tinh-thanh/view">
+                <Button variant="outline">
+                  <Network class="h-4 w-4" />
+                </Button>
+              </NuxtLink>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Cây menu</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </template>
 
       <!-- Expanded Content Slot -->

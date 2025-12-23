@@ -57,6 +57,7 @@ const post = ref<PropertiesForm>({
   province: "",
   district: "",
   is_published: 1,
+  room: 0, // phụ phí
 });
 
 const { data: servicesData } = await useFetch<Response<Service[]>>(
@@ -352,6 +353,17 @@ const districtOptions = computed(() => {
         <Input
           id="per_month"
           v-model="post.per_month"
+          type="number"
+          placeholder="Nhập số tiền..."
+        />
+      </div>
+
+      <!-- Phụ phí theo người -->
+      <div>
+        <Label for="room" class="mb-2 ml-1">Phụ phí/1 người (VND)</Label>
+        <Input
+          id="room"
+          v-model="post.room"
           type="number"
           placeholder="Nhập số tiền..."
         />

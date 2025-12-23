@@ -334,7 +334,6 @@ async function updateStatus(item: Properties) {
 }
 
 function handleSearch(event: any) {
-  console.log(event);
   search.value = event.title;
   propertiesType.value = event.property_types;
   region.value = event.region;

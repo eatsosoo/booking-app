@@ -23,6 +23,7 @@ export type PropertiesForm = {
   province: string;
   district: string;
   is_published: 1 | 0;
+  room: number // phụ phí
 };
 
 export type PostForm = {
