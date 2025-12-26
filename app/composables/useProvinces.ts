@@ -55,16 +55,6 @@ export const useProvinces = () => {
       ) || []
   );
 
-  // Get province by slug
-  const getProvinceBySlug = (slug: string) => {
-    return provinces.value?.data.items.find((p) => p.slug === slug);
-  };
-
-  // Get province by name
-  const getProvinceByName = (name: string) => {
-    return provinces.value?.data.items.find((p) => p.name === name);
-  };
-
   // Get province by property id and region
   const getProvinces = (propertyId: number, region: string) => {
     if (!provinces.value) return [];
@@ -73,6 +63,19 @@ export const useProvinces = () => {
       .filter(
         (p) =>
           p.property_types.map((item) => item.id).includes(propertyId) &&
+          p.region === region
+      )
+      .map((el) => el.name);
+    return [...new Set(res)];
+  };
+
+  const getProvincesByIds = (propertyIds: number[], region: string) => {
+    if (!provinces.value) return [];
+    const records = provinces.value?.data.items;
+    const res = [...records]
+      .filter(
+        (p) =>
+          p.property_types.some((item) => propertyIds.includes(item.id)) &&
           p.region === region
       )
       .map((el) => el.name);
@@ -121,6 +124,24 @@ export const useProvinces = () => {
     return filtered;
   };
 
+  const getDistrictsByIds = (
+    propertyIds: number[],
+    region: string,
+    province: string
+  ) => {
+    if (!provinces.value) return [];
+    const records = provinces.value?.data.items;
+    const filtered = [...records]
+      .filter(
+        (p) =>
+          p.region === region &&
+          p.name === province &&
+          p.property_types.some((item) => propertyIds.includes(item.id))
+      )
+      .map((el) => el.district);
+    return filtered;
+  };
+
   const treeProvinces = computed(() => {
     return PROPERTY_TYPES.map((property) => ({
       ...property,
@@ -162,10 +183,10 @@ export const useProvinces = () => {
     error,
     refresh,
 
-    getProvinceBySlug,
-    getProvinceByName,
     getProvinces,
+    getProvincesByIds,
     getDistricts,
+    getDistrictsByIds,
     getProvinceAndDistrict,
   };
 };

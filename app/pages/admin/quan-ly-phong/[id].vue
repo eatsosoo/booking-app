@@ -30,7 +30,7 @@ definePageMeta({
 
 const { request } = useApi();
 const route = useRoute();
-const { getProvinces, getDistricts } = useProvinces();
+const { getProvincesByIds, getDistrictsByIds } = useProvinces();
 const id = route.params.id;
 
 const loading = ref<boolean>(false);
@@ -38,7 +38,7 @@ const multiSelected = reactive({
   property_types: [] as (string | number)[],
   services: [] as (string | number)[],
 });
-const roomTypeSelect = ref<number>(1);
+const roomTypeSelect = ref<number[]>([1]);
 const serviceOptions = ref<Option3[]>([]);
 
 /* -----------------------
@@ -63,7 +63,7 @@ const saveProperties = async () => {
       method: "PUT",
       body: {
         ...home.value,
-        property_types: [roomTypeSelect.value],
+        property_types: [...roomTypeSelect.value],
         services: multiSelected.services,
         slug: genSlug(home.value.name),
       },
@@ -84,9 +84,7 @@ const saveProperties = async () => {
 
 multiSelected.property_types = home.value.property_types.map((item) => item.id);
 multiSelected.services = home.value.services.map((item) => item.id);
-roomTypeSelect.value = home.value.property_types.map(
-  (item) => item.id
-)[0] as number;
+roomTypeSelect.value = home.value.property_types.map((item) => item.id);
 
 serviceOptions.value =
   servicesData.value?.data.items.map((service) => ({
@@ -95,10 +93,10 @@ serviceOptions.value =
   })) || [];
 
 const provinceOptions = computed(() => {
-  return getProvinces(roomTypeSelect.value, home.value.region);
+  return getProvincesByIds(roomTypeSelect.value, home.value.region);
 });
 const districtOptions = computed(() => {
-  return getDistricts(
+  return getDistrictsByIds(
     roomTypeSelect.value,
     home.value.region,
     home.value.province
@@ -120,7 +118,7 @@ const districtOptions = computed(() => {
       <!-- Loại hình -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
-        <Select v-model="roomTypeSelect">
+        <!-- <Select v-model="roomTypeSelect">
           <SelectTrigger class="w-full">
             <SelectValue placeholder="Chọn loại hình..." />
           </SelectTrigger>
@@ -136,7 +134,13 @@ const districtOptions = computed(() => {
               </SelectItem>
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> -->
+        <MultiSelect
+          v-model="roomTypeSelect"
+          :options="PROPERTY_TYPES"
+          placeholder="Chọn loại hình..."
+          class="w-64"
+        />
       </div>
 
       <!-- Address -->

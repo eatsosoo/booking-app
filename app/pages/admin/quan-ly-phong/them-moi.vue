@@ -29,9 +29,9 @@ definePageMeta({
   middleware: "auth",
 });
 
-const { getProvinces, getDistricts } = useProvinces();
+const { getProvincesByIds, getDistrictsByIds } = useProvinces();
 const serviceOptions = ref<Option[]>([]);
-const roomTypeSelect = ref<number>(1);
+const roomTypeSelect = ref<number[]>([1]);
 const post = ref<PropertiesForm>({
   name: "",
   description: "",
@@ -76,7 +76,7 @@ const savePost = async () => {
       body: {
         ...post.value,
         slug: genSlug(post.value.name),
-        property_types: [roomTypeSelect.value],
+        property_types: [...roomTypeSelect.value],
       },
     });
 
@@ -108,10 +108,10 @@ serviceOptions.value =
   })) || [];
 
 const provinceOptions = computed(() => {
-  return getProvinces(roomTypeSelect.value, post.value.region);
+  return getProvincesByIds(roomTypeSelect.value, post.value.region);
 });
 const districtOptions = computed(() => {
-  return getDistricts(
+  return getDistrictsByIds(
     roomTypeSelect.value,
     post.value.region,
     post.value.province
@@ -133,7 +133,7 @@ const districtOptions = computed(() => {
       <!-- Loại hình -->
       <div>
         <Label for="property_types" class="mb-2 ml-1">Loại hình</Label>
-        <Select v-model="roomTypeSelect">
+        <!-- <Select v-model="roomTypeSelect">
           <SelectTrigger class="w-full">
             <SelectValue placeholder="Chọn loại hình..." />
           </SelectTrigger>
@@ -149,7 +149,13 @@ const districtOptions = computed(() => {
               </SelectItem>
             </SelectGroup>
           </SelectContent>
-        </Select>
+        </Select> -->
+        <MultiSelect
+          v-model="roomTypeSelect"
+          :options="PROPERTY_TYPES"
+          placeholder="Chọn loại hình..."
+          class="w-64"
+        />
       </div>
 
       <!-- Address -->

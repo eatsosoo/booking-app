@@ -1,5 +1,64 @@
 import type { PaginationType } from "~/types";
 
+export enum ROLE {
+  OWNER = 1,
+  ADMIN = 2,
+  WRITER = 3,
+}
+
+export const PERMISSION = [
+  {
+    title: "Trang chủ",
+    url: "/",
+    permission: [ROLE.OWNER, ROLE.ADMIN, ROLE.WRITER],
+  },
+  {
+    title: "Bảng điều khiển",
+    url: "/admin",
+    permission: [ROLE.OWNER, ROLE.ADMIN, ROLE.WRITER],
+  },
+  {
+    title: "Đặt phòng của khách hàng",
+    url: "/admin/quan-ly-dat-phong",
+    permission: [ROLE.OWNER, ROLE.ADMIN],
+  },
+  {
+    title: "Cẩm nang",
+    url: "/admin/quan-ly-bai-viet",
+    permission: [ROLE.OWNER, ROLE.ADMIN, ROLE.WRITER],
+  },
+  {
+    title: "Phòng",
+    url: "/admin/quan-ly-phong",
+    permission: [ROLE.OWNER, ROLE.ADMIN],
+  },
+  {
+    title: "FAQs",
+    url: "/admin/quan-ly-faq",
+    permission: [ROLE.OWNER, ROLE.ADMIN],
+  },
+  {
+    title: "Dịch vụ",
+    url: "/admin/quan-ly-dich-vu",
+    permission: [ROLE.OWNER, ROLE.ADMIN],
+  },
+  // {
+  //   title: "Videos",
+  //   url: "/admin/videos",
+  //   icon: VideoIcon,
+  // },
+  {
+    title: "Các lựa chọn của Menu",
+    url: "/admin/quan-ly-tinh-thanh",
+    permission: [ROLE.OWNER, ROLE.ADMIN],
+  },
+  {
+    title: "Cấu hình hệ thống",
+    url: "/admin/cau-hinh-he-thong",
+    permission: [ROLE.OWNER, ROLE.ADMIN],
+  },
+];
+
 export const PUBLISHED_STATUSES = {
   0: "Không hiển thị",
   1: "Hiển thị",

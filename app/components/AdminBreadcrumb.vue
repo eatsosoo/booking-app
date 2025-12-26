@@ -4,8 +4,7 @@ import {
   BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbSeparator,
-  BreadcrumbLink,
-  BreadcrumbPage
+  BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 
 const { breadcrumbs } = useBreadcrumbs();
@@ -14,9 +13,14 @@ const { breadcrumbs } = useBreadcrumbs();
 <template>
   <Breadcrumb>
     <BreadcrumbList>
-      <BreadcrumbItem v-for="(item, index) in breadcrumbs" :key="index" class="text-lg">
+      <BreadcrumbItem
+        v-for="(item, index) in breadcrumbs"
+        :key="index"
+        class="text-lg"
+      >
         <template v-if="index < breadcrumbs.length - 1">
-          <BreadcrumbLink :href="item.to">{{ item.label }}</BreadcrumbLink>
+          <NuxtLink :to="item.to">{{ item.label }}</NuxtLink>
+          <!-- <BreadcrumbLink :href="item.to">{{ item.label }}</BreadcrumbLink> -->
           <BreadcrumbSeparator />
         </template>
 

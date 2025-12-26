@@ -102,7 +102,9 @@ const handleLogin = async () => {
 
     if (result.data.items.token) {
       const token = useCookie("token");
+      const role = useCookie("role");
       token.value = result.data.items.token;
+      role.value = result.data.items.user_id;
     }
 
     toast.success("Đăng nhập thành công!");
