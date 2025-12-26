@@ -54,7 +54,7 @@
                 />
               </div>
 
-              <Button class="mt-2 w-full md:w-auto">Gửi yêu cầu</Button>
+              <Button class="mt-2 w-full md:w-auto" :loading="loading" @click="sumbit">Gửi yêu cầu</Button>
             </CardContent>
           </Card>
         </div>
@@ -103,8 +103,43 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { toast } from "vue-sonner";
+import type { Response } from "~/types";
 
 const { baseInfo } = useSystemSetting();
-</script>
+const config = useRuntimeConfig();
+const formData = reactive({
+  name: "",
+  phone: "",
+  email: "",
+  subject: "",
+  message: "",
+})
+const loading = ref(false);
 
-<style scoped></style>
+const sumbit = async () => {
+  if (loading.value) return;
+  loading.value = true;
+
+  try {
+    await $fetch<Response<any>>(`${config.public.apiBase}/home/contact`, {
+      method: "POST",
+      body: formData,
+    });
+
+    // Hiển thị thông báo thành công
+    toast.success("Hỗ trợ!", {
+      description: "Thông tin hỗ trợ gửi thành công.",
+    });
+  } catch (err: any) {
+    toast.error("Lỗi!", {
+      description:
+        err?.data?.message ||
+        err?.message ||
+        "Có lỗi xảy ra, vui lòng thử lại!",
+    });
+  } finally {
+    loading.value = false;
+  }
+}
+</script>
