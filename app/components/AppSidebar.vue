@@ -109,10 +109,10 @@ const currentRoute = router.currentRoute;
                   'bg-primary text-white': currentRoute.path === item.url,
                 }"
               >
-                <a :href="item.url">
+                <NuxtLink :to="item.url">
                   <component :is="item.icon" />
                   <span>{{ item.title }}</span>
-                </a>
+                </NuxtLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
