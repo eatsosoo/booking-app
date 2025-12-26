@@ -228,7 +228,7 @@
       </div>
     </section>
 
-    <!-- <section class="bg-section">
+    <section class="bg-section">
       <div class="cus-container">
         <h2 class="home-head-2">Video & Mạng xã hội</h2>
         <div class="lg:px-24">
@@ -272,7 +272,7 @@
           </Swiper>
         </div>
       </div>
-    </section> -->
+    </section>
   </div>
 </template>
 

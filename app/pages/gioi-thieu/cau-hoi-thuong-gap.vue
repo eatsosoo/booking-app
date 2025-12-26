@@ -1,27 +1,3 @@
-<script setup lang="ts">
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { ref } from "vue";
-import { useFetch } from "#app";
-import type { Faq, Response } from "~/types";
-
-const config = useRuntimeConfig();
-const faqs = ref<Faq[]>([]);
-
-const { data, error } = await useFetch<Response<Faq[]>>(
-  `${config.public.apiBase}/home/faqs`
-);
-if (error.value) {
-  console.error("Failed to fetch FAQs:", error.value);
-} else {
-  faqs.value = data.value?.data.items ?? [];
-}
-</script>
-
 <template>
   <div>
     <section class="w-full">
@@ -45,7 +21,7 @@ if (error.value) {
       <!-- Title -->
       <div class="text-center space-y-3">
         <p class="text-muted-foreground text-lg italic">
-          Tìm câu trả lời nhanh cho những thắc mắc phổ biến về BookingApp.
+          {{ baseInfo.FAQ_TITLE }}
         </p>
       </div>
 
@@ -65,3 +41,34 @@ if (error.value) {
     </section>
   </div>
 </template>
+
+<script setup lang="ts">
+  import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+  } from "@/components/ui/accordion";
+  import { ref } from "vue";
+  import { useFetch } from "#app";
+  import type { Faq, Response } from "~/types";
+  
+  useSeoMeta({
+    title: "Câu Hỏi Thường Gặp - Booking",
+    description:
+      "Tìm câu trả lời cho những câu hỏi phổ biến về dịch vụ đặt phòng của chúng tôi.",
+  });
+  
+  const config = useRuntimeConfig();
+  const { baseInfo } = useSystemSetting();
+  const faqs = ref<Faq[]>([]);
+  
+  const { data, error } = await useFetch<Response<Faq[]>>(
+    `${config.public.apiBase}/home/faqs`
+  );
+  if (error.value) {
+    console.error("Failed to fetch FAQs:", error.value);
+  } else {
+    faqs.value = data.value?.data.items ?? [];
+  }
+  </script>

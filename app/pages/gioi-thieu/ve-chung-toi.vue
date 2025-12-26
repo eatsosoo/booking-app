@@ -1,17 +1,3 @@
-<script setup lang="ts">
-import { Button } from "@/components/ui/button";
-const { aboutPageSetting } = useSystemSetting();
-
-const aboutPageHtml = ref<string>(aboutPageSetting.value.setting_value);
-
-watch(
-  () => aboutPageSetting.value,
-  (newVal) => {
-    aboutPageHtml.value = newVal.setting_value;
-  }
-);
-</script>
-
 <template>
   <section class="w-full">
     <!-- Hero section -->
@@ -46,3 +32,23 @@ watch(
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+  import { Button } from "@/components/ui/button";
+  
+  useSeoMeta({
+    title: "Về Chúng Tôi - Booking",
+    description:
+      "Tìm hiểu về chúng tôi và cam kết mang đến trải nghiệm đặt phòng tốt nhất cho bạn.",
+  });
+  
+  const { aboutPageSetting } = useSystemSetting();
+  const aboutPageHtml = ref<string>(aboutPageSetting.value.setting_value);
+  
+  watch(
+    () => aboutPageSetting.value,
+    (newVal) => {
+      aboutPageHtml.value = newVal.setting_value;
+    }
+  );
+</script>

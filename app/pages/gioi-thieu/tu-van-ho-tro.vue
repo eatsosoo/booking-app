@@ -12,7 +12,7 @@
         <h1 class="text-4xl md:text-5xl font-bold text-white">Tư vấn & Hỗ trợ</h1>
       </div>
     </div>
-    <div class="max-w-5xl mx-auto py-10 px-4">
+    <div class="max-w-7xl mx-auto py-10 px-4">
       <p class="text-gray-600 mb-8">
         Chúng tôi luôn sẵn sàng hỗ trợ bạn trong quá trình đặt phòng.
       </p>
@@ -68,8 +68,8 @@
                 Nếu bạn cần hỗ trợ nhanh, hãy liên hệ trực tiếp:
               </p>
               <ul class="space-y-2 text-gray-700">
-                <li>📞 Hotline: <strong>0987 654 321</strong></li>
-                <li>📧 Email: <strong>support@booking.com</strong></li>
+                <li>📞 Hotline: <strong>{{ baseInfo.PHONE }}</strong></li>
+                <li>📧 Email: <strong>{{ baseInfo.EMAIL }}</strong></li>
                 <li>⏰ Thời gian: 08:00 - 22:00 mỗi ngày</li>
               </ul>
             </CardContent>
@@ -103,6 +103,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+
+const { baseInfo } = useSystemSetting();
 </script>
 
 <style scoped></style>

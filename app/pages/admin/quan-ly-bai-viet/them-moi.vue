@@ -45,6 +45,11 @@ const { request } = useApi();
 const { getProvinces, getDistricts } = useProvinces();
 
 const savePost = async () => {
+  if (!post.value.image) {
+    toast.error("Vui lòng chọn ảnh Thumbnail!");
+    return;
+  }
+
   const titleNotify = "Tạo bài viết mới";
   loading.value = true;
   try {

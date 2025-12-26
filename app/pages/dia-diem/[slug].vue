@@ -377,6 +377,11 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ChevronRight, MapPinHouse } from "lucide-vue-next";
 
+useSeoMeta({
+  title: "Chi tiết phòng",
+  description: "Xem chi tiết và đặt phòng tại DyHome.",
+});
+
 const route = useRoute();
 const id = route.params.slug;
 const config = useRuntimeConfig();
