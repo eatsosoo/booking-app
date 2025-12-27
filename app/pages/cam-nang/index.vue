@@ -106,7 +106,7 @@ import {
   InputGroupInput,
   InputGroupAddon,
 } from "~/components/ui/input-group";
-import type { Category, Post, Response } from "~/types";
+import type { Post, Response } from "~/types";
 
 useSeoMeta({
   title: "Cẩm nang căn hộ",
@@ -117,7 +117,11 @@ const config = useRuntimeConfig();
 const page = ref(1);
 const search = ref("");
 let debounce: string | number | NodeJS.Timeout | undefined = undefined;
-
+const res = await fetch(
+  `${config.public.apiBase}/home/posts?page=1&per_page=100`
+);
+const res1 = await res.json();
+console.log(res1.data.items);
 // =========================
 // FETCH API
 // =========================

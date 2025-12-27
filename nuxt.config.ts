@@ -77,18 +77,8 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
-    urls: async () => {
-      const res = await fetch(
-        `${process.env.NUXT_API_BASE_URL}/home/posts?page=1&per_page=100`
-      );
-      const posts = await res.json();
-
-      return posts.map((post: any) => ({
-        loc: `/cam-nang/${post.slug}`,
-        lastmod: post.updated_at,
-        priority: 0.8,
-      }));
-    },
+    exclude: ["/admin/**", "/login", "/register", "/forgot-password"],
+    sources: ["/api/__sitemap__/urls"],
   },
 
   veeValidate: {

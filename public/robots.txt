@@ -1,2 +1,7 @@
-User-Agent: *
-Disallow:
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /login
+
+Sitemap: https://dyhome.vn/sitemap.xml
