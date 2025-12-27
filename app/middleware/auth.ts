@@ -16,7 +16,8 @@ export default defineNuxtRouteMiddleware((to) => {
 
   // 3️⃣ Check quyền truy cập
   const isAllow = PERMISSION.some(
-    (item) => item.url === to.path && item.permission.includes(role.value ?? "")
+    (item) =>
+      to.path.includes(item.url) && item.permission.includes(role.value ?? "")
   );
 
   // 4️⃣ Không có quyền → 403 hoặc redirect
