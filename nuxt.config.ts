@@ -12,6 +12,7 @@ export default defineNuxtConfig({
       apiBase: process.env.NUXT_API_BASE_URL, // client + server
       mediaUrl: process.env.NUXT_MEDIA_BASE_URL,
       tinymceKey: process.env.NUXT_TINYMCE_API_KEY,
+      siteUrl: process.env.NUXT_SITE_URL,
     },
   },
 
@@ -22,12 +23,12 @@ export default defineNuxtConfig({
         {
           name: "description",
           content:
-            "Trang web đặt chỗ trực tuyến nhanh chóng, dễ sử dụng, tối ưu SEO.",
+            "Đặt homestay, căn hộ, khách sạn nhanh chóng tại Ocean Park & Hà Nội, khu vực Miền Bắc, Miền Nam, Miền Trung. Giá tốt, vị trí đẹp, tiện ích đầy đủ, hỗ trợ 24/7.",
         },
         {
           name: "keywords",
           content:
-            "booking, đặt phòng, du lịch, khách sạn, nhà nghỉ, tour, resort",
+            "booking, đặt phòng, du lịch, khách sạn, nhà nghỉ, tour, resort, đặt homestay, homestay ocean park, đặt phòng hà nội, căn hộ cho thuê, khách sạn giá tốt",
         },
         {
           property: "og:title",
@@ -40,7 +41,21 @@ export default defineNuxtConfig({
         { property: "og:type", content: "website" },
         { name: "robots", content: "index, follow" },
       ],
-      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+      link: [
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "32x32",
+          href: "/favicon-32x32.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "16x16",
+          href: "/favicon-16x16.png",
+        },
+      ],
       htmlAttrs: {
         lang: "vi",
       },

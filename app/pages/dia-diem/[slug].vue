@@ -419,6 +419,7 @@ useSeoMeta({
     "Xem chi tiết và đặt phòng tại DyHome.",
   ogImage: home.value.thumbnail,
   ogUrl: `${config.public.siteUrl}/dia-diem/${id}`,
+  ogType: "website",
   twitterCard: "summary_large_image",
   twitterTitle: `${home.value.name} - DyHome`,
   twitterDescription:

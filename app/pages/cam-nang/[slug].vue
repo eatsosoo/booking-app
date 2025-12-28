@@ -85,6 +85,7 @@ useSeoMeta({
   ogTitle: post.value?.title,
   ogDescription: (post.value?.description || "").substring(0, 150) + "...",
   ogImage: post.value?.image,
+  ogUrl: `${config.public.siteUrl}/cam-nang/${slug}`,
   ogType: "article",
   twitterCard: "summary_large_image",
   twitterTitle: post.value?.title,
