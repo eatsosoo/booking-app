@@ -51,6 +51,10 @@ import Button from "~/components/ui/button/Button.vue";
 import { LogOutIcon } from "lucide-vue-next";
 import TooltipContent from "~/components/ui/tooltip/TooltipContent.vue";
 
+useHead({
+  meta: [{ name: "robots", content: "noindex, nofollow" }],
+});
+
 const token = useCookie("token");
 const logout = () => {
   token.value = null;
