@@ -109,8 +109,20 @@ import {
 import type { Post, Response } from "~/types";
 
 useSeoMeta({
-  title: "Cẩm nang căn hộ",
-  description: "Trang đặt phòng khách sạn, resort, homestay chuẩn SEO.",
+  title: "Cẩm nang căn hộ - Hướng dẫn và kinh nghiệm về căn hộ",
+  description:
+    "Cẩm nang căn hộ với các bài viết hữu ích về hướng dẫn, kinh nghiệm, và mẹo về căn hộ. Tìm kiếm thông tin cần thiết để lựa chọn căn hộ phù hợp.",
+  ogTitle: "Cẩm nang căn hộ - Hướng dẫn và kinh nghiệm",
+  ogDescription:
+    "Cẩm nang căn hộ với các bài viết hữu ích về hướng dẫn, kinh nghiệm, và mẹo về căn hộ.",
+  ogType: "website",
+  ogImage: "/banner.avif",
+  keywords:
+    "cẩm nang căn hộ, hướng dẫn căn hộ, kinh nghiệm căn hộ, lựa chọn căn hộ",
+});
+
+definePageMeta({
+  layout: "default",
 });
 
 const config = useRuntimeConfig();

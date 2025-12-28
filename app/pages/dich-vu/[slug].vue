@@ -80,9 +80,17 @@ const service = ref<Service>(data.value?.data.items || ({} as Service));
 
 // SEO meta
 useSeoMeta({
-  title: () => service.value?.title,
-  description: () =>
+  title: service.value?.title,
+  description: (service.value?.description || "").substring(0, 150) + "...",
+  ogTitle: service.value?.title,
+  ogDescription: (service.value?.description || "").substring(0, 150) + "...",
+  ogImage: service.value?.image,
+  ogUrl: window.location.href,
+  twitterCard: "summary_large_image",
+  twitterTitle: service.value?.title,
+  twitterDescription:
     (service.value?.description || "").substring(0, 150) + "...",
+  twitterImage: service.value?.image,
 });
 
 const shareFacebook = () => {

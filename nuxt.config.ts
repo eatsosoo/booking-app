@@ -36,7 +36,8 @@ export default defineNuxtConfig({
         },
         {
           property: "og:description",
-          content: "Website booking hiện đại, thân thiện với SEO và người dùng",
+          content:
+            "DyHome – Nền tảng booking homestay, khách sạn tiện lợi, đặt chỗ nhanh, giao diện thân thiện",
         },
         { property: "og:type", content: "website" },
         { name: "robots", content: "index, follow" },
@@ -64,11 +65,6 @@ export default defineNuxtConfig({
 
   // eslint: {
   //   lintOnStart: false,
-  // },
-
-  // content: {
-  //   // nếu sau này bạn có bài blog hoặc bài giới thiệu SEO
-  //   documentDriven: false,
   // },
 
   image: {

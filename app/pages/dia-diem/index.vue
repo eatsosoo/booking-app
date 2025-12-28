@@ -174,12 +174,6 @@ import Separator from "~/components/ui/separator/Separator.vue";
 import type { PaginationType, Properties, Response } from "~/types";
 import { formatCurrency } from "~/utils/string-helper";
 
-useSeoMeta({
-  title: "Danh sách phòng",
-  description:
-    "Danh sách các phòng khách sạn đẹp, giá tốt, đặt ngay tại DyHome.",
-});
-
 const route = useRoute();
 const config = useRuntimeConfig();
 const router = useRouter();
@@ -215,6 +209,17 @@ const { data } = await useAsyncData(
   () => $fetch<Response<Properties[]>>(apiUrl.value),
   { watch: [apiUrl] }
 );
+
+useSeoMeta({
+  title: `Tìm kiếm "${keyword.value}" - Phòng cho thuê giá tốt | DyHome`,
+  description: `Tìm được ${paginate.value.total} địa điểm cho thuê tại "${keyword.value}". Phòng khách sạn, căn hộ, nhà nguyên căn giá tốt, chất lượng cao. Đặt ngay tại DyHome.`,
+  ogTitle: `Tìm kiếm "${keyword.value}" - DyHome`,
+  ogDescription: `Khám phá ${paginate.value.total} phòng cho thuê tại "${keyword.value}" với giá cạnh tranh và dịch vụ tốt nhất.`,
+  ogImage: "/banner1.jpg",
+  twitterCard: "summary_large_image",
+  robots: "index, follow",
+  keywords: `${keyword.value}, phòng cho thuê, khách sạn, căn hộ, nhà nguyên căn, DyHome`,
+});
 
 const updatePage = (newPage: number) => {
   router.push({
