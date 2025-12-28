@@ -80,8 +80,16 @@ const post = ref<Post>(data.value?.data.items || ({} as Post));
 
 // SEO meta
 useSeoMeta({
-  title: () => post.value?.title,
-  description: () => (post.value?.description || "").substring(0, 150) + "...",
+  title: post.value?.title,
+  description: (post.value?.description || "").substring(0, 150) + "...",
+  ogTitle: post.value?.title,
+  ogDescription: (post.value?.description || "").substring(0, 150) + "...",
+  ogImage: post.value?.image,
+  ogType: "article",
+  twitterCard: "summary_large_image",
+  twitterTitle: post.value?.title,
+  twitterDescription: (post.value?.description || "").substring(0, 150) + "...",
+  twitterImage: post.value?.image,
 });
 
 const shareFacebook = () => {

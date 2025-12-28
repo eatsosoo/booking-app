@@ -145,7 +145,7 @@
             </div>
           </div>
 
-          <NuxtLink :to="`/dia-diem/${room.id}`" class="mb-2">
+          <NuxtLink :to="`/dia-diem/${room.slug}`" class="mb-2">
             <Button variant="link" class="text-md underline"> Xem thêm </Button>
           </NuxtLink>
         </div>

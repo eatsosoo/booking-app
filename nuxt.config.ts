@@ -77,7 +77,15 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
-    exclude: ["/admin/**", "/login", "/register", "/forgot-password"],
+    exclude: [
+      "/admin/**",
+      "/login",
+      "/register",
+      "/forgot-password",
+      "/cam-on",
+      "/xac-nhan",
+      "/dia-diem",
+    ],
     sources: ["/api/__sitemap__/urls"],
   },
 

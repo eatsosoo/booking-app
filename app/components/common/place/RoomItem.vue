@@ -108,7 +108,7 @@
           </p>
         </div>
         <div class="mt-2">
-          <NuxtLink :to="`/dia-diem/${room.id}`">
+          <NuxtLink :to="`/dia-diem/${room.slug}`">
             <Button variant="outline">
               Xem thêm
               <LogOutIcon />

@@ -377,11 +377,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ChevronRight, MapPinHouse } from "lucide-vue-next";
 
-useSeoMeta({
-  title: "Chi tiết phòng",
-  description: "Xem chi tiết và đặt phòng tại DyHome.",
-});
-
 const route = useRoute();
 const id = route.params.slug;
 const config = useRuntimeConfig();
@@ -409,6 +404,29 @@ const apiUrl = `${config.public.apiBase}/home/properties/${id}`;
 const { data } = await useFetch<Response<Properties>>(apiUrl);
 
 home.value = data.value?.data.items || ({} as Properties);
+
+/* -----------------------
+   SEO META
+------------------------- */
+useSeoMeta({
+  title: `${home.value.name} - DyHome`,
+  description:
+    home.value.content?.substring(0, 160) ||
+    "Xem chi tiết và đặt phòng tại DyHome.",
+  ogTitle: `${home.value.name} - DyHome`,
+  ogDescription:
+    home.value.content?.substring(0, 160) ||
+    "Xem chi tiết và đặt phòng tại DyHome.",
+  ogImage: home.value.thumbnail,
+  ogUrl: `${config.public.siteUrl}/dia-diem/${id}`,
+  twitterCard: "summary_large_image",
+  twitterTitle: `${home.value.name} - DyHome`,
+  twitterDescription:
+    home.value.content?.substring(0, 160) ||
+    "Xem chi tiết và đặt phòng tại DyHome.",
+  twitterImage: home.value.thumbnail,
+  keywords: `${home.value.name}, ${home.value.district}, ${home.value.province}, phòng cho thuê, ${home.value.property_types?.[0]?.name}`,
+});
 
 const amountGuest = ref<number>(home.value.guest);
 const homeVal = home.value;
