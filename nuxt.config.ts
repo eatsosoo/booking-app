@@ -8,6 +8,13 @@ export default defineNuxtConfig({
   ssr: true,
 
   runtimeConfig: {
+    db: {
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+    },
     public: {
       apiBase: process.env.NUXT_API_BASE_URL, // client + server
       mediaUrl: process.env.NUXT_MEDIA_BASE_URL,
@@ -90,12 +97,12 @@ export default defineNuxtConfig({
   sitemap: {
     exclude: [
       "/admin/**",
+      "/dich-vu",
+      "/dia-diem",
+      "/tim-kiem",
       "/login",
-      "/register",
-      "/forgot-password",
       "/cam-on",
       "/xac-nhan",
-      "/dia-diem",
     ],
     sources: ["/api/__sitemap__/urls"],
   },

@@ -1,7 +1,9 @@
-import { db } from "../../db/mysql";
+import { getDB } from "../../db/mysql";
 import { getQuery, createError } from "h3";
 
 export default defineEventHandler(async (event) => {
+  const db = getDB();
+
   try {
     const query = getQuery(event);
     const search = query.search?.toString() || "";

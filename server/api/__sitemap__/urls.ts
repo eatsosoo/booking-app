@@ -3,10 +3,7 @@ import { defineSitemapEventHandler } from "#imports";
 export default defineSitemapEventHandler(async () => {
   // URLs from your API are already encoded
   const res = await $fetch<any>(
-    "https://api-gateway.dyhome.vn/api/home/posts?page=1&per_page=20"
-  );
-  const res2 = await $fetch<any>(
-    "https://api-gateway.dyhome.vn/api/home/properties?page=1&per_page=20"
+    "https://api-gateway.dyhome.vn/api/home/posts?page=1&per_page=30"
   );
 
   const urls = res.data.items;
@@ -15,10 +12,5 @@ export default defineSitemapEventHandler(async () => {
     _encoded: true,
   }));
 
-  const urls2 = res2.data.items;
-  const sitemap2 = urls2.map((item) => ({
-    loc: `https://dyhome.vn/dia-diem/${item.slug}`,
-    _encoded: true,
-  }));
-  return [...sitemap1, ...sitemap2];
+  return [...sitemap1];
 });

@@ -1,6 +1,8 @@
-import { db } from "../../db/mysql";
+import { getDB } from "../../db/mysql";
 
 export default defineEventHandler(async () => {
+  const db = getDB();
+
   const [rows] = await db.query(`
     SELECT
       p.id,

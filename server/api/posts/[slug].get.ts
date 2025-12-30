@@ -1,6 +1,7 @@
-import { db } from "../../db/mysql";
+import { getDB } from "../../db/mysql";
 
 export default defineEventHandler(async (event) => {
+  const db = getDB();
   try {
     const slug = getRouterParam(event, "slug");
 
