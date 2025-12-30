@@ -1,36 +1,21 @@
 import { PROPERTY_TYPES, REGIONS } from "~/constants";
-import type { Province, Response } from "~/types";
-
-type TreeProvinceType = {
-  label: string;
-  value: string;
-  regions: RegionType[];
-};
-
-type RegionType = {
-  region: string;
-  provinces: string[];
-};
+import type { InternalAPI, Province } from "~/types";
 
 export const useProvinces = () => {
-  const config = useRuntimeConfig();
   const {
     data: provinces,
     pending,
     refresh,
     error,
-  } = useFetch<Response<Province[]>>(
-    `${config.public.apiBase}/home/provinces?per_page=100`,
-    {
-      server: true,
-      lazy: true,
-    }
-  );
+  } = useFetch<InternalAPI<Province[]>>(`/api/provinces`, {
+    server: true,
+    lazy: true,
+  });
 
   // Memoized computed properties for performance
   const northernProvinces = computed(
     () =>
-      provinces.value?.data.items.filter(
+      provinces.value?.data.filter(
         (p) =>
           p.region.includes("Bắc") ||
           ["Miền Bắc", "Bắc", "Bắc Bộ"].includes(p.region)
@@ -39,7 +24,7 @@ export const useProvinces = () => {
 
   const centralProvinces = computed(
     () =>
-      provinces.value?.data.items.filter(
+      provinces.value?.data.filter(
         (p) =>
           p.region.includes("Trung") ||
           ["Miền Trung", "Trung", "Trung Bộ"].includes(p.region)
@@ -48,7 +33,7 @@ export const useProvinces = () => {
 
   const southernProvinces = computed(
     () =>
-      provinces.value?.data.items.filter(
+      provinces.value?.data.filter(
         (p) =>
           p.region.includes("Nam") ||
           ["Miền Nam", "Nam", "Nam Bộ"].includes(p.region)
@@ -58,7 +43,7 @@ export const useProvinces = () => {
   // Get province by property id and region
   const getProvinces = (propertyId: number, region: string) => {
     if (!provinces.value) return [];
-    const records = provinces.value?.data.items;
+    const records = provinces.value?.data;
     const res = [...records]
       .filter(
         (p) =>
@@ -71,7 +56,7 @@ export const useProvinces = () => {
 
   const getProvincesByIds = (propertyIds: number[], region: string) => {
     if (!provinces.value) return [];
-    const records = provinces.value?.data.items;
+    const records = provinces.value?.data;
     const res = [...records]
       .filter(
         (p) =>
@@ -85,7 +70,7 @@ export const useProvinces = () => {
   const getProvinceAndDistrict = (propertyId: number, region: string) => {
     if (!provinces.value) return {};
 
-    const records = provinces.value.data.items;
+    const records = provinces.value.data;
 
     const filtered = records.filter(
       (p) =>
@@ -112,7 +97,7 @@ export const useProvinces = () => {
     province: string
   ) => {
     if (!provinces.value) return [];
-    const records = provinces.value?.data.items;
+    const records = provinces.value?.data;
     const filtered = [...records]
       .filter(
         (p) =>
@@ -130,7 +115,7 @@ export const useProvinces = () => {
     province: string
   ) => {
     if (!provinces.value) return [];
-    const records = provinces.value?.data.items;
+    const records = provinces.value?.data;
     const filtered = [...records]
       .filter(
         (p) =>

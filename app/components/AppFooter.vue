@@ -113,7 +113,7 @@
         <h3 class="text-white font-semibold mb-4 text-lg">Liên hệ</h3>
         <ul class="space-y-3 text-sm">
           <li class="flex items-start space-x-2">
-            <LocationEdit />
+            <LocationEdit size="18" />
             <span>{{ baseInfo.ADDRESS }}</span>
           </li>
           <li class="flex items-center space-x-2 item">
@@ -162,5 +162,14 @@ import {
   Youtube,
 } from "lucide-vue-next";
 
-const { baseInfo } = useSystemSetting();
+// const { baseInfo } = useSystemSetting();
+const baseInfo = {
+  FACEBOOK: "https://facebook.com/dyhome",
+  INSTAGRAM: "https://instagram.com/dyhome",
+  YOUTUBE: "https://youtube.com/dyhome",
+  TWITTER: "https://twitter.com/dyhome",
+  ADDRESS: "Hoàn Kiếm - Từ Liêm - Hà Nội",
+  PHONE: "0898098596",
+  EMAIL: "dyhome.official.vn@gmail.com",
+};
 </script>

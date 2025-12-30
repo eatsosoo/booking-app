@@ -50,6 +50,7 @@
     "date-fns": "^4.1.0",
     "eslint": "^9.39.1",
     "lucide-vue-next": "^0.553.0",
+    "mysql2": "^3.16.0",
     "nuxt": "^4.2.1",
     "reka-ui": "^2.6.1",
     "shadcn-nuxt": "2.3.2",

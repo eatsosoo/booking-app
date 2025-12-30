@@ -158,6 +158,16 @@ export interface Response<T> {
   };
 }
 
+export interface InternalAPI<T> {
+  data: T;
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
 export interface Auth {
   user_id: number;
   token_type: string;

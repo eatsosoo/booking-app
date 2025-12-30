@@ -82,11 +82,13 @@
         <div v-html="homePageHtml"></div>
       </div>
       <div v-else>
-        <EditorCustom
-          :model-value="homePageHtml"
-          :menu-bar="false"
-          @update:model-value="homePageHtml = $event"
-        />
+        <ClientOnly>
+          <EditorCustom
+            :model-value="homePageHtml"
+            :menu-bar="false"
+            @update:model-value="homePageHtml = $event"
+          />
+        </ClientOnly>
       </div>
     </section>
 
@@ -132,147 +134,141 @@
     </section>
 
     <!-- Cẩm nang -->
-    <section>
-      <div class="cus-container">
-        <h2 class="home-head-2">Tin tức & Cẩm nang du lịch</h2>
-        <div class="lg:px-24 relative">
-          <Swiper
-            :modules="[Pagination, Autoplay, Grid, Navigation]"
-            :navigation="{
-              prevEl: '.swiper-prev',
-              nextEl: '.swiper-next',
-            }"
-            :autoplay="{ delay: 5000 }"
-            :loop="true"
-            :grid="{ rows: 2 }"
-            :slides-per-view="1"
-            :space-between="20"
-            :breakpoints="{
-              640: {
-                slidesPerView: 1,
-              },
-              768: {
-                slidesPerView: 1,
-                grid: {
-                  rows: 2,
+    <ClientOnly>
+      <section>
+        <div class="cus-container">
+          <h2 class="home-head-2">Tin tức & Cẩm nang du lịch</h2>
+          <div class="lg:px-24 relative">
+            <Swiper
+              :modules="[Pagination, Autoplay, Grid, Navigation]"
+              :navigation="{
+                prevEl: '.swiper-prev',
+                nextEl: '.swiper-next',
+              }"
+              :autoplay="{ delay: 5000 }"
+              :loop="true"
+              :grid="{ rows: 2 }"
+              :slides-per-view="1"
+              :space-between="20"
+              :breakpoints="{
+                640: {
+                  slidesPerView: 1,
                 },
-              },
-              1024: {
-                slidesPerView: 2,
-                grid: {
-                  rows: 2,
+                768: {
+                  slidesPerView: 1,
+                  grid: {
+                    rows: 2,
+                  },
                 },
-              },
-            }"
-            class="mySwiper"
-          >
-            <SwiperSlide v-for="index in 12" :key="index">
-              <div class="rounded-md shadow-md flex h-[200px] border">
-                <div class="h-[200px] w-[200px] shrink-0">
-                  <img
-                    :src="posts[index] ? posts[index].image : posts[0]?.image"
-                    :alt="`anh-slider-bai-viet-${index + 1}`"
-                    class="h-full w-[200px] object-cover rounded-l-md"
+                1024: {
+                  slidesPerView: 2,
+                  grid: {
+                    rows: 2,
+                  },
+                },
+              }"
+              class="mySwiper"
+            >
+              <SwiperSlide v-for="post in posts" :key="post.id">
+                <div class="rounded-md shadow-md flex h-[200px] border">
+                  <div class="h-[200px] w-[200px] shrink-0">
+                    <img
+                      :src="post.image"
+                      :alt="`${post.slug}`"
+                      class="h-full w-[200px] object-cover rounded-l-md"
+                    />
+                  </div>
+                  <div class="p-2 flex-1 mx-2">
+                    <p class="text-2xl font-semibold line-clamp-1">
+                      {{ post.title }}
+                    </p>
+                    <p class="flex text-gray-500 text-[14px] my-2">
+                      <Calendar :size="20" class="mr-2" />{{
+                        convertUTC(post.created_at)
+                      }}
+                    </p>
+                    <p class="text-[14px] line-clamp-4">
+                      {{ post.description }}
+                    </p>
+                    <p class="">
+                      <NuxtLink
+                        :to="`/cam-nang/${post.slug}`"
+                        class="underline text-blue-950 font-semibold"
+                        >Xem thêm</NuxtLink
+                      >
+                    </p>
+                  </div>
+                </div>
+              </SwiperSlide>
+            </Swiper>
+
+            <!-- Prev -->
+            <button
+              class="hidden lg:block swiper-prev absolute left-8 top-1/2 -translate-y-1/2 z-10 bg-primary shadow rounded-lg p-2"
+              aria-label="Bài viết trước"
+            >
+              <ChevronLeft :size="30" />
+            </button>
+
+            <!-- Next -->
+            <button
+              class="hidden lg:block swiper-next absolute right-8 top-1/2 -translate-y-1/2 z-10 bg-primary shadow rounded-lg p-2"
+              aria-label="Bài viết tiếp theo"
+            >
+              <ChevronRight :size="30" />
+            </button>
+          </div>
+        </div>
+      </section>
+    </ClientOnly>
+
+    <ClientOnly>
+      <section class="bg-section">
+        <div class="cus-container">
+          <h2 class="home-head-2">Video & Mạng xã hội</h2>
+          <div class="lg:px-24">
+            <Swiper
+              :modules="[Pagination, Autoplay, Grid]"
+              :pagination="{ clickable: true }"
+              :loop="true"
+              :slides-per-view="1"
+              :space-between="20"
+              :breakpoints="{
+                640: {
+                  slidesPerView: 1,
+                },
+                768: {
+                  slidesPerView: 1,
+                },
+                1024: {
+                  slidesPerView: 2,
+                },
+                1280: {
+                  slidesPerView: 3,
+                },
+              }"
+              class="video-slide"
+            >
+              <SwiperSlide
+                v-for="video in videos"
+                :key="`video-${video.id}`"
+                class="shadow-md rounded-xl video-slide-h"
+              >
+                <div>
+                  <iframe
+                    v-if="getTikTokEmbedUrl(video.setting_value)"
+                    :src="getTikTokEmbedUrl(video.setting_value)"
+                    class="w-full aspect-9/16 rounded-xl"
+                    frameborder="0"
+                    allowfullscreen
                   />
                 </div>
-                <div class="p-2 flex-1 mx-2">
-                  <p class="text-2xl font-semibold line-clamp-1">
-                    {{ posts[index] ? posts[index].title : posts[0]?.title }}
-                  </p>
-                  <p class="flex text-gray-500 text-[14px] my-2">
-                    <Calendar :size="20" class="mr-2" />{{
-                      convertUTC(
-                        posts[index]?.created_at ||
-                          posts[0]?.created_at ||
-                          nowDate()
-                      )
-                    }}
-                  </p>
-                  <p class="text-[14px] line-clamp-4">
-                    {{
-                      posts[index]
-                        ? posts[index].description
-                        : posts[0]?.description
-                    }}
-                  </p>
-                  <p class="">
-                    <NuxtLink
-                      :to="`/cam-nang/${
-                        posts[index] ? posts[index].slug : posts[0]?.slug
-                      }`"
-                      class="underline text-blue-950 font-semibold"
-                      >Xem thêm</NuxtLink
-                    >
-                  </p>
-                </div>
-              </div>
-            </SwiperSlide>
-          </Swiper>
-
-          <!-- Prev -->
-          <button
-            class="hidden lg:block swiper-prev absolute left-8 top-1/2 -translate-y-1/2 z-10 bg-primary shadow rounded-lg p-2"
-            aria-label="Bài viết trước"
-          >
-            <ChevronLeft :size="30" />
-          </button>
-
-          <!-- Next -->
-          <button
-            class="hidden lg:block swiper-next absolute right-8 top-1/2 -translate-y-1/2 z-10 bg-primary shadow rounded-lg p-2"
-            aria-label="Bài viết tiếp theo"
-          >
-            <ChevronRight :size="30" />
-          </button>
+              </SwiperSlide>
+            </Swiper>
+          </div>
         </div>
-      </div>
-    </section>
-
-    <section class="bg-section">
-      <div class="cus-container">
-        <h2 class="home-head-2">Video & Mạng xã hội</h2>
-        <div class="lg:px-24">
-          <Swiper
-            :modules="[Pagination, Autoplay, Grid]"
-            :pagination="{ clickable: true }"
-            :loop="true"
-            :slides-per-view="1"
-            :space-between="20"
-            :breakpoints="{
-              640: {
-                slidesPerView: 1,
-              },
-              768: {
-                slidesPerView: 1,
-              },
-              1024: {
-                slidesPerView: 2,
-              },
-              1280: {
-                slidesPerView: 3,
-              },
-            }"
-            class="video-slide"
-          >
-            <SwiperSlide
-              v-for="video in videos"
-              :key="`video-${video.id}`"
-              class="shadow-md rounded-xl video-slide-h"
-            >
-              <div>
-                <iframe
-                  v-if="getTikTokEmbedUrl(video.setting_value)"
-                  :src="getTikTokEmbedUrl(video.setting_value)"
-                  class="w-full aspect-9/16 rounded-xl"
-                  frameborder="0"
-                  allowfullscreen
-                />
-              </div>
-            </SwiperSlide>
-          </Swiper>
-        </div>
-      </div>
-    </section>
+      </section>
+    </ClientOnly>
   </div>
 </template>
 
@@ -291,7 +287,7 @@ import {
   nowDate,
 } from "~/utils/string-helper";
 import Button from "~/components/ui/button/Button.vue";
-import type { Post, Response, SystemSetting } from "~/types";
+import type { InternalAPI, Post, Response, SystemSetting } from "~/types";
 import { toast } from "vue-sonner";
 
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -328,9 +324,13 @@ const { homePageSetting, videos, baseInfo, regionImages } = useSystemSetting();
 const token = useCookie("token");
 const { request } = useApi();
 
-const config = useRuntimeConfig();
-const { data } = await useFetch<Response<Post[]>>(
-  `${config.public.apiBase}/home/posts`
+const { data } = await useFetch<InternalAPI<Post[]>>(
+  `/api/posts?page=1&limit=20`,
+  {
+    server: true,
+    lazy: false,
+    immediate: true,
+  }
 );
 
 const homePageHtml = ref<string>(homePageSetting.value.setting_value);
@@ -338,7 +338,7 @@ const enableEditor = ref<boolean>(false);
 const btnText = ref<string>("Chỉnh sửa");
 const updating = ref<boolean>(false);
 const showActions = ref<boolean>(true);
-const posts = ref<Post[]>(data.value?.data.items || []);
+const posts = ref<Post[]>(data.value?.data || []);
 
 const updateHomePage = async () => {
   updating.value = true;

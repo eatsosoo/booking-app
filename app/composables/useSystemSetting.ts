@@ -1,4 +1,4 @@
-import type { Response, SettingItem } from "~/types";
+import type { InternalAPI, SettingItem } from "~/types";
 
 type RegionCardType = {
   key: number;
@@ -11,7 +11,6 @@ type RegionCardType = {
 };
 
 export const useSystemSetting = () => {
-  const config = useRuntimeConfig();
   const properties = [
     { id: 1, code: "VILLA", title: "Villa" },
     { id: 2, code: "HOMESTAY", title: "Homestay" },
@@ -29,16 +28,13 @@ export const useSystemSetting = () => {
     pending,
     refresh,
     error,
-  } = useFetch<Response<SettingItem[]>>(
-    `${config.public.apiBase}/home/settings?per_page=1000`,
-    {
-      server: true,
-      lazy: true,
-    }
-  );
+  } = useFetch<InternalAPI<SettingItem[]>>(`/api/settings`, {
+    server: true,
+    lazy: true,
+  });
 
   const homePageSetting = computed(() => {
-    const res = settings.value?.data.items || [];
+    const res = settings.value?.data || [];
     return (
       res.find((item) => item.setting_key === "HOME_PAGE") || {
         id: 0,
@@ -49,7 +45,7 @@ export const useSystemSetting = () => {
   });
 
   const aboutPageSetting = computed(() => {
-    const res = settings.value?.data.items || [];
+    const res = settings.value?.data || [];
     return (
       res.find((item) => item.setting_key === "ABOUT_PAGE") || {
         id: 0,
@@ -60,7 +56,7 @@ export const useSystemSetting = () => {
   });
 
   const videos = computed(() => {
-    const res = settings.value?.data.items || [];
+    const res = settings.value?.data || [];
     return res.filter((item) => item.setting_key === "video_tiktok");
   });
 
@@ -76,9 +72,9 @@ export const useSystemSetting = () => {
       "YOUTUBE",
       "INSTAGRAM",
       "BANNER",
-      "FAQ_TITLE"
+      "FAQ_TITLE",
     ];
-    const res = settings.value?.data.items || [];
+    const res = settings.value?.data || [];
     const filtered = res.filter((item) => baseKeys.includes(item.setting_key));
     return Object.fromEntries(
       filtered.map((item) => [item.setting_key, item.setting_value])
@@ -86,7 +82,7 @@ export const useSystemSetting = () => {
   });
 
   const regionImages = computed(() => {
-    const res = settings.value?.data.items || [];
+    const res = settings.value?.data || [];
     const arr: RegionCardType[] = [];
     properties.forEach((el) => {
       arr.push({

@@ -62,7 +62,7 @@
 import { useRoute } from "vue-router";
 import { useFetch } from "#app";
 import { Calendar, Facebook, Twitter } from "lucide-vue-next";
-import type { Post, Response } from "~/types";
+import type { InternalAPI, Post, Response } from "~/types";
 import { convertUTC } from "~/utils/string-helper";
 
 const route = useRoute();
@@ -73,10 +73,12 @@ const slug = route.params.slug;
 const apiUrl = `${config.public.apiBase}/home/posts/${slug}`;
 
 // Fetch detail post
-const { data, pending, error } = await useFetch<Response<Post>>(apiUrl);
+const { data, pending, error } = await useFetch<InternalAPI<Post>>(
+  `/api/posts/${slug}`
+);
 
 // Extract data (chuẩn API của cậu: data.data)
-const post = ref<Post>(data.value?.data.items || ({} as Post));
+const post = ref<Post>(data.value?.data || ({} as Post));
 
 // SEO meta
 useSeoMeta({

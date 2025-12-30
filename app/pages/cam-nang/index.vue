@@ -53,8 +53,8 @@
           <!-- Pagination -->
           <PaginationPage
             class="mt-6"
-            :page="pagination.current_page"
-            :total-pages="pagination.last_page"
+            :page="pagination.page"
+            :total-pages="pagination.totalPages"
             @change="goToPage"
           />
         </div>
@@ -73,24 +73,6 @@
               </InputGroupAddon>
             </InputGroup>
           </div>
-
-          <!-- <div class="p-4 bg-white">
-            <h2 class="text-2xl font-semibold">Danh mục dự án</h2>
-
-            <ul class="mt-4 space-y-2">
-              <li
-                v-for="(cat, idx) in categories"
-                :key="idx"
-                class="border-b border-gray-200 pb-2"
-              >
-                <span
-                  class="font-semibold inline-block hover:text-primary hover:underline transition-all hover:-translate-y-1 text-gray-600"
-                >
-                  {{ cat.name }}
-                </span>
-              </li>
-            </ul>
-          </div> -->
         </aside>
       </div>
     </section>
@@ -106,7 +88,7 @@ import {
   InputGroupInput,
   InputGroupAddon,
 } from "~/components/ui/input-group";
-import type { Post, Response } from "~/types";
+import type { InternalAPI, Post } from "~/types";
 
 useSeoMeta({
   title: "Cẩm nang căn hộ - Hướng dẫn và kinh nghiệm về căn hộ",
@@ -125,7 +107,6 @@ definePageMeta({
   layout: "default",
 });
 
-const config = useRuntimeConfig();
 const page = ref(1);
 const search = ref("");
 let debounce: string | number | NodeJS.Timeout | undefined = undefined;
@@ -134,27 +115,19 @@ let debounce: string | number | NodeJS.Timeout | undefined = undefined;
 // FETCH API
 // =========================
 const apiUrl = computed(
-  () =>
-    `${config.public.apiBase}/home/posts?page=${page.value}&search=${search.value}`
+  () => `/api/posts?page=${page.value}&search=${search.value}`
 );
 
-const { data } = await useFetch<Response<Post[]>>(apiUrl, {
+const { data } = await useFetch<InternalAPI<Post[]>>(apiUrl, {
   server: true,
   lazy: false,
   immediate: true,
 });
 
-const posts = computed(() => data.value?.data.items ?? []);
+const posts = computed(() => data.value?.data ?? []);
 const pagination = computed(
-  () => data.value?.result?.pagination ?? { current_page: 1, last_page: 1 }
+  () => data.value?.pagination ?? { page: 1, totalPages: 1 }
 );
-
-// const { data: projectData } = await useFetch<Response<Category[]>>(`${config.public.apiBase}/home/categories?page=1&per_page=12`, {
-//   server: true,
-//   lazy: false,
-//   immediate: true,
-// });
-// const categories = ref<Category[]>(projectData.value?.data.items ?? [])
 
 // Format date
 const formatDate = (dateStr: string) => {

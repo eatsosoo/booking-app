@@ -146,6 +146,11 @@ export default defineNuxtConfig({
 
   routeRules: {
     "/admin/**": { ssr: false },
+    "/cam-nang/**": { ssr: true },
+    "/dich-vu/**": { ssr: false },
+    "/dia-diem/**": { ssr: false },
+    "/gioi-thieu/**": { ssr: false },
+    "/tim-kiem/**": { ssr: false },
   },
 
   image: {
