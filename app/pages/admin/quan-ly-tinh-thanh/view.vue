@@ -270,7 +270,6 @@ const columns: ColumnDef<Properties>[] = [
       @update:column-visibility="columnVisibility = $event"
       @update:row-selection="
         rowSelection = $event;
-        console.log($event);
       "
       @update:expanded="expanded = $event"
       @update:search="search = $event"

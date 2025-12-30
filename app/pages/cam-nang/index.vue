@@ -129,11 +129,7 @@ const config = useRuntimeConfig();
 const page = ref(1);
 const search = ref("");
 let debounce: string | number | NodeJS.Timeout | undefined = undefined;
-const res = await fetch(
-  `${config.public.apiBase}/home/posts?page=1&per_page=100`
-);
-const res1 = await res.json();
-console.log(res1.data.items);
+
 // =========================
 // FETCH API
 // =========================

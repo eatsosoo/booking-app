@@ -226,7 +226,7 @@ const errorMessage = CODES[errorCode] || CODES.default;
 useHead({
   title: `${
     errorCode === "default" ? "Error" : errorCode
-  } - ${errorMessage} | DYHOME`,
+  } - ${errorMessage}`,
   meta: [
     {
       name: "description",

@@ -211,7 +211,7 @@ const { data } = await useAsyncData(
 );
 
 useSeoMeta({
-  title: `Tìm kiếm "${keyword.value}" - Phòng cho thuê giá tốt | DyHome`,
+  title: `Tìm kiếm "${keyword.value}" - Phòng cho thuê giá tốt`,
   description: `Tìm được ${paginate.value.total} địa điểm cho thuê tại "${keyword.value}". Phòng khách sạn, căn hộ, nhà nguyên căn giá tốt, chất lượng cao. Đặt ngay tại DyHome.`,
   ogTitle: `Tìm kiếm "${keyword.value}" - DyHome`,
   ogDescription: `Khám phá ${paginate.value.total} phòng cho thuê tại "${keyword.value}" với giá cạnh tranh và dịch vụ tốt nhất.`,

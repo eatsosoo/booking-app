@@ -362,7 +362,6 @@ function handleSearch(event: any) {
       @update:column-visibility="columnVisibility = $event"
       @update:row-selection="
         rowSelection = $event;
-        console.log($event);
       "
       @update:expanded="expanded = $event"
     >

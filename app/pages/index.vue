@@ -304,7 +304,7 @@ import EditorCustom from "~/components/common/editor/EditorCustom.vue";
 
 useSeoMeta({
   // --- BASIC ---
-  title: "Trang chủ | DYHOME - Đặt phòng khách sạn, resort giá tốt",
+  title: "Trang chủ - Đặt phòng khách sạn, resort giá tốt",
   description:
     "Nền tảng đặt phòng khách sạn, resort, homestay dễ sử dụng. So sánh giá tốt nhất, đặt phòng nhanh chóng, thanh toán an toàn.",
 
