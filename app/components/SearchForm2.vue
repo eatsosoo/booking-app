@@ -13,16 +13,34 @@ import {
 import { PROPERTY_TYPES } from "~/constants";
 import Button from "./ui/button/Button.vue";
 
+const props = defineProps({
+  propertyTypes: {
+    type: String,
+    default: "",
+  },
+  region: {
+    type: String,
+    default: "",
+  },
+  province: {
+    type: String,
+    default: "",
+  },
+  district: {
+    type: String,
+    default: "",
+  },
+});
 const { getProvinces, getDistricts } = useProvinces();
 
 /* -----------------------
     STATE
 ------------------------- */
 const params = reactive({
-  property_types: null,
-  region: "",
-  province: "",
-  district: "",
+  property_types: parseInt(props.propertyTypes),
+  region: props.region,
+  province: props.province,
+  district: props.district,
 });
 const page = ref<number>(1);
 
@@ -40,11 +58,11 @@ const url = computed(
 );
 
 const provinceOptions = computed(() => {
-  if (!params.property_types) return []
+  if (!params.property_types) return [];
   return getProvinces(params.property_types, params.region);
 });
 const districtOptions = computed(() => {
-  if (!params.property_types) return []
+  if (!params.property_types) return [];
   return getDistricts(params.property_types, params.region, params.province);
 });
 </script>

@@ -55,6 +55,39 @@
 
       <article v-html="post.content"></article>
     </div>
+
+    <!-- Related posts -->
+    <div v-if="relatedPosts.length" class="mt-14">
+      <h2 class="text-2xl font-bold mb-6">Bài viết gợi ý</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <NuxtLink
+          v-for="item in relatedPosts"
+          :key="item.id"
+          :to="`/cam-nang/${item.slug}`"
+          class="group rounded-xl overflow-hidden border hover:shadow-lg transition"
+        >
+          <NuxtImg
+            :src="item.image"
+            :alt="item.title"
+            class="h-40 w-full object-cover group-hover:scale-105 transition"
+          />
+
+          <div class="p-4">
+            <h3
+              class="font-semibold line-clamp-2 group-hover:text-primary transition"
+            >
+              {{ item.title }}
+            </h3>
+
+            <div class="text-sm text-gray-500 mt-2 flex items-center gap-1">
+              <Calendar class="w-3 h-3" />
+              {{ convertUTC(item.created_at) }}
+            </div>
+          </div>
+        </NuxtLink>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -62,15 +95,12 @@
 import { useRoute } from "vue-router";
 import { useFetch } from "#app";
 import { Calendar, Facebook, Twitter } from "lucide-vue-next";
-import type { InternalAPI, Post, Response } from "~/types";
+import type { InternalAPI, Post } from "~/types";
 import { convertUTC } from "~/utils/string-helper";
 
 const route = useRoute();
 const config = useRuntimeConfig();
 const slug = route.params.slug;
-
-// API URL
-const apiUrl = `${config.public.apiBase}/home/posts/${slug}`;
 
 // Fetch detail post
 const { data, pending, error } = await useFetch<InternalAPI<Post>>(
@@ -112,8 +142,16 @@ const shareTwitter = () => {
     "_blank"
   );
 };
-</script>
 
-<style>
-@import "~/assets/css/reverse-format.css";
-</style>
+const { data: relatedData } = await useFetch<InternalAPI<Post[]>>(
+  `/api/posts`,
+  {
+    query: {
+      limit: 4,
+      exclude: slug,
+    },
+  }
+);
+
+const relatedPosts = computed(() => relatedData.value?.data || []);
+</script>

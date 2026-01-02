@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const [rows]: any = await db.query(
-      "SELECT * FROM posts WHERE slug = ? LIMIT 1",
+      "SELECT * FROM posts WHERE slug = ? AND is_published = 1 LIMIT 1",
       [slug]
     );
 

@@ -16,7 +16,12 @@
     </section>
 
     <section class="w-full px-6 pt-10 max-w-7xl mx-auto mt-4">
-      <SearchForm2 />
+      <SearchForm2
+        :property-types="property_types"
+        :region="region"
+        :province="province"
+        :district="district"
+      />
     </section>
 
     <section class="w-full px-6 py-10 max-w-7xl mx-auto mt-4">
@@ -24,11 +29,24 @@
       <div v-else-if="error">Có lỗi xảy ra</div>
       <div v-else>
         <!-- Header -->
-        <h1 class="text-4xl font-bold text-blue-950">DANH SÁCH PHÒNG</h1>
-        <p class="text-gray-600 mt-1">
-          Kết quả hiển thị cho
-          <span class="font-semibold">{{ paginate.total }} phòng</span>
-        </p>
+        <div class="flex justify-between">
+          <div>
+            <h1 class="text-4xl font-bold text-blue-950">DANH SÁCH PHÒNG</h1>
+            <p class="text-gray-600 mt-1">
+              Kết quả hiển thị cho
+              <span class="font-semibold">{{ paginate.total }} phòng</span>
+            </p>
+          </div>
+          <div class="flex space-x-2">
+            <div v-for="option in FILTER_ROOMS" :key="option.label" class="">
+              <Button
+                :variant="option.value === bedrooms ? 'default' : 'outline'"
+                @click="updateBedrooms(option.value)"
+                >{{ option.label }}</Button
+              >
+            </div>
+          </div>
+        </div>
 
         <!-- Room List -->
         <div v-if="province" class="mt-10 space-y-8">
@@ -115,6 +133,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/grid";
 import { Pagination, Autoplay, Grid } from "swiper/modules";
+import Button from "~/components/ui/button/Button.vue";
+import { FILTER_ROOMS } from "~/constants";
 
 const config = useRuntimeConfig();
 const route = useRoute();
@@ -139,6 +159,7 @@ const province = computed(() => route.query.province || "");
 const district = computed(() => route.query.district || "");
 const property_types = computed(() => route.query.property_types || "");
 const guest = computed(() => route.query.guest || "");
+const bedrooms = computed(() => route.query.bedrooms || "");
 
 const regionMenus = computed(() => {
   if (!property_types.value || !region.value) return {};
@@ -160,11 +181,12 @@ const apiParams = computed(() => ({
   province: province.value || undefined,
   district: district.value || undefined,
   guest: guest.value || undefined,
+  bed: bedrooms.value || undefined,
 }));
 
 const { data, pending, error } = await useAsyncData(
   () =>
-    `places-list-${page.value}_${perPage.value}_${property_types.value}_${region.value}_${province.value}_${district.value}`,
+    `places-list-${page.value}_${perPage.value}_${property_types.value}_${region.value}_${province.value}_${district.value}_${guest.value}_${bedrooms.value}`,
   () =>
     $fetch<Response<Properties[]>>(`${config.public.apiBase}/home/properties`, {
       params: apiParams.value,
@@ -188,6 +210,13 @@ const updateFilter = (newProvince: string, newDistrict: string) => {
   router.push({
     query: { ...route.query, province: newProvince, district: newDistrict },
   });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+const updateBedrooms = (bedroomCount: string) => {
+  const query = { ...route.query, bedrooms: bedroomCount, page: 1 };
+  router.push({ query });
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 };

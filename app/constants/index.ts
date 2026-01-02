@@ -99,6 +99,25 @@ export const PROPERTY_TYPES = [
   },
 ] as const;
 
+export const FILTER_ROOMS = [
+  {
+    label: "Tất cả",
+    value: "",
+  },
+  {
+    label: "Căn hộ 1 PN",
+    value: "1,1",
+  },
+  {
+    label: "Căn hộ 2 PN",
+    value: "2,2",
+  },
+  {
+    label: "Căn hộ 3 PN",
+    value: "3,3",
+  },
+];
+
 export const REGIONS = ["Miền Bắc", "Miền Trung", "Miền Nam"] as const;
 
 export const MORNING_TIMES = [

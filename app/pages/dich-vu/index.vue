@@ -47,7 +47,7 @@
             <p class="">
               {{ formatCurrency(parseInt(service.price)) }}
             </p>
-            <NuxtLink :to="`/dich-vu/${service.id}`" class="hover:underline"
+            <NuxtLink :to="`/dich-vu/${service.slug}`" class="hover:underline"
               >Xem thêm</NuxtLink
             >
           </div>
