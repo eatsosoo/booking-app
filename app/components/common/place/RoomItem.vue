@@ -25,13 +25,14 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Images -->
       <div class="grid grid-cols-2 gap-1 h-78">
-        <NuxtImg
+        <img
           :src="room.thumbnail"
+          :alt="`${room.slug}-thumbnail`"
           class="object-cover w-full h-78 transition-transform duration-300 hover:scale-105 border border-gray-200"
         />
         <div class="grid grid-cols-2 grid-rows-2 gap-1 overflow-hidden">
           <template v-for="index in 4" :key="index">
-            <NuxtImg
+            <img
               v-if="room.gallery[index]"
               :src="room.gallery[index]"
               :alt="`${room.slug}-galerry-${index}`"

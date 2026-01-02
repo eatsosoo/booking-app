@@ -25,7 +25,7 @@
             :key="item.id"
             class="flex flex-col md:flex-row border-b border-gray-300 py-6 gap-4"
           >
-            <NuxtImg
+            <img
               :src="`${item.image}`"
               :alt="item.title"
               class="w-full md:w-72 h-48 object-cover rounded-md transition-transform duration-300 hover:scale-105 shadow-sm"
