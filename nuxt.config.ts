@@ -162,5 +162,6 @@ export default defineNuxtConfig({
 
   image: {
     domains: [process.env.NUXT_API_SUBDOMAIN || ""],
+    provider: 'none'
   },
 });

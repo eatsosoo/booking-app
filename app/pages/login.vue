@@ -35,13 +35,6 @@
             <Checkbox v-model="remember" />
             <span>Ghi nhớ đăng nhập</span>
           </label>
-
-          <NuxtLink
-            to="/forgot-password"
-            class="text-primary hover:underline text-sm"
-          >
-            Quên mật khẩu?
-          </NuxtLink>
         </div>
 
         <Button type="submit" :loading="loading" class="w-full">
