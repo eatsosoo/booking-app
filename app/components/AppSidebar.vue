@@ -9,6 +9,7 @@ import {
   MonitorCloud,
   ChartNoAxesCombinedIcon,
   LandmarkIcon,
+  VideoIcon,
 } from "lucide-vue-next";
 import {
   Sidebar,
@@ -68,11 +69,12 @@ const items = [
     icon: MonitorCloud,
     permission: [ROLE.OWNER, ROLE.ADMIN],
   },
-  // {
-  //   title: "Videos",
-  //   url: "/admin/videos",
-  //   icon: VideoIcon,
-  // },
+  {
+    title: "Videos",
+    url: "/admin/videos",
+    icon: VideoIcon,
+    permission: [ROLE.OWNER, ROLE.ADMIN],
+  },
   {
     title: "Các lựa chọn của Menu",
     url: "/admin/quan-ly-tinh-thanh",

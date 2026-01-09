@@ -222,53 +222,10 @@
       </section>
     </ClientOnly>
 
-    <ClientOnly>
-      <section class="bg-section">
-        <div class="cus-container">
-          <h2 class="home-head-2">Video & Mạng xã hội</h2>
-          <div class="lg:px-24">
-            <Swiper
-              :modules="[Pagination, Autoplay, Grid]"
-              :pagination="{ clickable: true }"
-              :loop="true"
-              :slides-per-view="1"
-              :space-between="20"
-              :breakpoints="{
-                640: {
-                  slidesPerView: 1,
-                },
-                768: {
-                  slidesPerView: 1,
-                },
-                1024: {
-                  slidesPerView: 2,
-                },
-                1280: {
-                  slidesPerView: 3,
-                },
-              }"
-              class="video-slide"
-            >
-              <SwiperSlide
-                v-for="video in videos"
-                :key="`video-${video.id}`"
-                class="shadow-md rounded-xl video-slide-h"
-              >
-                <div>
-                  <iframe
-                    v-if="getTikTokEmbedUrl(video.setting_value)"
-                    :src="getTikTokEmbedUrl(video.setting_value)"
-                    class="w-full aspect-9/16 rounded-xl"
-                    frameborder="0"
-                    allowfullscreen
-                  />
-                </div>
-              </SwiperSlide>
-            </Swiper>
-          </div>
-        </div>
-      </section>
-    </ClientOnly>
+    <VideoSlider
+      v-if="sliderVid.length > 0"
+      :urls="sliderVid"
+    />
   </div>
 </template>
 
@@ -282,12 +239,10 @@ import {
 } from "lucide-vue-next";
 import {
   formatTelNumber,
-  getTikTokEmbedUrl,
   convertUTC,
-  nowDate,
 } from "~/utils/string-helper";
 import Button from "~/components/ui/button/Button.vue";
-import type { InternalAPI, Post, Response, SystemSetting } from "~/types";
+import type { InternalAPI, Post, Response, SystemSetting, Video } from "~/types";
 import { toast } from "vue-sonner";
 
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -297,6 +252,7 @@ import "swiper/css/grid";
 import { Pagination, Autoplay, Grid, Navigation } from "swiper/modules";
 import RegionCard from "~/components/common/RegionCard.vue";
 import EditorCustom from "~/components/common/editor/EditorCustom.vue";
+import VideoSlider from "~/components/common/VideoSlider.vue";
 
 useSeoMeta({
   // --- BASIC ---
@@ -320,7 +276,8 @@ useSeoMeta({
   twitterImage: "https://dyhome.com/og-image.png",
 });
 
-const { homePageSetting, videos, baseInfo, regionImages } = useSystemSetting();
+const { homePageSetting, baseInfo, regionImages } = useSystemSetting();
+const config = useRuntimeConfig();
 const token = useCookie("token");
 const { request } = useApi();
 
@@ -333,12 +290,22 @@ const { data } = await useFetch<InternalAPI<Post[]>>(
   }
 );
 
+const { data: videos } = await useFetch<Response<Video[]>>(
+  `${config.public.apiBase}/home/videos`,
+  {
+    server: false,
+  }
+);
+
 const homePageHtml = ref<string>(homePageSetting.value.setting_value);
 const enableEditor = ref<boolean>(false);
 const btnText = ref<string>("Chỉnh sửa");
 const updating = ref<boolean>(false);
 const showActions = ref<boolean>(true);
 const posts = ref<Post[]>(data.value?.data || []);
+const sliderVid = ref<string[]>(
+  videos.value?.data.items.map((video) => video.url) || []
+);
 
 const updateHomePage = async () => {
   updating.value = true;
@@ -392,13 +359,5 @@ onMounted(() => {
 .mySwiper {
   width: 100%;
   height: 440px;
-}
-.video-slide {
-  width: 100%;
-  height: 800px;
-  border-radius: 16px;
-}
-.video-slide-h {
-  height: 769px !important;
 }
 </style>

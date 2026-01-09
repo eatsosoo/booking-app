@@ -68,6 +68,12 @@ const columns: ColumnDef<Video>[] = [
     enableSorting: false,
   },
   {
+    accessorKey: "created_at",
+    header: "Ngày tạo",
+    cell: ({ row }) =>
+      h("div", { class: "capitalize" }, convertUTC(row.getValue("created_at"))),
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
@@ -75,6 +81,7 @@ const columns: ColumnDef<Video>[] = [
       return h(ActionDropdown, {
         itemId: post.id,
         editLink: `/admin/videos/${post.id}`,
+        showEdit: false,
         onDelete: () => deleteItem(post.id),
         onCopy: () => {
           navigator.clipboard.writeText(post.id.toString());

@@ -4,8 +4,8 @@ import Input from "~/components/ui/input/Input.vue";
 import Button from "~/components/ui/button/Button.vue";
 import type { Video } from "~/types";
 import Label from "~/components/ui/label/Label.vue";
-import Textarea from "~/components/ui/textarea/Textarea.vue";
 import { toast } from "vue-sonner";
+import UploadVideo from "~/components/common/UploadVideo.vue";
 
 definePageMeta({
   layout: "admin",
@@ -60,21 +60,13 @@ const saveVideo = async () => {
       <!-- Question -->
       <div>
         <Label for="title" class="mb-2 ml-1">Tiêu đề</Label>
-        <Input
-          id="title"
-          v-model="video.name"
-          placeholder="Nhập tiêu đề..."
-        />
+        <Input id="title" v-model="video.name" placeholder="Nhập tiêu đề..." />
       </div>
 
       <!-- Answer -->
       <div>
         <Label for="url" class="mb-2 ml-1">URL</Label>
-        <Textarea
-          id="url"
-          v-model="video.url"
-          placeholder="Nhập url..."
-        />
+        <UploadVideo @uploaded="video.url = $event" />
       </div>
     </div>
 
