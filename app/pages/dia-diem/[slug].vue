@@ -207,7 +207,13 @@
               />
             </h3>
 
-            <Tabs default-value="morning">
+            <Tabs
+              :default-value="
+                AFTERNOON_TIMES.includes(times.start_time)
+                  ? 'afternoon'
+                  : 'morning'
+              "
+            >
               <TabsList>
                 <TabsTrigger value="morning"> Sáng </TabsTrigger>
                 <TabsTrigger value="afternoon"> Chiều </TabsTrigger>
@@ -255,7 +261,13 @@
               />
             </h3>
 
-            <Tabs default-value="morning">
+            <Tabs
+              :default-value="
+                AFTERNOON_TIMES.includes(times.end_time)
+                  ? 'afternoon'
+                  : 'morning'
+              "
+            >
               <TabsList>
                 <TabsTrigger value="morning"> Sáng </TabsTrigger>
                 <TabsTrigger value="afternoon"> Chiều </TabsTrigger>
@@ -383,6 +395,8 @@ const config = useRuntimeConfig();
 const minDate = nowDate();
 const current = nowDateTime();
 
+const infoOrder = JSON.parse(sessionStorage.getItem("order") || "{}");
+
 /* -----------------------
    STATE
 ------------------------- */
@@ -391,10 +405,10 @@ const rentType = ref<"base_hours" | "per_day" | "per_night" | "per_month">(
 );
 const home = ref<Properties>({} as Properties);
 const times = reactive({
-  start_date: minDate,
-  start_time: "",
-  end_date: "",
-  end_time: "",
+  start_date: infoOrder.times.start_date || minDate,
+  start_time: infoOrder.times.start_time || "",
+  end_date: infoOrder.times.end_date || "",
+  end_time: infoOrder.times.end_time || "",
 });
 
 /* -----------------------
@@ -429,7 +443,7 @@ useSeoMeta({
   keywords: `${home.value.name}, ${home.value.district}, ${home.value.province}, phòng cho thuê, ${home.value.property_types?.[0]?.name}`,
 });
 
-const amountGuest = ref<number>(home.value.guest);
+const amountGuest = ref<number>(infoOrder.amount_guest || home.value.guest);
 const homeVal = home.value;
 const typeName = homeVal.property_types?.[0];
 

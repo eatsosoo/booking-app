@@ -26,8 +26,6 @@ defineProps<{
               prevEl: '.swiper-prev',
               nextEl: '.swiper-next',
             }"
-            :autoplay="{ delay: 5000, disableOnInteraction: false }"
-            :loop="true"
             :slides-per-view="1"
             :space-between="40"
             :breakpoints="{
@@ -41,16 +39,49 @@ defineProps<{
             }"
             class=""
           >
-            <SwiperSlide v-for="(url, index) in urls" :key="index">
+            <SwiperSlide>
               <div
                 class="rounded-2xl shadow-md border overflow-hidden bg-orange-100 p-4 max-w-90 mx-auto"
               >
                 <video
-                  :src="url"
+                  :src="urls[0]"
                   autoplay
                   muted
                   loop
                   playsinline
+                  controls
+                  preload="metadata"
+                  class="w-full h-full object-cover rounded-md"
+                />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div
+                class="rounded-2xl shadow-md border overflow-hidden bg-orange-100 p-4 max-w-90 mx-auto"
+              >
+                <video
+                  :src="urls[1]"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  controls
+                  preload="metadata"
+                  class="w-full h-full object-cover rounded-md"
+                />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div
+                class="rounded-2xl shadow-md border overflow-hidden bg-orange-100 p-4 max-w-90 mx-auto"
+              >
+                <video
+                  :src="urls[2]"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  controls
                   preload="metadata"
                   class="w-full h-full object-cover rounded-md"
                 />

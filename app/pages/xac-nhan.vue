@@ -54,51 +54,53 @@
             <CardTitle>Chọn cách thanh toán</CardTitle>
           </CardHeader>
           <CardContent class="space-y-4">
-            <div class="space-y-2">
-              <Label class="font-semibold">Giữ chỗ trước, thanh toán sau</Label>
-              <p class="text-gray-600">
-                Giải pháp hoàn hảo khi bạn chưa sẵn sàng thanh toán nhưng muốn
-                đảm bảo phòng không bị tăng giá...
-              </p>
-              <RadioGroup>
+            <RadioGroup v-model="guestInfo.method_payment">
+              <div class="space-y-2">
+                <Label class="font-semibold"
+                  >Giữ chỗ trước, thanh toán sau</Label
+                >
+                <p class="text-gray-600">
+                  Giải pháp hoàn hảo khi bạn chưa sẵn sàng thanh toán nhưng muốn
+                  đảm bảo phòng không bị tăng giá...
+                </p>
                 <div class="flex items-start gap-3">
                   <RadioGroupItem value="option1" />
                   <Label class=""
                     >Chỉ cần đặt phòng, chúng tôi sẽ liên hệ để hỗ trợ...</Label
                   >
                 </div>
-              </RadioGroup>
-            </div>
+              </div>
 
-            <Separator />
+              <Separator />
 
-            <div class="space-y-2 pt-3">
-              <Label class="font-semibold">Trả trước một phần tiền phòng</Label>
-              <p class="text-gray-600">
-                Bạn sẽ thanh toán trước một phần tiền phòng hôm nay...
-              </p>
-              <RadioGroup>
+              <div class="space-y-2 pt-3">
+                <Label class="font-semibold"
+                  >Trả trước một phần tiền phòng</Label
+                >
+                <p class="text-gray-600">
+                  Bạn sẽ thanh toán trước một phần tiền phòng hôm nay...
+                </p>
+
                 <div class="flex items-start gap-3">
                   <RadioGroupItem value="option2" />
                   <Label class="">Phần còn lại thanh toán khi nhận phòng</Label>
                 </div>
-              </RadioGroup>
-            </div>
+              </div>
 
-            <Separator />
+              <Separator />
 
-            <div class="space-y-2 pt-3">
-              <Label class="font-semibold">Trả toàn bộ tiền phòng</Label>
-              <p class="text-gray-600">
-                Bạn sẽ thanh toán toàn bộ tiền phòng hôm nay...
-              </p>
-              <RadioGroup>
+              <div class="space-y-2 pt-3">
+                <Label class="font-semibold">Trả toàn bộ tiền phòng</Label>
+                <p class="text-gray-600">
+                  Bạn sẽ thanh toán toàn bộ tiền phòng hôm nay...
+                </p>
+
                 <div class="flex items-start gap-3">
                   <RadioGroupItem value="option3" />
                   <Label class="">Thanh toán toàn phần</Label>
                 </div>
-              </RadioGroup>
-            </div>
+              </div>
+            </RadioGroup>
           </CardContent>
         </Card>
       </div>
@@ -199,6 +201,7 @@ const guestInfo = reactive({
   phone: "",
   email: "",
   note: "",
+  method_payment: "option1",
 });
 
 const submitOrder = async () => {
