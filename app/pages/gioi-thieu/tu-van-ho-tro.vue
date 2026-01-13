@@ -27,28 +27,29 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label class="mb-1 block">Họ và tên</Label>
-                  <Input placeholder="Nhập họ tên" />
+                  <Input v-model="formData.name" placeholder="Nhập họ tên" />
                 </div>
                 <div>
                   <Label class="mb-1 block">Số điện thoại</Label>
-                  <Input placeholder="Số điện thoại" />
+                  <Input v-model="formData.phone" placeholder="Số điện thoại" />
                 </div>
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label class="mb-1 block">Email</Label>
-                  <Input placeholder="Email" />
+                  <Input v-model="formData.email" placeholder="Email" />
                 </div>
                 <div>
                   <Label class="mb-1 block">Chủ đề</Label>
-                  <Input placeholder="Chủ đề hỗ trợ" />
+                  <Input v-model="formData.subject" placeholder="Chủ đề hỗ trợ" />
                 </div>
               </div>
 
               <div>
                 <Label class="mb-1 block">Nội dung</Label>
                 <Textarea
+                  v-model="formData.message"
                   rows="5"
                   placeholder="Mô tả vấn đề bạn cần hỗ trợ..."
                 />
